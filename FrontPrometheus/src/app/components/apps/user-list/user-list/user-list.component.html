@@ -1,0 +1,178 @@
+ 
+ <app-page-header hassub="Apps" sub="" title1="Userlist" title="User List" activeTitle="User List"></app-page-header>
+<!-- Start:: row-1 -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="userlist-table mb-2" >
+                    <label class="mb-3 d-flex gap-2 align-items-center">
+                        Show
+                        <ng-select placeholder="10" data-trigger>
+                            <ng-option value="Choice 1">10</ng-option>
+                            <ng-option value="Choice 2">25</ng-option>
+                            <ng-option value="Choice 3">50</ng-option>
+                            <ng-option value="Choice 3">100</ng-option>
+                        </ng-select>
+                        Entries
+                    </label>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap w-100 mt-4" id="userlist-table">
+                        <thead>
+                            <tr>
+                                <th scope="row" class="align-top border-bottom-0 wd-5">
+
+                                </th>
+                                <th scope="row" class="border-bottom-0 w-20">User</th>
+                                <th scope="row" class="border-bottom-0 w-15">Date of joining</th>
+                                <th scope="row" class="border-bottom-0 w-30">Performance</th>
+                                <th scope="row" class="border-bottom-0 w-10">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (item of TableData; track $index) {
+                                <tr>
+                                    <td class="align-middle">
+                                        <label class="form-check-label mb-2">
+                                                <input type="checkbox" class="form-check-input" value="option2">
+                                                <span class="custom-control-label"></span>
+                                            </label>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="d-flex">
+                                            <img [src]="item.image" class="avatar avatar-rounded avatar-md d-block" alt="">
+                                            <div class="ms-3 mt-1">
+                                                <h6 class="mb-0 fw-bold">{{item.name}}</h6>
+                                                <small class="">{{item.position}}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-nowrap align-middle">{{item.date}}</td>
+                                    <td class="text-nowrap align-middle">
+                                        <div class="float-end">
+                                            <h6 class="mb-2 ms-4 fw-bold">{{item.progress}}</h6>
+                                        </div>
+                                        <div class="progress progress-sm mb-0 mt-1">
+                                            <div class="progress-bar bg-primary" [style.width.%]="item.width"></div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="btn-group align-top">
+                                            <button (click)="opencontent(content)" class="btn btn-sm btn-outline-light btn-svg" type="button" data-bs-toggle="modal" data-bs-target="#user-form-modal">Edit</button>
+                                            <button class="btn btn-sm btn-outline-light btn-svg" type="button" aria-label="button"><svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 9h8v10H8z" opacity=".3"/><path d="M15.5 4l-1-1h-5l-1 1H5v2h14V4zM6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9z"/></svg></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-1 -->
+
+<!-- User Form Modal -->
+<ng-template #content let-modal>
+            <div class="modal-header">
+                <h5 class="modal-title">Create User</h5>
+                <button  (click)="modal.dismiss('Cross click')" aria-label="button" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="py-1">
+                    <form class="form" >
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label>Full Name</label>
+                                            <input class="form-control" type="text" name="name" placeholder="John Smith" value="John Smith">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label>Username</label>
+                                            <input class="form-control" type="text" name="username" placeholder="johnny.s" value="johnny.s">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label>Email</label>
+                                            <input class="form-control" type="text" placeholder="user@example.com">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col mb-3">
+                                        <div class="mb-3">
+                                            <label>About</label>
+                                            <textarea class="form-control" rows="5" placeholder="My Bio"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-6 mb-3">
+                                <div class="mb-2"><b>Change Password</b></div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label>Current Password</label>
+                                            <input class="form-control" type="password" placeholder="••••••">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label>New Password</label>
+                                            <input class="form-control" type="password" placeholder="••••••">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label>Confirm <span class="d-none d-xl-inline">Password</span></label>
+                                            <input class="form-control" type="password" placeholder="••••••">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-5 offset-sm-1 mb-3">
+                                <div class="mb-2"><b>Keeping in Touch</b></div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label class="mb-2">Email Notifications</label>
+                                        <div class="custom-controls-stacked px-2">
+                                            <div class="form-check-label mb-2">
+                                                <input type="checkbox" class="form-check-input me-2" id="notifications-blog" checked>
+                                                <label class="custom-control-label" for="notifications-blog">Blog posts</label>
+                                            </div>
+                                            <div class="form-check-label mb-2">
+                                                <input type="checkbox" class="form-check-input me-2" id="notifications-news" checked>
+                                                <label class="custom-control-label" for="notifications-news">Newsletter</label>
+                                            </div>
+                                            <div class="form-check-label mb-2">
+                                                <input type="checkbox" class="form-check-input me-2" id="notifications-offers" checked>
+                                                <label class="custom-control-label" for="notifications-offers">Personal Offers</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                        <div class="row">
+                            <div class="col d-flex justify-content-end">
+                                <button (click)="modal.dismiss('Cross click')" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+</ng-template>

@@ -1,0 +1,496 @@
+<app-dashboard-header title="Analytics Dashboard"></app-dashboard-header>
+ <!-- Start:: row-1 -->
+  <div class="row">
+    <div class="col-xl-6 col-md-12 col-lg-12">
+        <div class="card bg-primary text-fixed-white">
+            <div class="card-body p-2">
+                <div class="row">
+                    <div class="col-xl-7 col-md-12 col-lg-6 my-auto">
+                        <div class="d-block py-2 border-0 text-center px-0">
+                            <h2 class="text-fixed-white text-center mb-3">Congratulations <b>John!</b></h2>
+                            <small class="text-fixed-white">You reached Page Views</small>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-md-12">
+                                <h2 class="mb-0 fs-40 counter fw-bold text-fixed-white">10M</h2>
+                                <h6 class="mt-3 text-fixed-white op-5">You have done 100% reached target today.</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-5 col-md-12 col-lg-6">
+                        <img class="mx-auto text-center w-85" alt="img" src="./assets/images/photos/18.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <span class="fs-50 icon-muted"><i class="si si-chart icon-dropshadow-info text-info"></i></span>
+                <p class=" mb-1">Bounce Rate</p>
+                <h2 class="mb-1 fs-40 fw-bold">52.12%</h2>
+                <small class="mb-1 text-muted"><small class="text-success"><i class="fa fa-caret-up  me-1"></i> 19.8</small> vs 36,144 than last month</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <span class="fs-50 icon-muted"><i class="si si-wallet icon-dropshadow-danger text-danger"></i></span>
+                <p class=" mb-1 ">Revenue Status</p>
+                <h2 class="mb-1 fs-40 fw-bold">$2,206.62</h2>
+                <small class="mb-1 text-muted"><small class="text-danger"><i class="fa fa-caret-down  me-1"></i> 43.2</small> vs $5,699 than last month</small>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End::row-1 -->
+
+<!-- Start::row-2 -->
+<div class="row">
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <i class="fs-60 mdi mdi-file-outline card-custom-icon2 text-primary"></i>
+                <p class=" mb-1">Page Views</p>
+                <h2 class="mb-1 fw-bold">234k</h2>
+                <span class="mb-1 text-muted"><span class="text-danger"><i class="fa fa-caret-down  me-1"></i> 43.2</span> than last month</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <i class="mdi mdi-clock card-custom-icon2 text-warning fs-60"></i>
+                <p class=" mb-1">Time On Site</p>
+                <h2 class="mb-1 fw-bold">12m 3s</h2>
+                <span class="mb-1 text-muted"><span class="text-success"><i class="fa fa-caret-up  me-1"></i> 19.8</span> than last month</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <i class="mdi mdi-heart-outline card-custom-icon2 text-success fs-60"></i>
+                <p class=" mb-1">Impressions</p>
+                <h2 class="mb-1 fw-bold">168</h2>
+                <span class="mb-1 text-muted"><span class="text-success"><i class="fa fa-caret-up  me-1"></i> 0.8%</span> than last month</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <i class="mdi mdi-account-multiple-outline card-custom-icon2 text-secondary fs-60"></i>
+                <p class=" mb-1">Total Followers</p>
+                <h2 class="mb-1 fw-bold">3456k</h2>
+                <span class="mb-1 text-muted"><span class="text-success"><i class="fa fa-caret-up  me-1"></i> 0.8%</span> than last month</span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End::row-2 -->
+
+<!-- Start::row-3 -->
+<div class="row"> 
+    <div class="col-xxl-3 col-xl-6 col-md-12 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Follower Growth</h3>
+            </div>
+            <div class="card-body pt-0">
+                <div class="text-center">
+                    <div id="chart-circle-primary">
+                        <apx-chart
+                        [labels]="chartOptions.labels!"
+                        [series]="chartOptions.series!"
+                        [chart]="chartOptions.chart!"
+                        [plotOptions]="chartOptions.plotOptions!"
+                        [stroke]="chartOptions.stroke!"
+                        [colors]="chartOptions.colors!"
+                        [fill]="chartOptions.fill!"
+                      ></apx-chart>
+                    </div>
+                    <h2 class="mb-0 fs-50 fw-bold">65,268</h2>
+                    <span class="fs-12 text-muted"><span class="text-danger me-1"><i class="fe fe-arrow-down ms-1"></i>0.82%</span> since last week</span>
+                    <p class="mt-4 mb-2 text-muted">It is a long established fact that a ayout. </p>
+                    <small class="mt-1 fs-12 text-muted">Updated 20 minutes ago</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-3 col-xl-6 col-md-12 col-lg-6">
+        <div class="card">
+            <div class="card-header mb-3">
+                <h3 class="card-title">Country Wise Page Views</h3>
+            </div>
+            <div class="p-2">
+                <h5 class="ps-3 fw-bold mb-3">This Week Page Views</h5>
+                <div class="table-responsive">
+                    <table class="table text-nowrap table-borderless mb-2">
+                        <tbody>
+                            <tr>
+                                <td class="w-1"><img alt="flag" src="./assets/images/flags/us_flag.jpg" class="country-flag"></td>
+                                <td>USA
+                                </td>
+                                <td class="w-3 text-end"><span class="">6425</span></td>
+                            </tr>
+                            <tr>
+                                <td class="w-1"><img alt="flag" src="./assets/images/flags/china_flag.jpg" class="country-flag"></td>
+                                <td>China
+                                </td>
+                                <td class="w-3 text-end"><span class="">5582</span></td>
+                            </tr>
+                            <tr>
+                                <td class="w-1"><img alt="flag" src="./assets/images/flags/germany_flag.jpg" class="country-flag"></td>
+                                <td>Germany
+                                </td>
+                                <td class="w-3 text-end"><span class="">4587</span></td>
+                            </tr>
+                            <tr>
+                                <td class="w-1"><img alt="flag" src="./assets/images/flags/russia_flag.jpg" class="country-flag"></td>
+                                <td>Russia
+                                </td>
+                                <td class="w-3 text-end"><span class="">2520</span></td>
+                            </tr>
+                            <tr>
+                                <td class="w-1"><img alt="flag" src="./assets/images/flags/india_flag.jpg" class="country-flag"></td>
+                                <td>India
+                                </td>
+                                <td class="w-3 text-end"><span class="">6429</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer border-top px-4 py-3">
+                <a href="javascript:void(0);" class="btn btn-lg w-100 btn-outline-light">View All</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-6 col-xl-12 col-md-12 col-lg-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-lg-12">
+                    <div class="card-header">
+                        <h4 class="card-title">Website Overview</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <div id="myfirstchart" class="BarChartShadow">
+                            <apx-chart [series]="statusData.series" [colors]="statusData.colors" [chart]="statusData.chart"
+                        [dataLabels]="statusData.dataLabels" [xaxis]="statusData.xaxis" [legend]="statusData.legend"
+                        [plotOptions]="statusData.plotOptions">
+                        </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End::row-3 -->
+
+<!-- Start::row-4 -->
+<div class="row">
+    <div class="col-xl-8 col-lg-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Country Traffic Source</h3>
+                <div class="card-options ">
+                    <div ngbDropdown class="btn-group mb-0">
+                        <a ngbDropdownToggle aria-label="anchor" class="option-dots no-caret" data-bs-toggle="dropdown" aria-expanded="false" href="javascript:void(0);"><i class="fa fa-ellipsis-v"></i></a>
+                        <div ngbDropdownMenu class="dropdown-menu">
+                            <a class="dropdown-item" href="javascript:void(0);"> Download Print</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Last Week</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Yearly</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="fa fa-cog me-2"></i> Settings</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="wd-45p border-bottom-0 py-3 fw-bold">Country</th>
+                                <th scope="col" class="border-bottom-0 py-3 fw-bold text-center">Total Traffic</th>
+                                <th scope="col" class="border-bottom-0 py-3 fw-bold text-center">Entrances</th>
+                                <th scope="col" class="border-bottom-0 py-3 fw-bold text-center">Bounce Rate</th>
+                                <th scope="col" class="border-bottom-0 py-3 fw-bold text-center">Exits</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><img alt="flag" src="./assets/images/flags/us_flag.jpg" class="country-flag me-2"> <strong>United States</strong></td>
+                                <td class="text-center"><strong>4534</strong></td>
+                                <td class="text-center"><strong>134</strong> (1.51%)</td>
+                                <td class="text-center">33.58% <i class="fa fa-caret-up text-success"></i></td>
+                                <td class="text-center">15.47% <i class="fa fa-caret-up text-success"></i></td>
+                            </tr>
+                            <tr>
+                                <td><img alt="flag" src="./assets/images/flags/uk_flag.jpg" class="country-flag me-2"> <strong>United Kingdom</strong></td>
+                                <td class="text-center"><strong>5463</strong></td>
+                                <td class="text-center"><strong>290</strong> (3.30%)</td>
+                                <td class="text-center">9.22% <i class="fa fa-caret-down text-danger"></i></td>
+                                <td class="text-center">7.99% <i class="fa fa-caret-up text-success"></i></td>
+                            </tr>
+                            <tr>
+                                <td><img alt="flag" src="./assets/images/flags/india_flag.jpg" class="country-flag me-2"> <strong>India</strong></td>
+                                <td class="text-center"><strong>6534</strong></td>
+                                <td class="text-center"><strong>250</strong> (3.00%)</td>
+                                <td class="text-center">20.75% <i class="fa fa-caret-down text-danger"></i></td>
+                                <td class="text-center">2.40% <i class="fa fa-caret-down text-danger"></i></td>
+                            </tr>
+                            <tr>
+                                <td><img alt="flag" src="./assets/images/flags/canada_flag.jpg" class="country-flag me-2"> <strong>Canada</strong></td>
+                                <td class="text-center"><strong>4532</strong></td>
+                                <td class="text-center"><strong>216</strong> (2.79%)</td>
+                                <td class="text-center">32.07% <i class="fa fa-caret-up text-success"></i></td>
+                                <td class="text-center">15.09% <i class="fa fa-caret-down text-danger"></i></td>
+                            </tr>
+                            <tr>
+                                <td><img alt="flag" src="./assets/images/flags/french_flag.jpg" class="country-flag me-2"> <strong>France</strong></td>
+                                <td class="text-center"><strong>5643</strong></td>
+                                <td class="text-center"><strong>216</strong> (2.79%)</td>
+                                <td class="text-center">32.07% <i class="fa fa-caret-down text-danger"></i></td>
+                                <td class="text-center">15.09% <i class="fa fa-caret-up text-success"></i></td>
+                            </tr>
+                            <tr>
+                                <td><img alt="flag" src="./assets/images/flags/china_flag.jpg" class="country-flag me-2"> <strong>China</strong></td>
+                                <td class="text-center"><strong>6534</strong></td>
+                                <td class="text-center"><strong>216</strong> (2.79%)</td>
+                                <td class="text-center">32.07% <i class="fa fa-caret-down text-danger"></i></td>
+                                <td class="text-center">15.09% <i class="fa fa-caret-up text-success"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"> Website Visitors</h3>
+            </div>
+            <div class="card-body text-center mx-auto py-5">
+                <div class="overflow-hidden">
+                    <div class="chart-container">
+           <apx-chart  class="chartjs-chart" id="canvasDoughnut" height="250" width="250"
+              [series]="chartOptions2.series"
+              [chart]="chartOptions2.chart"
+              [labels]="chartOptions2.labels"
+              [legend]="chartOptions2.legend"
+              [colors]="chartOptions2.colors"
+              [dataLabels]="chartOptions2.dataLabels"
+            ></apx-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer border-top p-4">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-muted d-flex">
+                            <div class="chart-label bg-success"></div> Local</div>
+                    </div>
+                    <div class="col">
+                        <div class="text-muted d-flex">
+                            <div class="chart-label bg-primary"></div> Domestic</div>
+                    </div>
+                    <div class="col">
+                        <div class="text-muted d-flex">
+                            <div class="chart-label bg-danger"></div> International
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End::row-4 -->
+
+<!-- Start::row-5 -->
+<div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Most Visited Pages
+                </h3>
+                <div class="card-options ">
+                    <div ngbDropdown class="btn-group mb-0">
+                        <a ngbDropdownToggle aria-label="anchor" class="option-dots no-caret" data-bs-toggle="dropdown" aria-expanded="false" href="javascript:void(0);"><i class="fa fa-ellipsis-v"></i></a>
+                        <div ngbDropdownMenu class="dropdown-menu">
+                            <a class="dropdown-item" href="javascript:void(0);"> Download Print</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Last Week</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Yearly</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="fa fa-cog me-2"></i> Settings</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="">
+                    <div class="table-responsive">
+                        <table class="table card-table table-vcenter text-nowrap mb-0 border">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="wd-lg-10p">Page Name</th>
+                                    <th scope="col" class="wd-lg-20p text-center">Browsers</th>
+                                    <th scope="col" class="wd-lg-20p text-center">Visitors</th>
+                                    <th scope="col" class="wd-lg-20p text-center">Unique Page Visitors</th>
+                                    <th scope="col" class="wd-lg-20p text-center">Bounce Rate</th>
+                                    <th scope="col" class="text-center">Page Updated</th>
+                                    <th scope="col" class="text-center">Preview</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>home/index.html</td>
+                                    <td class="text-center">
+                                        <div class="avatar-list-stacked">
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/1.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/2.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/3.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/4.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/5.jpg" alt="img">
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">3456</td>
+                                    <td class="text-center">556</td>
+                                    <td class="text-center">13.6 <i class="fa fa-caret-down text-danger"></i></td>
+                                    <td class="text-nowrap text-center">July 13, 2020</td>
+                                    <td class="w-1 text-center"><a aria-label="anchor" href="javascript:void(0);" class="btn btn-icon btn-outline-light"><i class="fe fe-eye"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td>Store/shop/cart.html</td>
+                                    <td class="text-center">
+                                        <div class="avatar-list-stacked">
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/6.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/7.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/8.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/9.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/10.jpg" alt="img">
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">3456</td>
+                                    <td class="text-center">556</td>
+                                    <td class="text-center">13.6 <i class="fa fa-caret-down text-danger"></i></td>
+                                    <td class="text-nowrap text-center">June 15, 2020</td>
+                                    <td class="w-1 text-center"><a aria-label="anchor" href="javascript:void(0);" class="btn btn-icon btn-outline-light"><i class="fe fe-eye"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td>Store/shop</td>
+                                    <td class="text-center">
+                                        <div class="avatar-list-stacked">
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/11.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/12.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/13.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/14.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/15.jpg" alt="img">
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">3456</td>
+                                    <td class="text-center">556</td>
+                                    <td class="text-center">13.6 <i class="fa fa-caret-down text-danger"></i></td>
+                                    <td class="text-nowrap text-center">July 8, 2020</td>
+                                    <td class="w-1 text-center"><a aria-label="anchor" href="javascript:void(0);" class="btn btn-icon btn-outline-light"><i class="fe fe-eye"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td>home/blog.html</td>
+                                    <td class="text-center">
+                                        <div class="avatar-list-stacked">
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/16.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/2.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/9.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/2.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/4.jpg" alt="img">
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">3456</td>
+                                    <td class="text-center">556</td>
+                                    <td class="text-center">13.6 <i class="fa fa-caret-down text-danger"></i></td>
+                                    <td class="text-nowrap text-center">June 28, 2020</td>
+                                    <td class="w-1 text-center"><a aria-label="anchor" href="javascript:void(0);" class="btn btn-icon btn-outline-light"><i class="fe fe-eye"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td>home/blog/blog-overview.html</td>
+                                    <td class="text-center">
+                                        <div class="avatar-list-stacked">
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/12.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/2.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/9.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/2.jpg" alt="img">
+                                            </span>
+                                            <span class="avatar avatar-rounded avatar-sm">
+                                                <img src="./assets/images/faces/4.jpg" alt="img">
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">3456</td>
+                                    <td class="text-center">556</td>
+                                    <td class="text-center">13.6 <i class="fa fa-caret-down text-danger"></i></td>
+                                    <td class="text-nowrap text-center">July 2, 2020</td>
+                                    <td class="w-1 text-center"><a aria-label="anchor" href="javascript:void(0);" class="btn btn-icon btn-outline-light"><i class="fe fe-eye"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End::row-5 -->

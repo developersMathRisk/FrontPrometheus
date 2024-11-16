@@ -1,0 +1,93 @@
+<app-page-header hassub="" sub="Pages" title1="Invoice" title="Create Invoice" activeTitle="Create Invoice" ></app-page-header>
+<!-- Start:: row-1 -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Create Invoice</div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="mb-4 row">
+                            <div class="col-md-12">
+                                <label class="form-label">Invoice Title</label>
+                                <input type="text" class="form-control" placeholder="Invoice title" value="">
+                            </div>
+                        </div>
+                        <div class="mb-4 row">
+                            <div class="col-md-12">
+                                <label class="form-label">Subject</label>
+                                <textarea class="form-control" rows="4" placeholder="Subject of Invoice"></textarea>
+                            </div>
+                        </div>
+                        <div class="mb-4 row">
+                            <div class="col-md-12">
+                                <label class="form-label">Payment Number</label>
+                                <input type="text" class="form-control" placeholder="Payment Number" value="">
+                            </div>
+                        </div>
+                        <div class="mb-4 row">
+                            <div class="col-md-12">
+                                <label class="form-label">Payment Date</label>
+                                <input type="text" class="form-control" id="invoice-date-issued" placeholder="Choose date" mwlFlatpickr [(ngModel)]="basicDemoValue">
+                            </div>
+                        </div>
+                        <div class="mb-4 row">
+                            <div class="col-md-12">
+                                <label class="form-label">Bill To</label>
+                                <textarea class="form-control" rows="4" placeholder="Bill To">
+                                    </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <a (click)="addTable()" class="invoice-add-item btn btn-light" href="javascript:void(0)"><i class="fe fe-plus"></i> Add Product</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table nowrap text-nowrap border mt-4">
+                        <thead>
+                            <tr>
+                                <th scope="col">PRODUCT</th>
+                                <th scope="col" class="w-40">DESCRIPTION</th>
+                                <th scope="col">QNTY</th>
+                                <th scope="col">UNIT PRICE</th>
+                                <th scope="col">AMOUNT</th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice-body">
+                            <tr class="invoice-list">
+                                <td><input class="form-control" placeholder="" type="text" value=""></td>
+                                <td><textarea rows="1" class="form-control"></textarea></td>
+                                <td><input class="form-control" placeholder="" type="text" value=""></td>
+                                <td><input class="form-control" placeholder="" type="text" value=""></td>
+                                <td><input class="form-control" placeholder="" type="text" value=""></td>
+                            </tr>
+                            @for(table of tables;track $index){
+                            <tr class="invoice-list">
+                                <td><input class="form-control" placeholder="" type="text" value=""></td>
+                                <td><textarea rows="1" class="form-control"></textarea></td>
+                                <td><input class="form-control" placeholder="" type="text" value=""></td>
+                                <td><input class="form-control" placeholder="" type="text" value=""></td>
+                                <td><input class="form-control" placeholder="" type="text" value=""></td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <label class="form-label">Vat Rate</label>
+                        <input class="form-control" placeholder="Vat Rate" type="text" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-success m-1" href="javascript:void(0)"><i class="fe fe-plus"></i> Add New Invoice</a>
+                <a class="btn btn-light m-1" href="javascript:void(0)">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-1 -->

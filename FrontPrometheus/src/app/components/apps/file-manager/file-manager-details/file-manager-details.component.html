@@ -1,0 +1,122 @@
+<app-page-header hassub="apps" sub="" title1="File Manager" title="File Manager Details" activeTitle="File Manager Details"></app-page-header>
+<!-- Start:: row-1 -->
+ <div class="row">
+    <div class="col-xl-8 col-lg-12 col-md-12">
+        <div class="card overflow-hidden">
+            <div class="card-body px-4 pt-4">
+                <a [routerLink]="['/pages/blog/blog/blog-03']"><img src="./assets/images/photos/20.jpg" alt="img" class="cover-image br-5 w-100"></a>
+            </div>
+        </div>
+        <div class="card overflow-hidden filedetails-slider">
+            
+            <div class="card-body h-100">
+                <owl-carousel-o [options]="customOptions" class="swiper">
+                        @for ( slide of slidesStore; track $index) {
+                        <ng-container >
+                          <ng-template carouselSlide [id]="slide.id">
+                              <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                  <div
+                                    class="card border custom-card overflow-hidden mb-0 shadow-none file-details-card m-2"
+                                  >
+                                    <a routerLink="/apps/file-manager/file-manager-details"
+                                      ><img [src]="slide.src" [alt]="slide.alt" alt="img"
+                                    /></a>
+                                    <div class="card-footer bd-t-0 py-3">
+                                      <div class="d-flex">
+                                        <div>
+                                          <h6 class="mb-0 fs-14">{{ slide.title }}</h6>
+                                        </div>
+                                        <div class="ms-auto">
+                                          <h6 class="text-muted mb-0 fs-14">
+                                            {{ slide.size }}
+                                          </h6>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                          </ng-template>
+                        </ng-container>
+                    }
+                      </owl-carousel-o>
+                </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-12 col-md-12">
+        <div class="card ">
+            <div class=" card-body ">
+                <h5 class="mb-3">File details :</h5>
+                <div class="">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="table-responsive">
+                                <table class="table mb-0 border-top table-bordered text-nowrap">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">File-name</th>
+                                            <td>image.jpg</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">File-size</th>
+                                            <td>12.45mb</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">uploaded-date</th>
+                                            <td>01-12-2020</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">uploaded-by</th>
+                                            <td>prityy abodh</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">image-width</th>
+                                            <td>1000</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">image-height</th>
+                                            <td>600</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">File-formate</th>
+                                            <td>jpg</td>
+                                        </tr>
+                                        <tr class="border-bottom">
+                                            <th scope="row">File-location</th>
+                                            <td>storage/photos/image.jpg</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    Recent Files
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="text-center demo-gallery">
+                    <ul id="lightgallery" class="list-unstyled row row-sm gy-3 gx-3 mb-0 " gallerize>
+                        @for (img of imageData; track $index) {
+                            <li class="col-sm-6 col-lg-3"  data-responsive="./assets/images/photos/1.jpg"
+                          data-src="./assets/images/photos/1.jpg">
+                                <a class="glightbox" data-gallery="gallery1">
+                                    <img [src]="img.srcUrl" alt="image" class="img-responsive br-5 w-100">
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-1 -->
+ 
