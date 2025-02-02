@@ -20,6 +20,7 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from '../environments/environment';
 import { SortablejsModule } from '@maksim_m/ngx-sortablejs';
+import { HttpClientModule } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
@@ -47,7 +48,8 @@ export const appConfig: ApplicationConfig = {
       OverlayscrollbarsModule,
       AngularFireModule.initializeApp(environment.firebase),
       NgCircleProgressModule.forRoot({
-      })
+      }),
+      HttpClientModule
     )
 
   ],

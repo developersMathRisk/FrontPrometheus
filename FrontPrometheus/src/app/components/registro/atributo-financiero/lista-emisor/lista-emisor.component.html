@@ -1,0 +1,138 @@
+<div>
+    <button type="submit" class="btn btn-primary" (click)="registrar(cargaModal)">Agregar Emisor</button>
+</div>
+
+<br>
+
+<div id="mat-sorting">
+    <div class="mat-elevation-z8">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" matSort #sort="matSort">
+
+                <ng-container matColumnDef="codEmisor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codEmisor}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codPais">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>País</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codPais}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codIDCCliente">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. IDC Cliente</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codIDCCliente}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="nomEmisor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+                    <td mat-cell *matCellDef="let element"> {{element.nomEmisor}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codTipoEmisor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codTipoEmisor}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="detalle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Detalle</th>
+                    <td mat-cell *matCellDef="let element"> {{element.detalle}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="flagEmiReport">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Emite Reporte</th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-checkbox [checked]="element.flagEmiReport" disabled></mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="flagOrgaMulti">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Organismo Multilateral</th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-checkbox [checked]="element.flagOrgaMulti" disabled></mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ambito">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Ámbito</th>
+                    <td mat-cell *matCellDef="let element"> {{element.ambito}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codBloomberg">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. Bloomberg</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codBloomberg}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="flgContratoMarco">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Contrato Marco</th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-checkbox [checked]="element.flgContratoMarco" disabled></mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="flgContratoEspecifico">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Contrato Específico</th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-checkbox [checked]="element.flgContratoEspecifico" disabled></mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="numThresHold">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Thres Hold</th>
+                    <td mat-cell *matCellDef="let element"> {{element.numThresHold}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codSBS">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. SBS</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codSBS}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codRUC">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>RUC</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codRUC}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codFuente">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fuente</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codFuente}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codTipoEmisorAnx8">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Emisor Anx8</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codTipoEmisorAnx8}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
+            </table>
+        </div>
+        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+        </mat-paginator>
+    </div>
+
+</div>
+
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="contextMenu">
+</div>
+
+<mat-menu #contextMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item (click)="editar(selectedRow, editarModal)">
+            <mat-icon>edit</mat-icon> Editar
+        </button>
+        <button mat-menu-item (click)="eliminar(selectedRow)">
+            <mat-icon>delete</mat-icon> Eliminar
+        </button>
+    </ng-template>
+</mat-menu>
+
+<ng-template #cargaModal let-modal>
+    <app-carga-emisor (close)="cerrarModal($event)"></app-carga-emisor>
+</ng-template>
+
+<ng-template #editarModal let-modal>
+    <app-editar-emisor (close)="cerrarModal($event)" [data]="filaEditar"></app-editar-emisor>
+</ng-template>

@@ -1,0 +1,19 @@
+export class Emisor{
+    codEmisor !: number
+    codPais !: string;
+    codIDCCliente !: string;
+    nomEmisor !: string;
+    codTipoEmisor !: string;
+    detalle !: string;
+    flagEmiReport !: boolean;
+    flagOrgaMulti !: boolean;
+    ambito !: string;
+    codBloomberg !: string;
+    flgContratoMarco !: boolean;
+    flgContratoEspecifico !: boolean;
+    numThresHold !: number;
+    codSBS !: string;
+    codRUC !: string;
+    codFuente !: string;
+    codTipoEmisorAnx8 !: string;
+}

@@ -20,6 +20,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlatpickrModule } from 'angularx-flatpickr';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,7 @@ import { FlatpickrModule } from 'angularx-flatpickr';
     OverlayscrollbarsModule,
     ReactiveFormsModule,
     FormsModule,
-    FlatpickrModule
+    FlatpickrModule,
   ],
   exports:[
     HeaderComponent,

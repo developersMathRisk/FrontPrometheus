@@ -5,10 +5,22 @@ export const admin: Routes = [
     {
         path: 'registro', children: [
             {
-                path: 'productos/bono',
+                path: 'mantenedor/producto',
                 loadComponent: () =>
-                    import('./productos/carga-bono/carga-bono.component').then((m) => m.CargaBonoComponent),
-                title: 'Bono'
+                    import('./productos/mantenedor-productos/mantenedor-productos.component').then((m) => m.MantenedorProductosComponent),
+                title: 'Mantenedor de Productos'
+            },
+            {
+                path: 'mantenedor/atributo-financiero',
+                loadComponent: () =>
+                    import('./atributo-financiero/mantenedor-atributos-financieros/mantenedor-atributos-financieros.component').then((m) => m.MantenedorAtributosFinancierosComponent),
+                title: 'Mantenedor de Atributos Financieros'
+            },
+            {
+                path: 'mantenedor/factor',
+                loadComponent: () =>
+                    import('./factores/mantenedor-factores/mantenedor-factores.component').then((m) => m.MantenedorFactoresComponent),
+                title: 'Mantenedor de Factores'
             },
         ]
     }

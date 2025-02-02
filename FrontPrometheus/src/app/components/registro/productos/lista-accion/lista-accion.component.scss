@@ -1,0 +1,25 @@
+.icono-accion {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    outline: none !important;
+}
+
+.icono-editar {
+    color: rgb(68, 84, 195);
+}
+
+.icono-eliminar {
+    color: #dc3545;
+}
+
+.acciones {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+}
+
+table {
+    pointer-events: all; /* Asegúrate de que se pueden recibir eventos de puntero */
+  }
+  

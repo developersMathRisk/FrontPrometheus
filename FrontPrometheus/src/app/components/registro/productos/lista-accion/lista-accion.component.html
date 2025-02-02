@@ -1,0 +1,129 @@
+<div>
+    <button type="submit" class="btn btn-primary" (click)="registrar(cargaAccionModal)">Agregar Acción</button>
+</div>
+
+<br>
+
+<div id="mat-sorting">
+    <div class="mat-elevation-z8">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" matSort #sort="matSort">
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef>Acción</th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="acciones">
+                            <button mat-icon-button class="icono-accion icono-editar" (click)="editar(row, editarAccionModal)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button class="icono-accion icono-eliminar" (click)="eliminar(row)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idAccion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idAccion}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codISIN">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ISIN</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codISIN}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codTicker">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Ticker</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codTicker}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codNemonico">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nemónico</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codNemonico}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codTipoAccion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Acción</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codTipoAccion}} </td>
+                </ng-container>
+                
+                <ng-container matColumnDef="codMoneda">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Moneda</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codMoneda}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codPlaza">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Plaza</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codPlaza}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codEmisor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Emisor</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codEmisor}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="flgCargaAutom">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Carga Automática</th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-checkbox [checked]="element.flgCargaAutom" disabled></mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="flgActivo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Activo</th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-checkbox [checked]="element.flgActivo" disabled></mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codIndAsociado">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Ind. Asociado</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codIndAsociado}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="flgVar">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>VaR</th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-checkbox [checked]="element.flgVar" disabled></mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="fuenteInformacion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fuente de Información</th>
+                    <td mat-cell *matCellDef="let element"> {{element.fuenteInformacion}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
+            </table>
+        </div>
+        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+        </mat-paginator>
+    </div>
+
+</div>
+
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="contextMenu">
+</div>
+
+<mat-menu #contextMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item (click)="editar(selectedRow, editarAccionModal)">
+            <mat-icon>edit</mat-icon> Editar
+        </button>
+        <button mat-menu-item (click)="eliminar(selectedRow)">
+            <mat-icon>delete</mat-icon> Eliminar
+        </button>
+    </ng-template>
+</mat-menu>
+
+<ng-template #cargaAccionModal let-modal>
+    <app-carga-accion (close)="cerrarModal($event)"></app-carga-accion>
+</ng-template>
+
+<ng-template #editarAccionModal let-modal>
+    <app-editar-accion (close)="cerrarModal($event)" [data]="filaEditar"></app-editar-accion>
+</ng-template>

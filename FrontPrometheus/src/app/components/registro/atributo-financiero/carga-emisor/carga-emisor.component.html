@@ -1,0 +1,100 @@
+<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
+    <div role="document" class="msg_card_body" style="width: 100%;">
+        <div class="modal-header">
+            <table style="width: 100%;">
+                <tr style="width: 100%;">
+                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
+                        <h3 class="modal-title">Cargar Emisor</h3>
+                    </td>
+                    <td style="text-align: right; padding-right: 1.3%;">
+                        <button type="button" class="icon-close" (click)="cerrar()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <!-- <div class="col-md-4">
+                    <label class="form-label">País</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoRegistro.codPais"></ng-select>
+                </div> -->
+                <div class="col-md-4">
+                    <label class="form-label">Cod. IDC Cliente</label>
+                    <input type="text" placeholder="Cod. IDC Cliente" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codIDCCliente">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" placeholder="Nombre" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.nomEmisor">
+                </div>
+                <!-- <div class="col-md-4">
+                    <label class="form-label">Tipo Emisor</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoRegistro.codTipoEmisor"></ng-select>
+                </div> -->
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Detalle</label>
+                    <input type="text" placeholder="Detalle" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.detalle">
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkEmiReport" name="chkEmiReport" [(ngModel)]="this.nuevoRegistro.flagEmiReport"><label for="chkEmiReport" class="form-check-label"> Emite Reporte </label></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkOrgaMulti" name="chkOrgaMulti" [(ngModel)]="this.nuevoRegistro.flagOrgaMulti"><label for="chkOrgaMulti" class="form-check-label"> Organismo Multilateral </label></div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Ámbito</label>
+                    <input type="text" placeholder="Ámbito" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.ambito">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Cod. Bloomberg</label>
+                    <input type="text" placeholder="Cod. Bloomberg" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codBloomberg">
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkContratoMarco" name="chkContratoMarco" [(ngModel)]="this.nuevoRegistro.flgContratoMarco"><label for="chkContratoMarco" class="form-check-label"> Contrato Marco </label></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkContratoEspecifico" name="chkContratoEspecifico" [(ngModel)]="this.nuevoRegistro.flgContratoEspecifico"><label for="chkContratoEspecifico" class="form-check-label"> Contrato Específico </label></div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Thres Hold</label>
+                    <input type="number" placeholder="Thres Hold" class="form-control" [(ngModel)]="this.nuevoRegistro.numThresHold">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Cod. SBS</label>
+                    <input type="text" placeholder="Cod. SBS" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codSBS">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Cod. RUC</label>
+                    <input type="text" placeholder="Cod. RUC" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codRUC">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Fuente</label>
+                    <input type="number" placeholder="Fuente" class="form-control" [(ngModel)]="this.nuevoRegistro.codFuente">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Tipo Emisor Anx8</label>
+                    <input type="text" placeholder="Tipo Emisor Anx8" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codTipoEmisorAnx8">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" (click)="registrar()">Registrar</button>
+            <br>
+        </div>
+    </div>
+</div>

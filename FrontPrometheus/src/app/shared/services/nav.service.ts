@@ -1528,68 +1528,101 @@ export class NavService implements OnDestroy {
       ],
     },
     {
-      title: 'Registros',
+      title: 'Mantenedores',
       type: 'sub',
       icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="side-menu__icon"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`,
       active: false,
       dirchange: false,
       children: [
         {
-          title: 'Productos',
-          type: 'sub',
-          active: false,
+          path: 'registro/mantenedor/producto',
+          title: 'Instrumentos de Deuda',
+          type: 'link',
           dirchange: false,
-          children: [
-            {
-              path: 'registro/productos/bono',
-              title: 'Bonos',
-              type: 'link',
-              dirchange: false,
-            },
-            {
-              path: 'registro/productos/accion',
-              title: 'Acciones',
-              type: 'link',
-              dirchange: false,
-            },
-            {
-              path: 'registro/producto/spot',
-              title: 'Spot',
-              type: 'link',
-              dirchange: false,
-            },
-          ],
         },
         {
-          title: 'Factores',
+          path: 'registro/mantenedor/factor',
+          title: 'Factores de Riesgo',
+          type: 'link',
+          dirchange: false,
+        },
+        {
+          path: 'registro/mantenedor/atributo-financiero',
+          title: 'Atributos Financieros',
+          type: 'link',
+          dirchange: false,
+        }
+      ],
+    },
+    {
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="side-menu__icon"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`,
+      path: 'registro/portafolio',
+      title: 'Portafolio',
+      type: 'link',
+      dirchange: false,
+      nochild: true,
+    },
+    {
+      title: 'Cargas Diarias',
+      type: 'sub',
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="side-menu__icon"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`,
+      active: false,
+      dirchange: false,
+      children: [
+        {
+          path: 'registro/cargas/factores',
+          title: 'Factores de Riesgo',
+          type: 'link',
+          dirchange: false,
+        },
+      ],
+    },
+    {
+      title: 'Valorización',
+      type: 'sub',
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="side-menu__icon"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`,
+      active: false,
+      dirchange: false,
+      children: [
+        {
+          path: 'registro/valorizacion/ejecucion',
+          title: 'Ejecución de valorizaciones',
+          type: 'link',
+          dirchange: false,
+        },
+        {
+          path: 'registro/valorizacion/consulta',
+          title: 'Consulta de valorizaciones',
+          type: 'link',
+          dirchange: false,
+        },
+      ],
+    },
+    {
+      title: 'Banca',
+      type: 'sub',
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="side-menu__icon"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`,
+      active: false,
+      dirchange: false,
+      children: [
+        {
+          title: 'Riesgo de Mercado',
           type: 'sub',
           active: false,
           dirchange: false,
           children: [
             {
-              path: 'registro/factores/bono',
-              title: 'Bonos',
+              path: 'registro/var/ejecucion',
+              title: 'Ejecución de VaR y Stress Testing',
               type: 'link',
               dirchange: false,
             },
             {
-              path: 'registro/factores/accion',
-              title: 'Acciones',
+              path: 'registro/var/consulta',
+              title: 'Consulta de resultados VaR y Stress Testing',
               type: 'link',
               dirchange: false,
-            },
-            {
-              path: 'registro/factores/tasa',
-              title: 'Tasas',
-              type: 'link',
-              dirchange: false,
-            },
-            {
-              path: 'registro/factores/tc',
-              title: 'Tipo de Cambio',
-              type: 'link',
-              dirchange: false,
-            },
+            }
           ],
         },
       ],

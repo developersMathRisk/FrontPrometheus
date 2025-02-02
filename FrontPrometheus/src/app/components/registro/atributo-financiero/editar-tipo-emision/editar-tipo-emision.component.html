@@ -1,0 +1,106 @@
+<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
+    <div role="document" class="msg_card_body" style="width: 100%;">
+        <div class="modal-header">
+            <table style="width: 100%;">
+                <tr style="width: 100%;">
+                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
+                        <h3 class="modal-title">Editar Tipo de Emisión</h3>
+                    </td>
+                    <td style="text-align: right; padding-right: 1.3%;">
+                        <button type="button" class="icon-close" (click)="cerrar()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <!-- <div class="card-header justify-content-between d-sm-flex d-block">
+            <div class="card-title">
+                Datos Generales
+            </div>
+        </div> -->
+        <div class="card-body">
+            <!-- <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Código ISIN</label>
+                    <input type="text" placeholder="Código ISIN" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.codISIN">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Ticker (BLG o Interno)</label>
+                    <input type="text" placeholder="Ticker" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.codTicker">
+                </div>
+                <div class="col-md-4">
+                    <label for="inputEmail4" class="form-label">Nemónico</label>
+                    <input type="text" placeholder="Nemónico" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.codNemonico">
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Tipo Plaza</label>
+                    <ng-select placeholder="Seleccione una opción..." class="">
+                        <ng-option  selected>Tipo Plaza</ng-option>
+                        <ng-option>...</ng-option>
+                    </ng-select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Tipo Acción</label>
+                    <ng-select placeholder="Seleccione una opción..." class="" >
+                        <ng-option  selected>Tipo Acción</ng-option>
+                        <ng-option>...</ng-option>
+                    </ng-select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Moneda</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codMoneda"></ng-select>
+                </div>
+            </div>  
+            
+            <br>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Emisor</label>
+                    <ng-select placeholder="Seleccione una opción..." class="" >
+                        <ng-option  selected>Emisor</ng-option>
+                        <ng-option>...</ng-option>
+                    </ng-select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Fuente Información</label>
+                    <ng-select placeholder="Seleccione una opción..." class="" >
+                        <ng-option  selected>Fuente Información</ng-option>
+                        <ng-option>...</ng-option>
+                    </ng-select>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkCargaAutomatica" name="chkCargaAutomatica" [(ngModel)]="this.objRegistroEditado.flgCargaAutom"><label for="chkCargaAutomatica" class="form-check-label"> Carga Automática </label></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkActivo" name="chkActivo" [(ngModel)]="this.objRegistroEditado.flgActivo"><label for="chkActivo" class="form-check-label"> Activo </label></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkCalculoVaR" name="chkCalculoVaR" [(ngModel)]="this.objRegistroEditado.flgVar"><label for="chkCalculoVaR" class="form-check-label"> Cálculo de VaR </label></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" (click)="guardarCambios()">Guardar Cambios</button>
+            <br>
+        </div> -->
+    </div>
+</div>

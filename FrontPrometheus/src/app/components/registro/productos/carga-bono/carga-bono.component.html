@@ -1,55 +1,189 @@
-<form novalidate="" class="row g-3 mt-0 ng-untouched ng-pristine ng-valid">
+<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
+    <div role="document" class="msg_card_body" style="width: 100%;">
+        <div class="modal-header">
+            <table style="width: 100%;">
+                <tr style="width: 100%;">
+                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
+                        <h3 class="modal-title">Cargar Bono</h3>
+                    </td>
+                    <td style="text-align: right; padding-right: 1.3%;">
+                        <button type="button" class="icon-close" (click)="cerrar()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
     <div class="card">
-        <div class="card-header justify-content-between d-sm-flex d-block">
+        <!-- <div class="card-header justify-content-between d-sm-flex d-block">
             <div class="card-title">
                 Datos Generales
             </div>
-        </div>
+        </div> -->
         <div class="card-body">
-            <div class="col-md-6"><label class="form-label">First Name</label>
-                <input type="text" placeholder="First name" aria-label="First name" class="form-control">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Código ISIN</label>
+                    <input type="text" placeholder="Código ISIN" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoBono.codISIN">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Nemónico</label>
+                    <input type="text" placeholder="Nemónico" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoBono.desNemonico">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Tipo Pago</label>
+                    <input type="text" placeholder="Tipo Pago" minlength="1" maxlength="1" class="form-control" [(ngModel)]="this.nuevoBono.flgTipoPago">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Tipo Bono SBS</label>
+                    <input type="text" placeholder="Spread Emisión" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoBono.codTipoBonoSbs">
+                </div>
             </div>
-            <div class="col-md-6"><label class="form-label">Last Name</label>
-                <input type="text" placeholder="Last name" aria-label="Last name" class="form-control">
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Tasa Cupón</label>
+                    <input type="number" placeholder="Tasa Cupón" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoBono.numTasaCupon">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Spread Tasa Variable</label>
+                    <input type="number" placeholder="Nemónico" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoBono.numSpreadTasaVar">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Spread Liquidez</label>
+                    <input type="number" placeholder="Spread Liquidez" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoBono.mtoSpreadLiquidez">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Spread Emisión</label>
+                    <input type="number" placeholder="Spread Emisión" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoBono.mtoSpreadEmision">
+                </div>
             </div>
-            <div class="col-md-6"><label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" id="inputEmail4" placeholder="Email id" class="form-control">
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Inicio</label>
+                    <input type="date" class="form-control" [(ngModel)]="this.nuevoBono.fecInicio">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Vencimiento</label>
+                    <input type="date" class="form-control" [(ngModel)]="this.nuevoBono.fecVcto">
+                </div>
             </div>
-            <div class="col-md-6"><label for="inputPassword4" class="form-label">Password</label>
-                <input type="password" id="inputPassword4" placeholder="Password" class="form-control">
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Método Amortización</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoBono.codMetoAmortizac"></ng-select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Frecuencia Pago</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoBono.codFrecuenciaPago"></ng-select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Emisor</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoBono.codEmisor"></ng-select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Base Cálculo IC</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoBono.codBaseCalculoIc"></ng-select>
+                </div>
             </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Tipo Tasa</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoBono.codTipoTasa"></ng-select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Tasa RJTE</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoBono.codTasaRjte"></ng-select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Fórmula Tasa</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoBono.codFormulaTasa"></ng-select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Base Cáluclo Dcto.</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoBono.codBaseCalculoDcto"></ng-select>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Moneda</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoBono.codMoneda"></ng-select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Curva Referencia</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoBono.codCurvaReferencia"></ng-select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">ISIN Sob. Gdn.</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoBono.codISINSOBGDN"></ng-select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Base Cálculo Flujo</label>
+                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoBono.codBaseCalculoFlujo"></ng-select>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkRevisado" name="chkRevisado" [(ngModel)]="this.nuevoBono.flgRevisado"><label for="chkRevisado" class="form-check-label"> Revisado </label></div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkProrrateo" name="chkProrrateo" [(ngModel)]="this.nuevoBono.flgProrrateo"><label for="chkProrrateo" class="form-check-label"> Prorrateo </label></div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkValCirc" name="chkValCirc" [(ngModel)]="this.nuevoBono.flgValCirc"><label for="chkValCirc" class="form-check-label"> Val. Circ. </label></div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkFicticio" name="chkFicticio" [(ngModel)]="this.nuevoBono.flgFicticio"><label for="chkFicticio" class="form-check-label"> Ficticio </label></div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkFicticio" name="chkFicticio" [(ngModel)]="this.nuevoBono.flgOpcionCall"><label for="chkFicticio" class="form-check-label"> Opción Call </label></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" (click)="registrar()">Registrar</button>
+            <br>
         </div>
     </div>
-
-
-    <div class="card">
-        <div class="card-header justify-content-between d-sm-flex d-block">
-            <div class="card-title">
-                Características
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="col-md-6"><label class="form-label">First Name</label>
-                <input type="text" placeholder="First name" aria-label="First name" class="form-control">
-            </div>
-            <div class="col-md-6"><label class="form-label">Last Name</label>
-                <input type="text" placeholder="Last name" aria-label="Last name" class="form-control">
-            </div>
-            <div class="col-md-6"><label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" id="inputEmail4" placeholder="Email id" class="form-control">
-            </div>
-            <div class="col-md-6"><label for="inputPassword4" class="form-label">Password</label>
-                <input type="password" id="inputPassword4" placeholder="Password" class="form-control">
-            </div>
-        </div>
-    </div>
-    
-
-
-
-
-    <div class="col-12">
-        <button type="submit" class="btn btn-primary" (click)="registrar()">Registrar</button>
-        <br>
-    </div>
-</form>
+</div>
