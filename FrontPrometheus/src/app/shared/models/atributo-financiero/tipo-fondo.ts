@@ -1,4 +1,5 @@
 export class TipoFondo{
-    id_Tipo!: number;
-    descripcion!: string;
+    idTipoFondo!: number;
+    codTipoFondo!: string;
+    desTipoFondo!: string;
 }

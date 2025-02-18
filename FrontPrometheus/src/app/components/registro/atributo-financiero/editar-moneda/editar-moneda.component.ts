@@ -38,7 +38,7 @@ export class EditarMonedaComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.registroService.putModificarMoneda(this.objRegistroEditado.codMoneda, this.objRegistroEditado).subscribe(
+        this.registroService.putModificarMoneda(this.objRegistroEditado.idMoneda, this.objRegistroEditado).subscribe(
           (response: any) => {
             Swal.fire({
               icon: 'success',

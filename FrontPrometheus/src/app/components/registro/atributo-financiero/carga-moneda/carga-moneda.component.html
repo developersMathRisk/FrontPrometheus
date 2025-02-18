@@ -19,40 +19,54 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Código</label>
-                    <input type="text" placeholder="Código" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codMoneda">
+                    <input type="text" placeholder="Código" minlength="3" maxlength="3" class="form-control" [(ngModel)]="this.nuevoRegistro.codMoneda">
                 </div>
-                <!-- <div class="col-md-4">
-                    <label class="form-label">País</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoRegistro.codPais"></ng-select>
-                </div> -->
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Descripción</label>
-                    <input type="text" placeholder="Descripción" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.descripcion">
+                    <input type="text" placeholder="Descripción" minlength="2" maxlength="60" class="form-control" [(ngModel)]="this.nuevoRegistro.desMoneda">
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Símbolo</label>
-                    <input type="text" placeholder="Símbolo" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.simbolo">
+                <div class="col-md-3">
+                    <label class="form-label">Descripción Corta</label>
+                    <input type="text" placeholder="Descripción Corta" minlength="3" maxlength="3" class="form-control" [(ngModel)]="this.nuevoRegistro.desCorto">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Sucave</label>
-                    <input type="text" placeholder="Sucave" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codSucave">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Relación USD</label>
-                    <input type="text" placeholder="Relación USD" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.relacionUsd">
+                    <input type="text" placeholder="Sucave" minlength="4" maxlength="4" class="form-control" [(ngModel)]="this.nuevoRegistro.codSucave">
                 </div>
             </div>
 
+            <br>
+
             <div class="row">
-                <!-- <div class="col-md-4">
-                    <label class="form-label">Corporación</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoRegistro.corporacion"></ng-select>
+                <div class="col-md-3">
+                    <label class="form-label">Relación USD</label>
+                    <input type="text" placeholder="Relación USD" minlength="1" maxlength="1" class="form-control" [(ngModel)]="this.nuevoRegistro.codTipoRelacionUSD">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Cod. Moneda Int.</label>
+                    <input type="text" placeholder="Cod. Moneda Int." minlength="4" maxlength="4" class="form-control" [(ngModel)]="this.nuevoRegistro.codMonedaInt">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Ticker</label>
+                    <input type="text" placeholder="Ticker" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.desTicker">
+                </div>
+                <!-- <div class="col-md-3">
+                    <label class="form-label">País</label>
+                    <ng-select placeholder="Seleccione una opción..." [items]="listPais" bindLabel="desPais" bindValue="idPais" [(ngModel)]="this.nuevoRegistro.codPais"></ng-select>
                 </div> -->
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkCargaAutomatica" name="chkCargaAutomatica" [(ngModel)]="this.nuevoRegistro.flgCargaAutom"><label for="chkCargaAutomatica" class="form-check-label"> Carga Automática </label></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkCalculoVaR" name="chkCalculoVaR" [(ngModel)]="this.nuevoRegistro.flgVaR"><label for="chkCalculoVaR" class="form-check-label"> Cálculo de VaR </label></div>
+                </div>
             </div>
 
         </div>

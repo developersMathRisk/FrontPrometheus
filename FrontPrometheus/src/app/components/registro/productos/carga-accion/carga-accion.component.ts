@@ -8,6 +8,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Accion } from '../../../../shared/models/producto/accion';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { Emisor } from '../../../../shared/models/atributo-financiero/emisor';
+import { FuenteInformacion } from '../../../../shared/models/atributo-financiero/fuente-informacion';
+import { Plaza } from '../../../../shared/models/atributo-financiero/plaza';
+import { TipoAccion } from '../../../../shared/models/atributo-financiero/tipo-accion';
 
 @Component({
   selector: 'app-carga-accion',
@@ -19,46 +23,66 @@ import Swal from 'sweetalert2';
 export class CargaAccionComponent{
   @Output() close = new EventEmitter<any>();
   
-  listMonedas: Moneda[] = [];
-  monedaSeleccionada: string = '';
-  flgCargaAutomatica: boolean = false;
-  flgActivo: boolean = false;
-  flgCalculoVaR: boolean = false;
-  strCodISIN: string = '';
-  strTicker: string = '';
-  strNemonico: string = '';
+  listPlaza: Plaza[] = [];
+  listTipoAccion: TipoAccion[] = [];
+  listFuenteInformacion: FuenteInformacion[] = [];
+  listEmisor: Emisor[] = [];
+  listMoneda: Moneda[] = [];
+
+  nuevoRegistro: Accion = new Accion()
 
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
-    this.obtenerMonedas();
+    this.obtenerListPlaza();
+    this.obtenerListTipoAccion();
+    this.obtenerListFuenteInformacion();
+    this.obtenerListEmisor();
+    this.obtenerListMoneda();
   }
 
-  obtenerMonedas(){
-    this.registroService.monedas().subscribe(
+  obtenerListPlaza(){
+    this.registroService.getListaPlaza().subscribe(
+      (response: Plaza[]) => {
+        this.listPlaza = response;
+      }
+    )
+  }
+
+  obtenerListTipoAccion(){
+    this.registroService.getListaTipoAccion().subscribe(
+      (response: TipoAccion[]) => {
+        this.listTipoAccion = response;
+      }
+    )
+  }
+
+  obtenerListFuenteInformacion(){
+    this.registroService.getListaFuenteInformacion().subscribe(
+      (response: FuenteInformacion[]) => {
+        this.listFuenteInformacion = response;
+      }
+    )
+  }
+
+  obtenerListEmisor(){
+    this.registroService.getListaEmisor().subscribe(
+      (response: Emisor[]) => {
+        this.listEmisor = response;
+      }
+    )
+  }
+
+  obtenerListMoneda(){
+    this.registroService.getListaMoneda().subscribe(
       (response: Moneda[]) => {
-        this.listMonedas = response;
-        console.log(this.listMonedas);
+        this.listMoneda = response;
       }
     )
   }
 
   registrar(){
-    let objAccion: Accion = new Accion();
-    objAccion.codISIN = this.strCodISIN;
-    objAccion.codTicker = this.strTicker;
-    objAccion.codNemonico = this.strNemonico;
-    objAccion.codTipoAccion = '';
-    objAccion.codMoneda = this.monedaSeleccionada;
-    objAccion.codPlaza = '';
-    objAccion.codEmisor = 1;
-    objAccion.flgCargaAutom = this.flgCargaAutomatica;
-    objAccion.flgActivo = this.flgActivo;
-    objAccion.codIndAsociado = '1';
-    objAccion.flgVar = this.flgCalculoVaR;
-    objAccion.fuenteInformacion = '';
-
-    this.registroService.postRegistrarAccion(objAccion).subscribe(
+    this.registroService.postRegistrarAccion(this.nuevoRegistro).subscribe(
       (response: any) => {
         Swal.fire({
           icon: 'success',

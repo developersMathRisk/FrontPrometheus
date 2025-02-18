@@ -120,11 +120,6 @@
                     <td mat-cell *matCellDef="let element"> {{element.codTasaRjte}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="codEmisor">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. Emisor</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codEmisor}} </td>
-                </ng-container>
-
                 <ng-container matColumnDef="mtoSpreadLiquidez">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Mto. Spread Liquidez</th>
                     <td mat-cell *matCellDef="let element"> {{element.mtoSpreadLiquidez}} </td>
@@ -135,21 +130,11 @@
                     <td mat-cell *matCellDef="let element"> {{element.mtoSpreadEmision}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="codMoneda">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Moneda</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codMoneda}} </td>
-                </ng-container>
-
                 <ng-container matColumnDef="flgFicticio">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Ficticio</th>
                     <td mat-cell *matCellDef="let element">
                         <mat-checkbox [checked]="element.flgFicticio" disabled></mat-checkbox>
                     </td>
-                </ng-container>
-
-                <ng-container matColumnDef="codTipoBonoSbs">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Bono SBS</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codTipoBonoSbs}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="codCurvaReferencia">
@@ -162,38 +147,11 @@
                     <td mat-cell *matCellDef="let element"> {{element.codTipoBonoCVG}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="usrModifica">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario Modifica</th>
-                    <td mat-cell *matCellDef="let element"> {{element.usrModifica}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="usrValida">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario Valida</th>
-                    <td mat-cell *matCellDef="let element"> {{element.usrValida}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="usrRegistra">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario Registra</th>
-                    <td mat-cell *matCellDef="let element"> {{element.usrRegistra}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="flgBorradoLogico">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Borrado Lógico</th>
-                    <td mat-cell *matCellDef="let element">
-                        <mat-checkbox [checked]="element.flgBorradoLogico" disabled></mat-checkbox>
-                    </td>
-                </ng-container>
-
                 <ng-container matColumnDef="flgOpcionCall">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Opción Call</th>
                     <td mat-cell *matCellDef="let element">
                         <mat-checkbox [checked]="element.flgOpcionCall" disabled></mat-checkbox>
                     </td>
-                </ng-container>
-
-                <ng-container matColumnDef="codEstado">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. Estado</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codEstado}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="codBaseCalculoFlujo">
@@ -209,6 +167,21 @@
                 <ng-container matColumnDef="desResetIndex">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Reset Index</th>
                     <td mat-cell *matCellDef="let element"> {{element.desResetIndex}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codEmisor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. Emisor</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codEmisor}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codMoneda">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Moneda</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codMoneda}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codTipoBonoSbs">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Bono SBS</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codTipoBonoSbs}} </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

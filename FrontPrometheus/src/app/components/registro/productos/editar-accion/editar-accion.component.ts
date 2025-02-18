@@ -8,6 +8,10 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { Accion } from '../../../../shared/models/producto/accion';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { Plaza } from '../../../../shared/models/atributo-financiero/plaza';
+import { TipoAccion } from '../../../../shared/models/atributo-financiero/tipo-accion';
+import { FuenteInformacion } from '../../../../shared/models/atributo-financiero/fuente-informacion';
+import { Emisor } from '../../../../shared/models/atributo-financiero/emisor';
 
 @Component({
   selector: 'app-editar-accion',
@@ -22,28 +26,60 @@ export class EditarAccionComponent {
   
   objRegistroEditado: Accion = new Accion;
   
-  idAccion: number = 0;
-  listMonedas: Moneda[] = [];
-  monedaSeleccionada: string = '';
-  flgCargaAutomatica: boolean = false;
-  flgActivo: boolean = false;
-  flgCalculoVaR: boolean = false;
-  strCodISIN: string = '';
-  strTicker: string = '';
-  strNemonico: string = '';
+  listPlaza: Plaza[] = [];
+  listTipoAccion: TipoAccion[] = [];
+  listFuenteInformacion: FuenteInformacion[] = [];
+  listEmisor: Emisor[] = [];
+  listMoneda: Moneda[] = [];
+
   
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
     this.objRegistroEditado = {...this.data};
-    this.obtenerMonedas();
+    this.obtenerListPlaza();
+    this.obtenerListTipoAccion();
+    this.obtenerListFuenteInformacion();
+    this.obtenerListEmisor();
+    this.obtenerListMoneda();
   }
 
-  obtenerMonedas(){
-    this.registroService.monedas().subscribe(
+  obtenerListPlaza(){
+    this.registroService.getListaPlaza().subscribe(
+      (response: Plaza[]) => {
+        this.listPlaza = response;
+      }
+    )
+  }
+
+  obtenerListTipoAccion(){
+    this.registroService.getListaTipoAccion().subscribe(
+      (response: TipoAccion[]) => {
+        this.listTipoAccion = response;
+      }
+    )
+  }
+
+  obtenerListFuenteInformacion(){
+    this.registroService.getListaFuenteInformacion().subscribe(
+      (response: FuenteInformacion[]) => {
+        this.listFuenteInformacion = response;
+      }
+    )
+  }
+
+  obtenerListEmisor(){
+    this.registroService.getListaEmisor().subscribe(
+      (response: Emisor[]) => {
+        this.listEmisor = response;
+      }
+    )
+  }
+
+  obtenerListMoneda(){
+    this.registroService.getListaMoneda().subscribe(
       (response: Moneda[]) => {
-        this.listMonedas = response;
-        console.log(this.listMonedas);
+        this.listMoneda = response;
       }
     )
   }

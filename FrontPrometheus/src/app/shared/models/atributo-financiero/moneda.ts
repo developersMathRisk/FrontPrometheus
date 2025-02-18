@@ -1,10 +1,13 @@
 export class Moneda{
     idMoneda!: number;
     codMoneda!: string;
-    codPais!: string;
-    descripcion!: string;
-    simbolo!: string;
+    desMoneda!: string;
+    desCorto!: string;
     codSucave!: string;
-    relacionUsd!: string;
-    corporacion!: number;
+    codTipoRelacionUSD!: string;
+    codMonedaInt!: string;
+    flgCargaAutom!: boolean;
+    desTicker!: string;
+    flgVaR!: boolean;
+    // codPais!: number;
 }

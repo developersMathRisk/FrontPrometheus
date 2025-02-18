@@ -7,6 +7,7 @@ import { Emisor } from '../../../../shared/models/atributo-financiero/emisor';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { Pais } from '../../../../shared/models/atributo-financiero/pais';
 
 @Component({
   selector: 'app-carga-emisor',
@@ -18,13 +19,22 @@ import { NgSelectModule } from '@ng-select/ng-select';
 export class CargaEmisorComponent {
   @Output() close = new EventEmitter<any>();
 
+  listPais: Pais[] = [];
   nuevoRegistro: Emisor = new Emisor();
 
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
+    this.obtenerListPais();
   }
 
+  obtenerListPais(){
+    this.registroService.getListaPais().subscribe(
+      (response: Pais[]) => {
+        this.listPais = response;
+      }
+    );
+  }
 
   registrar(){
     this.registroService.postRegistrarEmisor(this.nuevoRegistro).subscribe(

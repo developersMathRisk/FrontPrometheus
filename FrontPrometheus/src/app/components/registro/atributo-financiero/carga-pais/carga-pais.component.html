@@ -21,18 +21,17 @@
             <div class="row">
                 <div class="col-md-4">
                     <label class="form-label">Código</label>
-                    <input type="text" placeholder="Código" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codPais">
+                    <input type="text" placeholder="Código" minlength="2" maxlength="2" class="form-control" [(ngModel)]="this.nuevoRegistro.codPais">
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Descripción</label>
-                    <input type="text" placeholder="Descripción" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.desPais">
+                    <input type="text" placeholder="Descripción" minlength="2" maxlength="60" class="form-control" [(ngModel)]="this.nuevoRegistro.desPais">
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Abreviatura</label>
-                    <input type="text" placeholder="Abreviatura" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.abrev">
+                    <input type="text" placeholder="Abreviatura" minlength="2" maxlength="10" class="form-control" [(ngModel)]="this.nuevoRegistro.abrev">
                 </div>
             </div>
-
         </div>
 
         <div class="card-footer">

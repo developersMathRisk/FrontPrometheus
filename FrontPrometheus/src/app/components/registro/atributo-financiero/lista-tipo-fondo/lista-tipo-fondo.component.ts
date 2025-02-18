@@ -33,8 +33,9 @@ export class ListaTipoFondoComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
-    'id',
-    'descripcion'
+    'idTipoFondo',
+    'codTipoFondo',
+    'desTipoFondo'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}
@@ -87,7 +88,7 @@ export class ListaTipoFondoComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         let seleccionado = this.contextMenu.menuData.item;
-        this.registroService.eiminarTipoFondo(row.id_Tipo).subscribe(
+        this.registroService.eiminarTipoFondo(row.idTipoFondo).subscribe(
           (response: any) => {
             this.listarRegistros();
             Swal.fire({
@@ -99,7 +100,7 @@ export class ListaTipoFondoComponent {
           },
           (error: HttpErrorResponse) => {
             Swal.fire({
-              icon: 'success',
+              icon: 'error',
               title: 'Error',
               text: error.message,
               confirmButtonText: 'Aceptar'

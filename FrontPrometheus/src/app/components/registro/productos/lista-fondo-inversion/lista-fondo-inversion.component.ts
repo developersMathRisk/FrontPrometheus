@@ -33,19 +33,18 @@ export class ListaFondoInversionComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
-    'idFondoInversion',
+    'idFondo',
     'codISIN',
     'codTicker',
     'desNemonico',
-    'codTipoFondo',
-    'codMoneda',
-    'codPlaza',
-    'codEmisor',
     'montoTotal',
-    'fuenteInformacion',
     'flgCargaAutom',
-    'flgActivo',
-    'flgVar'
+    'flgVar',
+    'idPlaza',
+    'idEmisor',
+    'idMoneda',
+    'idTipoFondo',
+    'idFuenteInformacion'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}
@@ -103,7 +102,7 @@ export class ListaFondoInversionComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         let seleccionado = this.contextMenu.menuData.item;
-        this.registroService.eiminarFondoInversion(row.idFondoInversion).subscribe(
+        this.registroService.eiminarFondoInversion(row.idFondo).subscribe(
           (response: any) => {
             this.listarRegistros();
             Swal.fire({
@@ -115,7 +114,7 @@ export class ListaFondoInversionComponent {
           },
           (error: HttpErrorResponse) => {
             Swal.fire({
-              icon: 'success',
+              icon: 'error',
               title: 'Error',
               text: error.message,
               confirmButtonText: 'Aceptar'

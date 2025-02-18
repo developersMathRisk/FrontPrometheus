@@ -31,17 +31,79 @@
 
                 <div class="col-md-3">
                     <label class="form-label">Nemónico</label>
-                    <input type="text" placeholder="Nemónico" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.desNemonico">
+                    <input type="text" placeholder="Nemónico" minlength="3" maxlength="60" class="form-control" [(ngModel)]="this.objRegistroEditado.desNemonico">
                 </div>
 
                 <div class="col-md-3">
-                    <label class="form-label">Tipo Pago</label>
-                    <input type="text" placeholder="Tipo Pago" minlength="1" maxlength="1" class="form-control" [(ngModel)]="this.objRegistroEditado.flgTipoPago">
+                    <label class="form-label">Método Amortización</label>
+                    <input type="text" placeholder="Método Amortización" minlength="3" maxlength="4" class="form-control" [(ngModel)]="this.objRegistroEditado.codMetoAmortizac">
                 </div>
 
                 <div class="col-md-3">
-                    <label class="form-label">Tipo Bono SBS</label>
-                    <input type="text" placeholder="Spread Emisión" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.codTipoBonoSbs">
+                    <label class="form-label">Frecuencia Pago</label>
+                    <input type="text" placeholder="Frecuencia Pago" minlength="1" maxlength="1" class="form-control" [(ngModel)]="this.objRegistroEditado.codFrecuenciaPago">
+                </div>
+            </div>
+
+            <br>
+            
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Fórmula Tasa</label>
+                    <input type="text" placeholder="Fórmula Tasa" minlength="1" maxlength="1" class="form-control" [(ngModel)]="this.objRegistroEditado.codFormulaTasa">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Base Cálculo Ic</label>
+                    <input type="text" placeholder="Base Cálculo Ic" minlength="3" maxlength="12" class="form-control" [(ngModel)]="this.objRegistroEditado.codBaseCalculoIc">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Base Cálculo Dcto.</label>
+                    <input type="text" placeholder="Base Cálculo Dcto." minlength="3" maxlength="12" class="form-control" [(ngModel)]="this.objRegistroEditado.codBaseCalculoDcto">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Tipo Tasa</label>
+                    <input type="text" placeholder="Tipo Tasa" minlength="1" maxlength="1" class="form-control" [(ngModel)]="this.objRegistroEditado.codTipoTasa">
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Tasa RJTE</label>
+                    <input type="text" placeholder="Tasa RJTE" minlength="1" maxlength="4" class="form-control" [(ngModel)]="this.objRegistroEditado.codTasaRjte">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Curva Referencia</label>
+                    <input type="text" placeholder="Curva Referencia" minlength="3" maxlength="15" class="form-control" [(ngModel)]="this.objRegistroEditado.codCurvaReferencia">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Tipo Bono CVG</label>
+                    <input type="text" placeholder="Tipo Bono CVG" minlength="3" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.codTipoBonoCVG">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Base Cálculo Flujo</label>
+                    <input type="text" placeholder="Base Cálculo Flujo" minlength="3" maxlength="12" class="form-control" [(ngModel)]="this.objRegistroEditado.codBaseCalculoFlujo">
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">ISIN Sob. Gdn.</label>
+                    <input type="text" placeholder="ISIN Sob. Gdn." minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.codISINSOBGDN">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Reset Index</label>
+                    <input type="text" placeholder="Reset Index" minlength="3" maxlength="30" class="form-control" [(ngModel)]="this.objRegistroEditado.desResetIndex">
                 </div>
             </div>
 
@@ -50,22 +112,22 @@
             <div class="row">
                 <div class="col-md-3">
                     <label class="form-label">Tasa Cupón</label>
-                    <input type="number" placeholder="Tasa Cupón" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.numTasaCupon">
+                    <input type="number" placeholder="Tasa Cupón" class="form-control" [(ngModel)]="this.objRegistroEditado.numTasaCupon">
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Spread Tasa Variable</label>
-                    <input type="number" placeholder="Nemónico" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.numSpreadTasaVar">
+                    <input type="number" placeholder="Nemónico" class="form-control" [(ngModel)]="this.objRegistroEditado.numSpreadTasaVar">
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Spread Liquidez</label>
-                    <input type="number" placeholder="Spread Liquidez" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.mtoSpreadLiquidez">
+                    <input type="number" placeholder="Spread Liquidez" class="form-control" [(ngModel)]="this.objRegistroEditado.mtoSpreadLiquidez">
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Spread Emisión</label>
-                    <input type="number" placeholder="Spread Emisión" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.mtoSpreadEmision">
+                    <input type="number" placeholder="Spread Emisión" class="form-control" [(ngModel)]="this.objRegistroEditado.mtoSpreadEmision">
                 </div>
             </div>
 
@@ -86,72 +148,19 @@
             <br>
 
             <div class="row">
-                <div class="col-md-3">
-                    <label class="form-label">Método Amortización</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codMetoAmortizac"></ng-select>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Frecuencia Pago</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codFrecuenciaPago"></ng-select>
-                </div>
-
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label">Emisor</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codEmisor"></ng-select>
+                    <ng-select placeholder="Seleccione una opción..." [items]="listEmisor" bindLabel="nomEmisor" bindValue="idEmisor" [(ngModel)]="this.objRegistroEditado.idEmisor"></ng-select>
                 </div>
 
-                <div class="col-md-3">
-                    <label class="form-label">Base Cálculo IC</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codBaseCalculoIc"></ng-select>
-                </div>
-            </div>
-
-            <br>
-
-            <div class="row">
-                <div class="col-md-3">
-                    <label class="form-label">Tipo Tasa</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codTipoTasa"></ng-select>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Tasa RJTE</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codTasaRjte"></ng-select>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Fórmula Tasa</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codFormulaTasa"></ng-select>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Base Cáluclo Dcto.</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codBaseCalculoDcto"></ng-select>
-                </div>
-            </div>
-
-            <br>
-
-            <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label">Moneda</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codMoneda"></ng-select>
+                    <ng-select placeholder="Seleccione una opción..." [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.objRegistroEditado.idMoneda"></ng-select>
                 </div>
 
-                <div class="col-md-3">
-                    <label class="form-label">Curva Referencia</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codCurvaReferencia"></ng-select>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">ISIN Sob. Gdn.</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codISINSOBGDN"></ng-select>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Base Cálculo Flujo</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.objRegistroEditado.codBaseCalculoFlujo"></ng-select>
+                <div class="col-md-4">
+                    <label class="form-label">Tipo Bono SBS</label>
+                    <ng-select placeholder="Seleccione una opción..." [items]="listTipoBonoSBS" bindLabel="desTipoBonoSBS" bindValue="idTipoBonoSBS" [(ngModel)]="this.objRegistroEditado.idTipoBonoSBS"></ng-select>
                 </div>
             </div>
 
@@ -171,11 +180,15 @@
                 </div>
 
                 <div class="col-md-2">
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkTipoPago" name="chkTipoPago" [(ngModel)]="this.objRegistroEditado.flgTipoPago"><label for="chkTipoPago" class="form-check-label"> Tipo Pago </label></div>
+                </div>
+
+                <div class="col-md-2">
                     <div class="form-check"><input type="checkbox" class="form-check-input" id="chkFicticio" name="chkFicticio" [(ngModel)]="this.objRegistroEditado.flgFicticio"><label for="chkFicticio" class="form-check-label"> Ficticio </label></div>
                 </div>
 
                 <div class="col-md-2">
-                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkFicticio" name="chkFicticio" [(ngModel)]="this.objRegistroEditado.flgOpcionCall"><label for="chkFicticio" class="form-check-label"> Opción Call </label></div>
+                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkOpcionCall" name="chkOpcionCall" [(ngModel)]="this.objRegistroEditado.flgOpcionCall"><label for="chkOpcionCall" class="form-check-label"> Opción Call </label></div>
                 </div>
             </div>
 

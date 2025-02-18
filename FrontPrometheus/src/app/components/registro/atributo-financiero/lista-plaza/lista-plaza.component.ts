@@ -33,9 +33,9 @@ export class ListaPlazaComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
-    'id',
-    'codigo',
-    'descripcion'
+    'idPlaza',
+    'codPlaza',
+    'desPlaza'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}
@@ -100,7 +100,7 @@ export class ListaPlazaComponent {
           },
           (error: HttpErrorResponse) => {
             Swal.fire({
-              icon: 'success',
+              icon: 'error',
               title: 'Error',
               text: error.message,
               confirmButtonText: 'Aceptar'

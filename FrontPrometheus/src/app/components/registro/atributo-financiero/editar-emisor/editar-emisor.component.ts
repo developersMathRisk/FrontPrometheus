@@ -7,6 +7,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
 import { RegistroService } from '../../../../shared/services/registro.service';
 import { Emisor } from '../../../../shared/models/atributo-financiero/emisor';
+import { Pais } from '../../../../shared/models/atributo-financiero/pais';
 
 @Component({
   selector: 'app-editar-emisor',
@@ -19,12 +20,22 @@ export class EditarEmisorComponent {
   @Input() data!: Emisor;
   @Output() close = new EventEmitter<any>();
   
+  listPais: Pais[] = [];
   objRegistroEditado: Emisor = new Emisor;
   
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
     this.objRegistroEditado = {...this.data};
+    this.obtenerListPais();
+  }
+
+  obtenerListPais(){
+    this.registroService.getListaPais().subscribe(
+      (response: Pais[]) => {
+        this.listPais = response;
+      }
+    );
   }
 
   guardarCambios(){
@@ -38,7 +49,7 @@ export class EditarEmisorComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.registroService.putModificarEmisor(this.objRegistroEditado.codEmisor, this.objRegistroEditado).subscribe(
+        this.registroService.putModificarEmisor(this.objRegistroEditado.idEmisor, this.objRegistroEditado).subscribe(
           (response: any) => {
             Swal.fire({
               icon: 'success',

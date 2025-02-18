@@ -33,20 +33,18 @@ export class ListaAccionComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
-    // 'acciones',
     'idAccion',
     'codISIN',
     'codTicker',
-    'codNemonico',
-    'codTipoAccion',
-    'codMoneda',
-    'codPlaza',
-    'codEmisor',
+    'desNemonico',
     'flgCargaAutom',
-    'flgActivo',
     'codIndAsociado',
     'flgVar',
-    'fuenteInformacion'
+    'idPlaza',
+    'idTipoAccion',
+    'idFuenteInformacion',
+    'idEmisor',
+    'idMoneda'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}
@@ -116,7 +114,7 @@ export class ListaAccionComponent {
           },
           (error: HttpErrorResponse) => {
             Swal.fire({
-              icon: 'success',
+              icon: 'error',
               title: 'Error',
               text: error.message,
               confirmButtonText: 'Aceptar'

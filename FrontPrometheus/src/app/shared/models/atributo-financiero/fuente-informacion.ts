@@ -1,5 +1,5 @@
 export class FuenteInformacion{
-    id!: number;
-    codigo!: string;
-    descripcion!: string;
+    idFuenteInformacion!: number;
+    codFuenteInformacion!: string;
+    desFuenteInformacion!: string;
 }

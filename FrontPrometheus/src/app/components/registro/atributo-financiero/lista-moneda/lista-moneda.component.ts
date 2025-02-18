@@ -33,13 +33,17 @@ export class ListaMonedaComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
+    'idMoneda',
     'codMoneda',
-    'codPais',
-    'descripcion',
-    'simbolo',
+    'desMoneda',
+    'desCorto',
     'codSucave',
-    'relacionUsd',
-    'corporacion'
+    'codTipoRelacionUSD',
+    'codMonedaInt',
+    'flgCargaAutom',
+    'desTicker',
+    'flgVaR',
+    // 'codPais'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}
@@ -92,7 +96,7 @@ export class ListaMonedaComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         let seleccionado = this.contextMenu.menuData.item;
-        this.registroService.eiminarMoneda(row.codMoneda).subscribe(
+        this.registroService.eiminarMoneda(row.idMoneda).subscribe(
           (response: any) => {
             this.listarRegistros();
             Swal.fire({
@@ -104,7 +108,7 @@ export class ListaMonedaComponent {
           },
           (error: HttpErrorResponse) => {
             Swal.fire({
-              icon: 'success',
+              icon: 'error',
               title: 'Error',
               text: error.message,
               confirmButtonText: 'Aceptar'

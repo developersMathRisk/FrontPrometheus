@@ -33,14 +33,14 @@ export class ListaEmisorComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
-    'codEmisor',
-    'codPais',
+    'idEmisor',
+    'codEmisor',    
     'codIDCCliente',
     'nomEmisor',
     'codTipoEmisor',
     'detalle',
-    'flagEmiReport',
-    'flagOrgaMulti',
+    'flgEmiReport',
+    'flgOrgaMulti',
     'ambito',
     'codBloomberg',
     'flgContratoMarco',
@@ -49,7 +49,8 @@ export class ListaEmisorComponent {
     'codSBS',
     'codRUC',
     'codFuente',
-    'codTipoEmisorAnx8'
+    'codTipoEmisorAnx8',
+    'idPais'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}
@@ -102,7 +103,7 @@ export class ListaEmisorComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         let seleccionado = this.contextMenu.menuData.item;
-        this.registroService.eiminarEmisor(row.codEmisor).subscribe(
+        this.registroService.eiminarEmisor(row.idEmisor).subscribe(
           (response: any) => {
             this.listarRegistros();
             Swal.fire({
@@ -114,7 +115,7 @@ export class ListaEmisorComponent {
           },
           (error: HttpErrorResponse) => {
             Swal.fire({
-              icon: 'success',
+              icon: 'error',
               title: 'Error',
               text: error.message,
               confirmButtonText: 'Aceptar'

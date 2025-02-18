@@ -1,12 +1,12 @@
 export class Emisor{
-    codEmisor !: number
-    codPais !: string;
-    codIDCCliente !: string;
+    idEmisor !: number;
+    codEmisor !: string;
+    codIDCCliente !: number;
     nomEmisor !: string;
     codTipoEmisor !: string;
     detalle !: string;
-    flagEmiReport !: boolean;
-    flagOrgaMulti !: boolean;
+    flgEmiReport !: boolean;
+    flgOrgaMulti !: boolean;
     ambito !: string;
     codBloomberg !: string;
     flgContratoMarco !: boolean;
@@ -16,4 +16,5 @@ export class Emisor{
     codRUC !: string;
     codFuente !: string;
     codTipoEmisorAnx8 !: string;
+    idPais !: string;
 }

@@ -21,6 +21,7 @@ import { ListaEmisorComponent } from '../lista-emisor/lista-emisor.component';
 import { ListaMonedaComponent } from '../lista-moneda/lista-moneda.component';
 import { ListaSectorComponent } from '../lista-sector/lista-sector.component';
 import { ListaGrupoEconomicoComponent } from '../lista-grupo-economico/lista-grupo-economico.component';
+import { ListaTipoBonoSbsComponent } from '../lista-tipo-bono-sbs/lista-tipo-bono-sbs.component';
 
 @Component({
   selector: 'app-mantenedor-atributos-financieros',
@@ -54,6 +55,7 @@ export class MantenedorAtributosFinancierosComponent {
       { id: 17, descripcion: 'Curva Referencia' },
       { id: 18, descripcion: 'Tipo Emisión' },
       { id: 19, descripcion: 'Tipo Fondo' },
+      { id: 20, descripcion: 'Tipo Bono SBS' },
     ];
     this.productoSeleccionado = 1;
   }
@@ -77,9 +79,8 @@ export class MantenedorAtributosFinancierosComponent {
     16: ListaTasaRjteComponent,
     17: ListaCurvaReferenciaComponent,
     18: ListaTipoEmisionComponent,
-    19: ListaTipoFondoComponent
-
-    // agregar más si es necesario
+    19: ListaTipoFondoComponent,
+    20: ListaTipoBonoSbsComponent
   };
 
   get componenteSeleccionado() {

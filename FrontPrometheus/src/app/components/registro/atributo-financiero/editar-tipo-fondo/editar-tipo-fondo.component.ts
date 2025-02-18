@@ -38,7 +38,7 @@ export class EditarTipoFondoComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.registroService.putModificarTipoFondo(this.objRegistroEditado.id_Tipo, this.objRegistroEditado).subscribe(
+        this.registroService.putModificarTipoFondo(this.objRegistroEditado.idTipoFondo, this.objRegistroEditado).subscribe(
           (response: any) => {
             Swal.fire({
               icon: 'success',

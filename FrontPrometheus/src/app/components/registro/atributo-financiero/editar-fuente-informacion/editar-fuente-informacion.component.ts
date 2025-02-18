@@ -38,7 +38,7 @@ export class EditarFuenteInformacionComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.registroService.putModificarFuenteInformacion(this.objRegistroEditado.id, this.objRegistroEditado).subscribe(
+        this.registroService.putModificarFuenteInformacion(this.objRegistroEditado.idFuenteInformacion, this.objRegistroEditado).subscribe(
           (response: any) => {
             Swal.fire({
               icon: 'success',

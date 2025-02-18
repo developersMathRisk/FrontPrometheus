@@ -19,12 +19,15 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
+                    <label class="form-label">Código</label>
+                    <input type="text" placeholder="Código" minlength="3" maxlength="3" class="form-control" [(ngModel)]="this.nuevoRegistro.codTipoFondo">
+                </div>
+                <div class="col-md-6">
                     <label class="form-label">Descripción</label>
-                    <input type="text" placeholder="Descripción" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.descripcion">
+                    <input type="text" placeholder="Descripción" minlength="3" maxlength="150" class="form-control" [(ngModel)]="this.nuevoRegistro.desTipoFondo">
                 </div>
             </div>
-
         </div>
 
         <div class="card-footer">

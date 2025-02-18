@@ -24,6 +24,7 @@ import { TipoEmision } from '../models/atributo-financiero/tipo-emision';
 import { TipoFondo } from '../models/atributo-financiero/tipo-fondo';
 import { Sector } from '../models/atributo-financiero/sector';
 import { GrupoEconomico } from '../models/atributo-financiero/grupo-economico';
+import { TipoBonoSBS } from '../models/atributo-financiero/tipo-bono-sbs';
 
 @Injectable({
   providedIn: 'root',
@@ -80,19 +81,19 @@ export class RegistroService {
 
   //Fondo de inversión
   public postRegistrarFondoInversion(objFondoInversion: FondoInversion){
-    return this.http.post<FondoInversion>(`${this.apiServeURL}/mantenedores/crearFondoInversion`, objFondoInversion);
+    return this.http.post<FondoInversion>(`${this.apiServeURL}/mantenedores/crearFondo`, objFondoInversion);
   }
 
   public getListaFondoInversion(): Observable<FondoInversion[]>{
-    return this.http.get<FondoInversion[]>(`${this.apiServeURL}/mantenedores/fondoInversion/list`);
+    return this.http.get<FondoInversion[]>(`${this.apiServeURL}/mantenedores/fondo/list`);
   }
 
   public putModificarFondoInversion(id: number, objFondoInversion: FondoInversion): Observable<FondoInversion> {
-    return this.http.put<FondoInversion>(`${this.apiServeURL}/mantenedores/modificarFondoInversion/${id}`, objFondoInversion);
+    return this.http.put<FondoInversion>(`${this.apiServeURL}/mantenedores/modificarFondo/${id}`, objFondoInversion);
   }
 
   public eiminarFondoInversion(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarFondoInversion/${id}`);
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarFondo/${id}`);
   }
 
 
@@ -260,11 +261,11 @@ export class RegistroService {
     return this.http.get<Moneda[]>(`${this.apiServeURL}/mantenedores/moneda/list`);
   }
 
-  public putModificarMoneda(id: string, objMoneda: Moneda): Observable<Moneda> {
+  public putModificarMoneda(id: number, objMoneda: Moneda): Observable<Moneda> {
     return this.http.put<Moneda>(`${this.apiServeURL}/mantenedores/modificarMoneda/${id}`, objMoneda);
   }
 
-  public eiminarMoneda(id: string): Observable<void> {
+  public eiminarMoneda(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarMoneda/${id}`);
   }
 
@@ -368,6 +369,23 @@ export class RegistroService {
 
   public eiminarTipoAccion(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarTipoAccion/${id}`);
+  }
+
+  //Tipo Bono SBS
+  public postRegistrarTipoBonoSBS(objTipoBonoSBS: TipoBonoSBS){
+    return this.http.post<TipoBonoSBS>(`${this.apiServeURL}/mantenedores/crearTipoBonoSBS`, objTipoBonoSBS);
+  }
+
+  public getListaTipoBonoSBS(): Observable<TipoBonoSBS[]>{
+    return this.http.get<TipoBonoSBS[]>(`${this.apiServeURL}/mantenedores/tipoBonoSBS/list`);
+  }
+
+  public putModificarTipoBonoSBS(id: number, objTipoBonoSBS: TipoBonoSBS): Observable<TipoBonoSBS> {
+    return this.http.put<TipoBonoSBS>(`${this.apiServeURL}/mantenedores/modificarTipoBonoSBS/${id}`, objTipoBonoSBS);
+  }
+
+  public eiminarTipoBonoSBS(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarTipoBonoSBS/${id}`);
   }
 
   //Tipo Fondo

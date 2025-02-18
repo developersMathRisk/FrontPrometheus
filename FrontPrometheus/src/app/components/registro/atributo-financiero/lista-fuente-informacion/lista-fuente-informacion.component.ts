@@ -33,9 +33,9 @@ export class ListaFuenteInformacionComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
-    'id',
-    'codigo',
-    'descripcion'
+    'idFuenteInformacion',
+    'codFuenteInformacion',
+    'desFuenteInformacion'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}
@@ -88,7 +88,7 @@ export class ListaFuenteInformacionComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         let seleccionado = this.contextMenu.menuData.item;
-        this.registroService.eiminarFuenteInformacion(row.id).subscribe(
+        this.registroService.eiminarFuenteInformacion(row.idFuenteInformacion).subscribe(
           (response: any) => {
             this.listarRegistros();
             Swal.fire({
@@ -100,7 +100,7 @@ export class ListaFuenteInformacionComponent {
           },
           (error: HttpErrorResponse) => {
             Swal.fire({
-              icon: 'success',
+              icon: 'error',
               title: 'Error',
               text: error.message,
               confirmButtonText: 'Aceptar'

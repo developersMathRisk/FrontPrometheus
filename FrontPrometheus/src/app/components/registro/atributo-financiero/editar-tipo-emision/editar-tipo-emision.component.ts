@@ -38,7 +38,7 @@ export class EditarTipoEmisionComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.registroService.putModificarTipoEmision(this.objRegistroEditado.iD_TipoEmision, this.objRegistroEditado).subscribe(
+        this.registroService.putModificarTipoEmision(this.objRegistroEditado.id_TipoEmision, this.objRegistroEditado).subscribe(
           (response: any) => {
             Swal.fire({
               icon: 'success',

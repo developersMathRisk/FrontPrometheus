@@ -49,18 +49,18 @@
 
             <div class="row">
                 <div class="col-md-4">
-                    <label class="form-label">Tipo Fondo</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoRegistro.codTipoFondo"></ng-select>
+                    <label class="form-label">Plaza</label>
+                    <ng-select placeholder="Seleccione una opción..." [items]="listPlaza" bindLabel="desPlaza" bindValue="idPlaza" [(ngModel)]="this.nuevoRegistro.idPlaza"></ng-select>
                 </div>
 
                 <div class="col-md-4">
-                    <label class="form-label">Plaza</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoRegistro.codPlaza"></ng-select>
+                    <label class="form-label">Emisor</label>
+                    <ng-select placeholder="Seleccione una opción..." [items]="listEmisor" bindLabel="nomEmisor" bindValue="idEmisor" [(ngModel)]="this.nuevoRegistro.idEmisor"></ng-select>
                 </div>
 
                 <div class="col-md-4">
                     <label class="form-label">Moneda</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoRegistro.codMoneda"></ng-select>
+                    <ng-select placeholder="Seleccione una opción..." [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.nuevoRegistro.idMoneda"></ng-select>
                 </div>
             </div>  
             
@@ -68,13 +68,13 @@
 
             <div class="row">
                 <div class="col-md-4">
-                    <label class="form-label">Emisor</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoRegistro.codEmisor"></ng-select>
+                    <label class="form-label">Tipo Fondo</label>
+                    <ng-select placeholder="Seleccione una opción..." [items]="listTipoFondo" bindLabel="desTipoFondo" bindValue="idTipoFondo" [(ngModel)]="this.nuevoRegistro.idTipoFondo"></ng-select>
                 </div>
 
                 <div class="col-md-4">
                     <label class="form-label">Fuente Información</label>
-                    <ng-select placeholder="Seleccione una opción..." name="select-moneda" [items]="listMonedas" bindLabel="descripcion" bindValue="codMoneda" [(ngModel)]="this.nuevoRegistro.fuenteInformacion"></ng-select>
+                    <ng-select placeholder="Seleccione una opción..." [items]="listFuenteInformacion" bindLabel="desFuenteInformacion" bindValue="idFuenteInformacion" [(ngModel)]="this.nuevoRegistro.idFuenteInformacion"></ng-select>
                 </div>
             </div>
 
@@ -83,9 +83,6 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-check"><input type="checkbox" class="form-check-input" id="chkCargaAutomatica" name="chkCargaAutomatica" [(ngModel)]="this.nuevoRegistro.flgCargaAutom"><label for="chkCargaAutomatica" class="form-check-label"> Carga Automática </label></div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkActivo" name="chkActivo" [(ngModel)]="this.nuevoRegistro.flgActivo"><label for="chkActivo" class="form-check-label"> Activo </label></div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-check"><input type="checkbox" class="form-check-input" id="chkCalculoVaR" name="chkCalculoVaR" [(ngModel)]="this.nuevoRegistro.flgVar"><label for="chkCalculoVaR" class="form-check-label"> Cálculo de VaR </label></div>

@@ -8,6 +8,10 @@ import { RegistroService } from '../../../../shared/services/registro.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Emisor } from '../../../../shared/models/atributo-financiero/emisor';
+import { FuenteInformacion } from '../../../../shared/models/atributo-financiero/fuente-informacion';
+import { Plaza } from '../../../../shared/models/atributo-financiero/plaza';
+import { TipoFondo } from '../../../../shared/models/atributo-financiero/tipo-fondo';
 
 @Component({
   selector: 'app-editar-fondo-inversion',
@@ -22,20 +26,59 @@ export class EditarFondoInversionComponent {
   
   objRegistroEditado: FondoInversion = new FondoInversion;
   
-  listMonedas: Moneda[] = [];
+  listPlaza: Plaza[] = [];
+  listTipoFondo: TipoFondo[] = [];
+  listFuenteInformacion: FuenteInformacion[] = [];
+  listEmisor: Emisor[] = [];
+  listMoneda: Moneda[] = [];
   
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
     this.objRegistroEditado = {...this.data};
-    this.obtenerMonedas();
+    this.obtenerListPlaza();
+    this.obtenerListTipoFondo();
+    this.obtenerListFuenteInformacion();
+    this.obtenerListEmisor();
+    this.obtenerListMoneda();
   }
 
-  obtenerMonedas(){
-    this.registroService.monedas().subscribe(
+  obtenerListPlaza(){
+    this.registroService.getListaPlaza().subscribe(
+      (response: Plaza[]) => {
+        this.listPlaza = response;
+      }
+    )
+  }
+
+  obtenerListTipoFondo(){
+    this.registroService.getListaTipoFondo().subscribe(
+      (response: TipoFondo[]) => {
+        this.listTipoFondo = response;
+      }
+    )
+  }
+
+  obtenerListFuenteInformacion(){
+    this.registroService.getListaFuenteInformacion().subscribe(
+      (response: FuenteInformacion[]) => {
+        this.listFuenteInformacion = response;
+      }
+    )
+  }
+
+  obtenerListEmisor(){
+    this.registroService.getListaEmisor().subscribe(
+      (response: Emisor[]) => {
+        this.listEmisor = response;
+      }
+    )
+  }
+
+  obtenerListMoneda(){
+    this.registroService.getListaMoneda().subscribe(
       (response: Moneda[]) => {
-        this.listMonedas = response;
-        console.log(this.listMonedas);
+        this.listMoneda = response;
       }
     )
   }
@@ -51,7 +94,7 @@ export class EditarFondoInversionComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.registroService.putModificarFondoInversion(this.objRegistroEditado.idFondoInversion, this.objRegistroEditado).subscribe(
+        this.registroService.putModificarFondoInversion(this.objRegistroEditado.idFondo, this.objRegistroEditado).subscribe(
           (response: any) => {
             Swal.fire({
               icon: 'success',

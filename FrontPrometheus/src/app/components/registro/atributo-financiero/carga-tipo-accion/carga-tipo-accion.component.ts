@@ -32,7 +32,7 @@ export class CargaTipoAccionComponent {
         Swal.fire({
           icon: 'success',
           title: 'Registro exitoso',
-          text: 'La plaza ha sido registrada correctamente.',
+          text: 'El tipo de acción ha sido registrado correctamente.',
           confirmButtonText: 'Aceptar'
         });
         this.cerrar();

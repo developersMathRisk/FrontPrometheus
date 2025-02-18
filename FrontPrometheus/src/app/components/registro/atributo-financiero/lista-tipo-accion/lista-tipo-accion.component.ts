@@ -33,9 +33,9 @@ export class ListaTipoAccionComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
-    'id',
-    'codigo',
-    'descripcion'
+    'idTipoAccion',
+    'codTipoAccion',
+    'desTipoAccion'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}
@@ -100,7 +100,7 @@ export class ListaTipoAccionComponent {
           },
           (error: HttpErrorResponse) => {
             Swal.fire({
-              icon: 'success',
+              icon: 'error',
               title: 'Error',
               text: error.message,
               confirmButtonText: 'Aceptar'

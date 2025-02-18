@@ -8,6 +8,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Bono } from '../../../../shared/models/producto/bono';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Emisor } from '../../../../shared/models/atributo-financiero/emisor';
+import { TipoBonoSBS } from '../../../../shared/models/atributo-financiero/tipo-bono-sbs';
 
 @Component({
   selector: 'app-carga-bono',
@@ -20,35 +22,46 @@ export class CargaBonoComponent implements OnInit{
 
   @Output() close = new EventEmitter<any>();
   
-  listMonedas: Moneda[] = [];
-  monedaSeleccionada: string = '';
-  flgCargaAutomatica: boolean = false;
-  flgActivo: boolean = false;
-  flgCalculoVaR: boolean = false;
-  strCodISIN: string = '';
-  strTicker: string = '';
-  strNemonico: string = '';
+  listEmisor: Emisor[] = [];
+  listMoneda: Moneda[] = [];
+  listTipoBonoSBS: TipoBonoSBS[] = [];
 
-  nuevoBono: Bono = new Bono();
+  nuevoRegistro: Bono = new Bono();
 
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
-    this.obtenerMonedas();
+    this.obtenerListEmisor();
+    this.obtenerListMoneda();
+    this.obtenerListTipoBonoSBS();
   }
 
-  obtenerMonedas(){
-    this.registroService.monedas().subscribe(
+  obtenerListEmisor(){
+    this.registroService.getListaEmisor().subscribe(
+      (response: Emisor[]) => {
+        this.listEmisor = response;
+      }
+    )
+  }
+
+  obtenerListMoneda(){
+    this.registroService.getListaMoneda().subscribe(
       (response: Moneda[]) => {
-        this.listMonedas = response;
-        console.log(this.listMonedas);
+        this.listMoneda = response;
+      }
+    )
+  }
+
+  obtenerListTipoBonoSBS(){
+    this.registroService.getListaTipoBonoSBS().subscribe(
+      (response: TipoBonoSBS[]) => {
+        this.listTipoBonoSBS = response;
       }
     )
   }
 
   registrar(){
-    this.nuevoBono.fecInicio = this.nuevoBono.fecInicio + "T00:00:00";
-    this.registroService.postRegistrarBono(this.nuevoBono).subscribe(
+    this.registroService.postRegistrarBono(this.nuevoRegistro).subscribe(
       (response: any) => {
         Swal.fire({
           icon: 'success',

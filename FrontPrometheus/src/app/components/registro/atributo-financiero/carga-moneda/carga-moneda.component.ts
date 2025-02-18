@@ -7,6 +7,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
 import { RegistroService } from '../../../../shared/services/registro.service';
 import { Moneda } from '../../../../shared/models/atributo-financiero/moneda';
+import { Pais } from '../../../../shared/models/atributo-financiero/pais';
 
 @Component({
   selector: 'app-carga-moneda',
@@ -19,12 +20,21 @@ export class CargaMonedaComponent {
   @Output() close = new EventEmitter<any>();
 
   nuevoRegistro: Moneda = new Moneda();
+  listPais: Pais[] = [];
 
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
+    this.obtenerListPais();
   }
 
+  obtenerListPais(){
+      this.registroService.getListaPais().subscribe(
+        (response: Pais[]) => {
+          this.listPais = response;
+        }
+      )
+    }
 
   registrar(){
     this.registroService.postRegistrarMoneda(this.nuevoRegistro).subscribe(

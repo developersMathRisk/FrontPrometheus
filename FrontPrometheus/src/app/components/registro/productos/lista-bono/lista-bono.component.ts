@@ -34,7 +34,6 @@ export class ListaBonoComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
-    // 'acciones',
     'idBono',
     'codISIN',
     'desNemonico',
@@ -53,23 +52,18 @@ export class ListaBonoComponent {
     'codBaseCalculoDcto',
     'codTipoTasa',
     'codTasaRjte',
-    'codEmisor',
     'mtoSpreadLiquidez',
     'mtoSpreadEmision',
-    'codMoneda',
     'flgFicticio',
-    'codTipoBonoSbs',
     'codCurvaReferencia',
     'codTipoBonoCVG',
-    'usrModifica',
-    'usrValida',
-    'usrRegistra',
-    'flgBorradoLogico',
     'flgOpcionCall',
-    'codEstado',
     'codBaseCalculoFlujo',
     'codISINSOBGDN',
-    'desResetIndex'
+    'desResetIndex',
+    'codEmisor',
+    'codMoneda',
+    'codTipoBonoSbs'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}
@@ -133,7 +127,7 @@ export class ListaBonoComponent {
           },
           (error: HttpErrorResponse) => {
             Swal.fire({
-              icon: 'success',
+              icon: 'error',
               title: 'Error',
               text: error.message,
               confirmButtonText: 'Aceptar'

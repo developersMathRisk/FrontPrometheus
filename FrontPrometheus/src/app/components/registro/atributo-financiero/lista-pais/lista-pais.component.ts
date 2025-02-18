@@ -33,8 +33,9 @@ export class ListaPaisComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
-    'id',
-    'descripcion',
+    'idPais',
+    'codPais',
+    'desPais',
     'abrev'
   ];
 
@@ -100,7 +101,7 @@ export class ListaPaisComponent {
           },
           (error: HttpErrorResponse) => {
             Swal.fire({
-              icon: 'success',
+              icon: 'error',
               title: 'Error',
               text: error.message,
               confirmButtonText: 'Aceptar'

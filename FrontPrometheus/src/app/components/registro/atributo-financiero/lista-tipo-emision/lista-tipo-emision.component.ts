@@ -89,7 +89,7 @@ export class ListaTipoEmisionComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         let seleccionado = this.contextMenu.menuData.item;
-        this.registroService.eiminarTipoEmision(row.iD_TipoEmision).subscribe(
+        this.registroService.eiminarTipoEmision(row.id_TipoEmision).subscribe(
           (response: any) => {
             this.listarRegistros();
             Swal.fire({
@@ -101,7 +101,7 @@ export class ListaTipoEmisionComponent {
           },
           (error: HttpErrorResponse) => {
             Swal.fire({
-              icon: 'success',
+              icon: 'error',
               title: 'Error',
               text: error.message,
               confirmButtonText: 'Aceptar'

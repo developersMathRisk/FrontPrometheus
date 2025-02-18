@@ -8,6 +8,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { Emisor } from '../../../../shared/models/atributo-financiero/emisor';
+import { TipoBonoSBS } from '../../../../shared/models/atributo-financiero/tipo-bono-sbs';
 
 @Component({
   selector: 'app-editar-bono',
@@ -22,20 +24,39 @@ export class EditarBonoComponent {
   
   objRegistroEditado: Bono = new Bono;
 
-  listMonedas: Moneda[] = [];
+  listEmisor: Emisor[] = [];
+  listMoneda: Moneda[] = [];
+  listTipoBonoSBS: TipoBonoSBS[] = [];
   
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
     this.objRegistroEditado = {...this.data};
-    this.obtenerMonedas();
+    this.obtenerListEmisor();
+    this.obtenerListMoneda();
+    this.obtenerListTipoBonoSBS();
   }
 
-  obtenerMonedas(){
-    this.registroService.monedas().subscribe(
+  obtenerListEmisor(){
+    this.registroService.getListaEmisor().subscribe(
+      (response: Emisor[]) => {
+        this.listEmisor = response;
+      }
+    )
+  }
+
+  obtenerListMoneda(){
+    this.registroService.getListaMoneda().subscribe(
       (response: Moneda[]) => {
-        this.listMonedas = response;
-        console.log(this.listMonedas);
+        this.listMoneda = response;
+      }
+    )
+  }
+
+  obtenerListTipoBonoSBS(){
+    this.registroService.getListaTipoBonoSBS().subscribe(
+      (response: TipoBonoSBS[]) => {
+        this.listTipoBonoSBS = response;
       }
     )
   }
