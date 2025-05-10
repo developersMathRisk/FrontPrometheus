@@ -1,0 +1,143 @@
+<div>
+    <button type="submit" class="btn btn-primary" (click)="registrar(cargaBonoModal)">Agregar Bono</button>
+</div>
+
+<br>
+
+<div id="mat-sorting">
+    <div class="mat-elevation-z8">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" matSort #sort="matSort">
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef>Bono</th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="acciones">
+                            <button mat-icon-button class="icono-accion icono-editar" (click)="editar(row, editarBonoModal)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button class="icono-accion icono-eliminar" (click)="eliminar(row)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idBono">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idBono}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="codISIN">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ISIN</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codISIN}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ticker">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Ticker</th>
+                    <td mat-cell *matCellDef="let element"> {{element.ticker}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="fechaEmision">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Emision</th>
+                    <td mat-cell *matCellDef="let element"> {{element.fechaEmision}} </td>
+                </ng-container>
+                
+                <ng-container matColumnDef="fechaVencimiento">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Vencimiento</th>
+                    <td mat-cell *matCellDef="let element"> {{element.fechaVencimiento}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="montoNominal">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nominal</th>
+                    <td mat-cell *matCellDef="let element"> {{element.montoNominal}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="tasaCupon">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tasa Cupón</th>
+                    <td mat-cell *matCellDef="let element"> {{element.tasaCupon}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="spread">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Spread</th>
+                    <td mat-cell *matCellDef="let element"> {{element.spread}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idEmisor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Emisor</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idEmisor}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idMoneda">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Moneda</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idMoneda}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idTipoBono">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Bono</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idTipoBono}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idCurvaReferencia">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Curva Referencia</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idCurvaReferencia}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idMetodoAmortizacion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Método Amortización</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idMetodoAmortizacion}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idCalculobase">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cálculo Base</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idCalculobase}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idFrecuenciaPago">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Frecuencia Pago</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idFrecuenciaPago}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idTipoTasaInteres">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Tasa Interés</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idTipoTasaInteres}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idFormulaTasa">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fórmula Tasa</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idFormulaTasa}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
+            </table>
+        </div>
+        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+        </mat-paginator>
+    </div>
+
+</div>
+
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="contextMenu">
+</div>
+
+<mat-menu #contextMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item (click)="editar(selectedRow, editarBonoModal)">
+            <mat-icon>edit</mat-icon> Editar
+        </button>
+        <button mat-menu-item (click)="eliminar(selectedRow)">
+            <mat-icon>delete</mat-icon> Eliminar
+        </button>
+    </ng-template>
+</mat-menu>
+
+<ng-template #cargaBonoModal let-modal>
+    <app-carga-bono (close)="cerrarModal($event)"></app-carga-bono>
+</ng-template>
+
+<ng-template #editarBonoModal let-modal>
+    <app-editar-bono (close)="cerrarModal($event)" [data]="filaEditar"></app-editar-bono>
+</ng-template>

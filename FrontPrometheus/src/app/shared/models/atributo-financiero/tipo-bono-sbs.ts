@@ -1,6 +1,4 @@
-export class TipoBonoSBS{
-    idTipoBonoSBS!: number;
-    codTipoBonoSBS!: string;
-    desTipoBonoSBS!: string;
-    codTipoBonoSucave!: string;
+export class TipoBono{
+    idTipoBono!: number;
+    descripcionTipoBono!: string;
 }

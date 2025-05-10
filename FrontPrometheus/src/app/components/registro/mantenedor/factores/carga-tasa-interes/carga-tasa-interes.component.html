@@ -1,0 +1,52 @@
+<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
+    <div role="document" class="msg_card_body" style="width: 100%;">
+        <div class="modal-header">
+            <table style="width: 100%;">
+                <tr style="width: 100%;">
+                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
+                        <h3 class="modal-title">Cargar Tasa Interés</h3>
+                    </td>
+                    <td style="text-align: right; padding-right: 1.3%;">
+                        <button type="button" class="icon-close" (click)="cerrar()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Cod. Vértice</label>
+                    <input type="text" placeholder=" Cod. Vértice" minlength="1" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codVertice">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Desc. Vértice</label>
+                    <input type="text" placeholder="Desc. Vértice" minlength="1" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.desVertice">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Cod. Vértice Ref.</label>
+                    <input type="text" placeholder=" Cod. Vértice Ref." minlength="1" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codVerticeRef">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Curva Proveedor</label>
+                    <input type="text" placeholder="Curva Proveedor" minlength="1" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codCurvaProveedor">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Plazo</label>
+                    <input type="number" placeholder="Plazo" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.nuevoRegistro.numPlazo">
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" (click)="registrar()">Registrar</button>
+            <br>
+        </div>
+    </div>
+</div>

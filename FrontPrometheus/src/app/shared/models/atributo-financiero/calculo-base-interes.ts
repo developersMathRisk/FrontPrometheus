@@ -1,6 +1,6 @@
 export class CalculoBaseInteres{
-    iD_Calculo !: number;
+    idCalculobase !: number;
     nombreCalculo !: string;
-    nombreCorto !: string;
-    descripcion !: string;
+    nombreCortoCalculo !: string;
+    descripcionCalculoBase !: string;
 }

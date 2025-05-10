@@ -1,0 +1,29 @@
+.icon-close{
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    outline: none !important;
+}
+
+.combo-contenedor {
+    display: flex;
+    align-items: center;
+    width: 100%; /* Puedes ajustar esto según sea necesario */
+  }
+
+  ng-select {
+    flex-grow: 1; /* El combo ocupa el espacio restante */
+    margin-right: 10px; /* Separación entre el combo y el botón */
+  }
+  
+  .btn-agregar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px; /* Ajusta el padding para que el botón tenga un tamaño adecuado */
+    border-radius: 50%; /* Hace el botón circular */
+  }
+  
+  .icon {
+    font-size: 20px;
+  }

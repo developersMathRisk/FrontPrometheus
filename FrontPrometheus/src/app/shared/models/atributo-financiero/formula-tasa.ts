@@ -1,7 +1,7 @@
 export class FormulaTasa{
-    iD_Formula !: number;
+    idFormulaTasa !: number;
     nombreFormula !: string;
-    nombreCorto !: string;
-    descripcion !: string;
+    nombreCortoFormula !: string;
+    descripcionFormula !: string;
     expresionFormula !: string;
 }

@@ -7,8 +7,13 @@ export class Accion {
     codIndAsociado!: string;
     flgVar!: boolean;
     idPlaza!: number;
+    desPlaza!: string;
     idTipoAccion!: number;
+    desTipoAccion!: string;
     idFuenteInformacion!: number;
+    desFuenteInformacion!: string;
     idEmisor!: number;
+    nomEmisor!: string;
     idMoneda!: number;
+    desMoneda!: string;
 }

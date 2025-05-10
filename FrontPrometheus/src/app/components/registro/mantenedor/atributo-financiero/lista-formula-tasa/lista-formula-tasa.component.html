@@ -1,0 +1,70 @@
+<div>
+    <button type="submit" class="btn btn-primary" (click)="registrar(cargaModal)">Agregar Fórmula Tasa</button>
+</div>
+
+<br>
+
+<div id="mat-sorting">
+    <div class="mat-elevation-z8">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" matSort #sort="matSort">
+
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idFormulaTasa}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+                    <td mat-cell *matCellDef="let element"> {{element.nombreFormula}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="nombreCorto">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Corto</th>
+                    <td mat-cell *matCellDef="let element"> {{element.nombreCortoFormula}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="descripcion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
+                    <td mat-cell *matCellDef="let element"> {{element.descripcionFormula}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="expresionFormula">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Expresión</th>
+                    <td mat-cell *matCellDef="let element"> {{element.expresionFormula}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
+            </table>
+        </div>
+        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+        </mat-paginator>
+    </div>
+
+</div>
+
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="contextMenu">
+</div>
+
+<mat-menu #contextMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item (click)="editar(selectedRow, editarModal)">
+            <mat-icon>edit</mat-icon> Editar
+        </button>
+        <button mat-menu-item (click)="eliminar(selectedRow)">
+            <mat-icon>delete</mat-icon> Eliminar
+        </button>
+    </ng-template>
+</mat-menu>
+
+<ng-template #cargaModal let-modal>
+    <app-carga-formula-tasa (close)="cerrarModal($event)"></app-carga-formula-tasa>
+</ng-template>
+
+<ng-template #editarModal let-modal>
+    <app-editar-formula-tasa (close)="cerrarModal($event)" [data]="filaEditar"></app-editar-formula-tasa>
+</ng-template>

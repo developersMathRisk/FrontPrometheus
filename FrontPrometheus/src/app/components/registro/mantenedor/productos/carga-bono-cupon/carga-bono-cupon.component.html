@@ -1,0 +1,163 @@
+<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
+    <div role="document" class="msg_card_body" style="width: 100%;">
+        <div class="modal-header">
+            <table style="width: 100%;">
+                <tr style="width: 100%;">
+                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
+                        <h3 class="modal-title">Cargar Cuponera del Bono {{this.data.idBono}}</h3>
+                    </td>
+                    <td style="text-align: right; padding-right: 1.3%;">
+                        <button type="button" class="icon-close" (click)="cerrar()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <!-- <div class="card-header justify-content-between d-sm-flex d-block">
+            <div class="card-title">
+                Datos Generales
+            </div>
+        </div> -->
+        <div class="card-body">
+            <ul ngbNav #nav="ngbNav" class="nav nav-tabs nav-justified mb-4 tab-style-6 p-0 d-block d-sm-flex">
+                <li [ngbNavItem]="1" class="nav-item">
+                    <a ngbNavLink class="nav-link icon-btn d-flex align-items-center justify-content-center gap-1 text-nowrap" data-bs-toggle="tab" data-toggle="tab">
+                        <span class="d-sm-inline">Cargar desde archivo</span>
+                    </a>
+                    <ng-template ngbNavContent>
+                        <div>
+                            <file-pond #myPond [options]="singlepondOptions" class="multiple-fileupload"
+                                [files]="pondFiles" (oninit)="pondHandleInit()"
+                                (onaddfile)="pondHandleAddFile($event)"
+                                (onactivatefile)="pondHandleActivateFile($event)">
+                            </file-pond>
+                        </div>
+                    </ng-template>
+                </li>
+
+                <li [ngbNavItem]="2" class="nav-item">
+                    <a ngbNavLink class="nav-link icon-btn d-flex align-items-center justify-content-center gap-1 text-nowrap" data-bs-toggle="tab" data-toggle="tab">
+                        <span class="d-sm-inline">Cargar manualmente</span>
+                    </a>
+                    <ng-template ngbNavContent>
+                        <div>
+                            <div>
+                                <button mat-raised-button (click)="addData()" class="btn btn-primary">
+                                    Agregar fila
+                                </button>&nbsp;
+                                <button mat-raised-button [disabled]="!nuevoRegistro.length" (click)="removeData()"
+                                    class="btn btn-primary">
+                                    Quitar fila
+                                </button>
+                            </div>
+                            <div class="table-responsive">
+                                <table mat-table [dataSource]="dataSource" matSort #sort="matSort"
+                                    class="mat-elevation-z8 demo-table mt-3">
+                                    <ng-container matColumnDef="codISIN">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>ISIN</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <input type="text" style="width: 100px;" placeholder="Código ISIN"
+                                                minlength="3" maxlength="20" class="form-control"
+                                                [(ngModel)]="element.codISIN">
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="numeroCuota">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Cuota</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <input type="number" style="width: 100px;" placeholder="Cuota"
+                                                class="form-control" [(ngModel)]="element.numeroCuota">
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="fechaPago">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Pago</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <input type="date" class="form-control" [(ngModel)]="element.fechaPago">
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="diasPeriodo">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Dias Periodo</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <input type="number" style="width: 150px;" placeholder="Días Periodo"
+                                                class="form-control" [(ngModel)]="element.diasPeriodo">
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="interesCalculado">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Interés Calculado</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <input type="number" style="width: 150px;"
+                                                placeholder="Interés Calculado" class="form-control"
+                                                [(ngModel)]="element.interesCalculado">
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="amortizacionCapital">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Amortización Capital
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <input type="number" style="width: 150px;" placeholder="Amortización"
+                                                class="form-control" [(ngModel)]="element.amortizacionCapital">
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="saldoCapital">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Saldo Capital</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <input type="number" style="width: 150px;" placeholder="Saldo Capital"
+                                                class="form-control" [(ngModel)]="element.saldoCapital">
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="interesesMoratorios">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Interés Moratorio</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <input type="number" style="width: 150px;"
+                                                placeholder="Interés Moratorio" class="form-control"
+                                                [(ngModel)]="element.interesesMoratorios">
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="estadoPago">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado Pago</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <input type="text" style="width: 150px;" placeholder="Estado Pago"
+                                                minlength="3" maxlength="20" class="form-control"
+                                                [(ngModel)]="element.estadoPago">
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="fechaPagoReal">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Pago Real</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <input type="date" class="form-control"
+                                                [(ngModel)]="element.fechaPagoReal">
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="observaciones">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <input type="text" style="width: 150px;" placeholder="Observaciones"
+                                                minlength="3" maxlength="20" class="form-control"
+                                                [(ngModel)]="element.observaciones">
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                </table>
+                            </div>
+                            <mat-paginator #paginator [pageSizeOptions]="[8]" showFirstLastButtons
+                                aria-label="Seleccione la página">
+                            </mat-paginator>
+                        </div>
+                    </ng-template>
+                </li>
+            </ul>
+
+
+            <div class="tab-content customtab" [ngbNavOutlet]="nav"></div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" (click)="registrar()">Registrar</button>
+            <br>
+        </div>
+    </div>
+</div>

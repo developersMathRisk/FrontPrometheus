@@ -1,0 +1,70 @@
+<div>
+    <button type="submit" class="btn btn-primary" (click)="registrar(cargaModal)">Agregar Volatilidad</button>
+</div>
+
+<br>
+
+<div id="mat-sorting">
+    <div class="mat-elevation-z8">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" matSort #sort="matSort">
+
+                <ng-container matColumnDef="id_VolatilitySurfacePoint">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+                    <td mat-cell *matCellDef="let element"> {{element.id_VolatilitySurfacePoint}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fecProceso">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Proceso</th>
+                    <td mat-cell *matCellDef="let element"> {{element.fecProceso}} </td>
+                </ng-container>
+                <ng-container matColumnDef="id_TipoCambio">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Cambio</th>
+                    <td mat-cell *matCellDef="let element"> {{element.id_TipoCambio}} </td>
+                </ng-container>
+                <ng-container matColumnDef="valor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
+                    <td mat-cell *matCellDef="let element"> {{element.valor}} </td>
+                </ng-container>
+                <ng-container matColumnDef="id_SkewPoint">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Skew Point</th>
+                    <td mat-cell *matCellDef="let element"> {{element.id_SkewPoint}} </td>
+                </ng-container>
+                <ng-container matColumnDef="id_TermVolatility">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Term Volatilidad</th>
+                    <td mat-cell *matCellDef="let element"> {{element.id_TermVolatility}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
+            </table>
+        </div>
+        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+        </mat-paginator>
+    </div>
+
+</div>
+
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="contextMenu">
+</div>
+
+<mat-menu #contextMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item (click)="editar(selectedRow, editarModal)">
+            <mat-icon>edit</mat-icon> Editar
+        </button>
+        <button mat-menu-item (click)="eliminar(selectedRow)">
+            <mat-icon>delete</mat-icon> Eliminar
+        </button>
+    </ng-template>
+</mat-menu>
+
+<ng-template #cargaModal let-modal>
+    <app-carga-volatilidad (close)="cerrarModal($event)"></app-carga-volatilidad>
+</ng-template>
+
+<ng-template #editarModal let-modal>
+    <app-editar-volatilidad (close)="cerrarModal($event)" [data]="filaEditar"></app-editar-volatilidad>
+</ng-template>

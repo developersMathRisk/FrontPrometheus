@@ -1,6 +1,6 @@
 export class TipoTasa{
-    iD_TipoTasa !: number;
-    nombreTasa !: string;
-    nombreCorto !: string;
-    descripcion !: string;
+    idTipoTasaInteres !: number;
+    nombreTipoTasa !: string;
+    nombreCortoTipoTasa !: string;
+    descripcionTipoTasa !: string;
 }

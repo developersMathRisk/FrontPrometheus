@@ -1,6 +1,6 @@
 export class MetodoAmortizacion{
-    iD_Metodo !: number;
+    idMetodoAmortizacion !: number;
     nombreMetodo !: string;
-    nombreCorto !: string;
-    descripcion !: string;
+    nombreCortoMetodo !: string;
+    descripcionMetodo !: string;
 }

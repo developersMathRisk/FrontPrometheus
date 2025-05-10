@@ -1,0 +1,70 @@
+<div>
+    <button type="submit" class="btn btn-primary" (click)="registrar(cargaModal)">Agregar Tasa Interés</button>
+</div>
+
+<br>
+
+<div id="mat-sorting">
+    <div class="mat-elevation-z8">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" matSort #sort="matSort">
+
+                <ng-container matColumnDef="idCurvaReferenciaPuntos">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idCurvaReferenciaPuntos}} </td>
+                </ng-container>
+                <ng-container matColumnDef="codVertice">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. Vértice</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codVertice}} </td>
+                </ng-container>
+                <ng-container matColumnDef="codCurvaProveedor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. Curva Proveedor</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codCurvaProveedor}} </td>
+                </ng-container>
+                <ng-container matColumnDef="desVertice">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Des. Vértice</th>
+                    <td mat-cell *matCellDef="let element"> {{element.desVertice}} </td>
+                </ng-container>
+                <ng-container matColumnDef="numPlazo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Plazo</th>
+                    <td mat-cell *matCellDef="let element"> {{element.numPlazo}} </td>
+                </ng-container>
+                <ng-container matColumnDef="codVerticeRef">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. Vértice Ref.</th>
+                    <td mat-cell *matCellDef="let element"> {{element.codVerticeRef}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
+            </table>
+        </div>
+        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+        </mat-paginator>
+    </div>
+
+</div>
+
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="contextMenu">
+</div>
+
+<mat-menu #contextMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item (click)="editar(selectedRow, editarModal)">
+            <mat-icon>edit</mat-icon> Editar
+        </button>
+        <button mat-menu-item (click)="eliminar(selectedRow)">
+            <mat-icon>delete</mat-icon> Eliminar
+        </button>
+    </ng-template>
+</mat-menu>
+
+<ng-template #cargaModal let-modal>
+    <app-carga-tasa-interes (close)="cerrarModal($event)"></app-carga-tasa-interes>
+</ng-template>
+
+<ng-template #editarModal let-modal>
+    <app-editar-tasa-interes (close)="cerrarModal($event)" [data]="filaEditar"></app-editar-tasa-interes>
+</ng-template>

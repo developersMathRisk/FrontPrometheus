@@ -1,5 +1,5 @@
 export class FrecuenciaPago{
-    iD_Frecuencia !: number;
+    idFrecuenciaPago !: number;
     nombreFrecuencia !: string;
-    descripcion !: string;
+    descripcionFrecuencia !: string;
 }

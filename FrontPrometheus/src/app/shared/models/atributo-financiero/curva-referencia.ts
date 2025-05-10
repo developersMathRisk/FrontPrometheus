@@ -1,6 +1,6 @@
 export class CurvaReferencia{
-    iD_Curva !: number;
+    idCurvaReferencia !: number;
     nombreCurva !: string;
-    nombreCorto !: string;
-    descripcion !: string;
+    nombreCortoCurva !: string;
+    descripcionCurva !: string;
 }
