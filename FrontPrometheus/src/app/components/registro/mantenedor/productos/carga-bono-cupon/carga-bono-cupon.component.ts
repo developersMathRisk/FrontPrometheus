@@ -28,7 +28,7 @@ export class CargaBonoCuponComponent {
   
   nuevoRegistro: BonoCupon[] = [];
 
-  dataSource = new MatTableDataSource<BonoCupon>(this.nuevoRegistro);;
+  dataSource = new MatTableDataSource<BonoCupon>(this.nuevoRegistro);
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
@@ -59,6 +59,7 @@ export class CargaBonoCuponComponent {
   }
 
   registrar(){
+    this.nuevoRegistro.map(i => i.idBono = this.data.idBono);
     this.registroService.postRegistrarCuponerXBono(this.nuevoRegistro).subscribe(
       (response: any) => {
         Swal.fire({

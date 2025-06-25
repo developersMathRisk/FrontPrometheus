@@ -30,6 +30,13 @@ import { PrecioMercado } from '../models/factor/precio-mercado';
 import { TasaInteres } from '../models/factor/tasa-interes';
 import { Volatilidad } from '../models/factor/volatilidad';
 import { BonoCupon } from '../models/producto/bono-cupon';
+import { TermVolatilidad } from '../models/atributo-financiero/term-volatilidad';
+import { SkewPoint } from '../models/atributo-financiero/skew-point';
+import { TipoCambio } from '../models/atributo-financiero/tipo-cambio';
+import { Portafolio } from '../models/portafolio/portafolio';
+import { PortafolioInstrumento } from '../models/portafolio/portafolio-instrumento';
+import { Benchmark } from '../models/portafolio/benchmark';
+import { TipoInstrumento } from '../models/producto/tipo-instrumento';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +56,12 @@ export class RegistroService {
   }
 
   //INSTRUMENTOS
+
+  //Tipo Instrumento
+  public getListaTipoInstrumento(): Observable<TipoInstrumento[]>{
+    return this.http.get<TipoInstrumento[]>(`${this.apiServeURL}/mantenedores/tipoInstrumento/list`);
+  }
+
 
   //Acción
   public postRegistrarAccion(objAccion: Accion){
@@ -384,20 +397,20 @@ export class RegistroService {
   }
 
   //Tipo Bono
-  public postRegistrarTipoBonoSBS(objTipoBonoSBS: TipoBono){
-    return this.http.post<TipoBono>(`${this.apiServeURL}/mantenedores/crearTipoBonoSBS`, objTipoBonoSBS);
+  public postRegistrarTipoBono(objTipoBono: TipoBono){
+    return this.http.post<TipoBono>(`${this.apiServeURL}/mantenedores/crearTipoBono`, objTipoBono);
   }
 
-  public getListaTipoBonoSBS(): Observable<TipoBono[]>{
-    return this.http.get<TipoBono[]>(`${this.apiServeURL}/mantenedores/tipoBonoSBS/list`);
+  public getListaTipoBono(): Observable<TipoBono[]>{
+    return this.http.get<TipoBono[]>(`${this.apiServeURL}/mantenedores/tipoBono/list`);
   }
 
-  public putModificarTipoBonoSBS(id: number, objTipoBonoSBS: TipoBono): Observable<TipoBono> {
-    return this.http.put<TipoBono>(`${this.apiServeURL}/mantenedores/modificarTipoBonoSBS/${id}`, objTipoBonoSBS);
+  public putModificarTipoBono(id: number, objTipoBono: TipoBono): Observable<TipoBono> {
+    return this.http.put<TipoBono>(`${this.apiServeURL}/mantenedores/modificarTipoBono/${id}`, objTipoBono);
   }
 
-  public eiminarTipoBonoSBS(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarTipoBonoSBS/${id}`);
+  public eiminarTipoBono(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarTipoBono/${id}`);
   }
 
   //Tipo Fondo
@@ -451,12 +464,63 @@ export class RegistroService {
     return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarTipoTasaInteres/${id}`);
   }
 
+  //Term. Volatilidad
+  public postRegistrarTermVolatilidad(objTermVolatilidad: TermVolatilidad){
+    return this.http.post<TermVolatilidad>(`${this.apiServeURL}/mantenedores/crearTermVolatililty`, objTermVolatilidad);
+  }
+
+  public getListaTermVolatilidad(): Observable<TermVolatilidad[]>{
+    return this.http.get<TermVolatilidad[]>(`${this.apiServeURL}/mantenedores/termVolatililty/list`);
+  }
+
+  public putModificarTermVolatilidad(id: number, objTermVolatilidad: TermVolatilidad): Observable<TermVolatilidad> {
+    return this.http.put<TermVolatilidad>(`${this.apiServeURL}/mantenedores/modificarTermVolatililty/${id}`, objTermVolatilidad);
+  }
+
+  public eiminarTermVolatilidad(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarTermVolatililty/${id}`);
+  }
+
+  //Skew Point
+  public postRegistrarSkewPoint(objSkewPoint: SkewPoint){
+    return this.http.post<SkewPoint>(`${this.apiServeURL}/mantenedores/crearSkewPoint`, objSkewPoint);
+  }
+
+  public getListaSkewPoint(): Observable<SkewPoint[]>{
+    return this.http.get<SkewPoint[]>(`${this.apiServeURL}/mantenedores/skewPoint/list`);
+  }
+
+  public putModificarSkewPoint(id: number, objSkewPoint: SkewPoint): Observable<SkewPoint> {
+    return this.http.put<SkewPoint>(`${this.apiServeURL}/mantenedores/modificarSkewPoint/${id}`, objSkewPoint);
+  }
+
+  public eiminarSkewPoint(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarSkewPoint/${id}`);
+  }
+
+  //Tipo Cambio
+  public postRegistrarTipoCambio(objTipoCambio: TipoCambio){
+    return this.http.post<TipoCambio>(`${this.apiServeURL}/mantenedores/crearTipoCambio`, objTipoCambio);
+  }
+
+  public getListaTipoCambio(): Observable<TipoCambio[]>{
+    return this.http.get<TipoCambio[]>(`${this.apiServeURL}/mantenedores/tipoCambio/list`);
+  }
+
+  public putModificarTipoCambio(id: number, objTipoCambio: TipoCambio): Observable<TipoCambio> {
+    return this.http.put<TipoCambio>(`${this.apiServeURL}/mantenedores/modificarTipoCambio/${id}`, objTipoCambio);
+  }
+
+  public eiminarTipoCambio(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarTipoCambio/${id}`);
+  }
+
 
   //FACTOR
 
   //índice Mercado
-  public postRegistrarIndiceMercado(objTipoMercado: IndiceMercado){
-    return this.http.post<IndiceMercado>(`${this.apiServeURL}/mantenedores/crearTipoTasa`, objTipoMercado);
+  public postRegistrarIndiceMercado(objIndiceMercado: IndiceMercado){
+    return this.http.post<IndiceMercado>(`${this.apiServeURL}/mantenedores/crearIndiceMercado`, objIndiceMercado);
   }
 
   public getListaIndiceMercado(): Observable<IndiceMercado[]>{
@@ -473,53 +537,98 @@ export class RegistroService {
 
   //Precio Mercado
   public postRegistrarPrecioMercado(objPrecioMercado: PrecioMercado){
-    return this.http.post<PrecioMercado>(`${this.apiServeURL}/mantenedores/crearPrecioMercado`, objPrecioMercado);
+    return this.http.post<PrecioMercado>(`${this.apiServeURL}/mantenedores/crearVectorPrecio`, objPrecioMercado);
   }
 
   public getListaPrecioMercado(): Observable<PrecioMercado[]>{
-    return this.http.get<PrecioMercado[]>(`${this.apiServeURL}/mantenedores/precioMercado/list`);
+    return this.http.get<PrecioMercado[]>(`${this.apiServeURL}/mantenedores/vectorPrecio/list`);
   }
 
   public putModificarPrecioMercado(id: number, objPrecioMercado: PrecioMercado): Observable<PrecioMercado> {
-    return this.http.put<PrecioMercado>(`${this.apiServeURL}/mantenedores/modificarPrecioMercado/${id}`, objPrecioMercado);
+    return this.http.put<PrecioMercado>(`${this.apiServeURL}/mantenedores/modificarVectorPrecio/${id}`, objPrecioMercado);
   }
 
   public eiminarPrecioMercado(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarPrecioMercado/${id}`);
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarVectorPrecio/${id}`);
   }
 
   //Tasa Interés
   public postRegistrarTasaInteres(objTasaInteres: TasaInteres){
-    return this.http.post<TasaInteres>(`${this.apiServeURL}/mantenedores/crearTasaInteres`, objTasaInteres);
+    return this.http.post<TasaInteres>(`${this.apiServeURL}/mantenedores/crearCurvaReferenciaPuntos`, objTasaInteres);
   }
 
   public getListaTasaInteres(): Observable<TasaInteres[]>{
-    return this.http.get<TasaInteres[]>(`${this.apiServeURL}/mantenedores/tasaInteres/list`);
+    return this.http.get<TasaInteres[]>(`${this.apiServeURL}/mantenedores/curvaReferenciaPuntos/list`);
   }
 
   public putModificarTasaInteres(id: number, objTasaInteres: TasaInteres): Observable<TasaInteres> {
-    return this.http.put<TasaInteres>(`${this.apiServeURL}/mantenedores/modificarTasaInteres/${id}`, objTasaInteres);
+    return this.http.put<TasaInteres>(`${this.apiServeURL}/mantenedores/modificarCurvaReferenciaPuntos/${id}`, objTasaInteres);
   }
 
   public eiminarTasaInteres(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarTasaInteres/${id}`);
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarCurvaReferenciaPuntos/${id}`);
   }
 
   //Volatilidad
   public postRegistrarVolatilidad(objVolatilidad: Volatilidad){
-    return this.http.post<Volatilidad>(`${this.apiServeURL}/mantenedores/crearVolatilidad`, objVolatilidad);
+    return this.http.post<Volatilidad>(`${this.apiServeURL}/mantenedores/crearVolatilitySurfacePoint`, objVolatilidad);
   }
 
   public getListaVolatilidad(): Observable<Volatilidad[]>{
-    return this.http.get<Volatilidad[]>(`${this.apiServeURL}/mantenedores/volatilidad/list`);
+    return this.http.get<Volatilidad[]>(`${this.apiServeURL}/mantenedores/volatilitySurfacePoint/list`);
   }
 
   public putModificarVolatilidad(id: number, objVolatilidad: Volatilidad): Observable<Volatilidad> {
-    return this.http.put<Volatilidad>(`${this.apiServeURL}/mantenedores/modificarVolatilidad/${id}`, objVolatilidad);
+    return this.http.put<Volatilidad>(`${this.apiServeURL}/mantenedores/modificarVolatilitySurfacePoint/${id}`, objVolatilidad);
   }
 
   public eiminarVolatilidad(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarVolatilidad/${id}`);
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarVolatilitySurfacePoint/${id}`);
+  }
+
+  //PORTAFOLIO
+
+  //Portafolio
+  public postRegistrarPortafolio(objPortafolio: Portafolio){
+    return this.http.post<Portafolio>(`${this.apiServeURL}/mantenedores/crearPortafolio`, objPortafolio);
+  }
+
+  public getListaPortafolio(): Observable<Portafolio[]>{
+    return this.http.get<Portafolio[]>(`${this.apiServeURL}/mantenedores/portafolio/list`);
+  }
+
+  public putModificarPortafolio(id: number, objPortafolio: Portafolio): Observable<Portafolio> {
+    return this.http.put<Portafolio>(`${this.apiServeURL}/mantenedores/modificarPortafolio/${id}`, objPortafolio);
+  }
+
+  public eiminarPortafolio(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarPortafolio/${id}`);
+  }
+
+  //PortafolioInstrumento
+  public postRegistrarPortafolioInstrumento(objPortafolioInstrumento: PortafolioInstrumento){
+    return this.http.post<PortafolioInstrumento>(`${this.apiServeURL}/mantenedores/crearPortafolioInstrumento`, objPortafolioInstrumento);
+  }
+
+  public postRegistrarPortafolioInstrumentoMasivo(listPortafolioInstrumento: PortafolioInstrumento[]){
+    return this.http.post<PortafolioInstrumento[]>(`${this.apiServeURL}/mantenedores/crearPortafolioInstrumentoMasivo`, listPortafolioInstrumento);
+  }
+
+  public getListaPortafolioInstrumento(): Observable<PortafolioInstrumento[]>{
+    return this.http.get<PortafolioInstrumento[]>(`${this.apiServeURL}/mantenedores/portafolioInstrumento/list`);
+  }
+
+  public putModificarPortafolioInstrumento(id: number, objPortafolioInstrumento: PortafolioInstrumento): Observable<PortafolioInstrumento> {
+    return this.http.put<PortafolioInstrumento>(`${this.apiServeURL}/mantenedores/modificarPortafolioInstrumento/${id}`, objPortafolioInstrumento);
+  }
+
+  public eiminarPortafolioInstrumento(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarPortafolioInstrumento/${id}`);
+  }
+
+  //Benchmark
+  public getListaBenchmark(): Observable<Benchmark[]>{
+    return this.http.get<Benchmark[]>(`${this.apiServeURL}/mantenedores/benchmark/list`);
   }
   
 }

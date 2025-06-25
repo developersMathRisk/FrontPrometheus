@@ -1,4 +1,17 @@
-<app-dashboard-header title="Portafolio"></app-dashboard-header>
+<div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-3">
+        <h1 class="page-title my-auto" style="white-space: nowrap;">Portafolio: </h1>
+        <ng-select style="margin-left: 10px; width: 250px;" placeholder="Seleccione un portafolio.."
+            name="select-producto" [items]="listaPortafolio" bindLabel="descripcionPortafolio" bindValue="idPortafolio"
+            [(ngModel)]="this.portafolioSeleccionado"></ng-select>
+        <h1 class="page-title my-auto">al</h1>
+        <input type="date" class="form-control" style="width: 200px;" [(ngModel)]="this.fechaConsulta">
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary px-4 py-2" (click)="registrar(cargaPortafolioModal)">Cargar Portafolio</button>
+    </div>
+</div>
 
 <!-- Start::row-1 -->
 <div class="row">
@@ -13,9 +26,25 @@
                     <div class="mat-elevation-z8">
                         <div class="table-responsive">
                             <table mat-table [dataSource]="dsResumen" matSort #sortResumen="matSort">
-                                <ng-container matColumnDef="codigo">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Columna</th>
-                                    <td mat-cell *matCellDef="let element"> {{element.codigo}} </td>
+                                <ng-container matColumnDef="codISIN">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ISIN</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.codISIN}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="codticker">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Ticker</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.codticker}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="cantidad">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="precio">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Precio</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.precio}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="fecha">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.fecha}} </td>
                                 </ng-container>
 
                                 <tr mat-header-row *matHeaderRowDef="displayedColumnsResumen"></tr>
@@ -35,7 +64,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h2 class="mb-1 fw-bold">123</h2>
-                        <p class="mb-1">Valor Total</p>
+                        <p class="mb-1">Valor de Mercado Total</p>
                     </div>
                 </div>
             </div>
@@ -43,7 +72,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h2 class="mb-1 fw-bold">123</h2>
-                        <p class="mb-1">Ganancia/Pérdida Prom.</p>
+                        <p class="mb-1">PnL Portafolio</p>
                     </div>
                 </div>
             </div>
@@ -53,7 +82,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h2 class="mb-1 fw-bold">123</h2>
-                        <p class="mb-1">Rendimiento Prom.</p>
+                        <p class="mb-1">Rendimiento del Portafolio</p>
                     </div>
                 </div>
             </div>
@@ -61,7 +90,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h2 class="mb-1 fw-bold">123</h2>
-                        <p class="mb-1">Duración Prom.</p>
+                        <p class="mb-1">Duración del Portafolio</p>
                     </div>
                 </div>
             </div>
@@ -82,7 +111,8 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Título</h5>
-                <button type="submit" class="btn btn-primary" (click)="abrirModalDetalle(detalleModal)">Ver Detalle</button>
+                <button type="submit" class="btn btn-primary" (click)="abrirModalDetalle(detallePortafolioModal)">Ver
+                    Detalle</button>
             </div>
 
             <div class="card-body">
@@ -148,6 +178,10 @@
 
 
 
-<ng-template #detalleModal let-modal>
-    <app-carga-indice-mercado (close)="cerrarModal($event)"></app-carga-indice-mercado>
+<ng-template #detallePortafolioModal let-modal>
+    <app-detalle-portafolio (close)="cerrarModal($event)"></app-detalle-portafolio>
+</ng-template>
+
+<ng-template #cargaPortafolioModal let-modal>
+    <app-carga-portafolio-producto (close)="cerrarModal($event)"></app-carga-portafolio-producto>
 </ng-template>

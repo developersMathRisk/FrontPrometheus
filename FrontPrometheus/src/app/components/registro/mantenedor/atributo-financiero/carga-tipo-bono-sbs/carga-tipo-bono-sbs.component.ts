@@ -27,7 +27,7 @@ export class CargaTipoBonoSbsComponent {
 
 
   registrar(){
-    this.registroService.postRegistrarTipoBonoSBS(this.nuevoRegistro).subscribe(
+    this.registroService.postRegistrarTipoBono(this.nuevoRegistro).subscribe(
       (response: any) => {
         Swal.fire({
           icon: 'success',

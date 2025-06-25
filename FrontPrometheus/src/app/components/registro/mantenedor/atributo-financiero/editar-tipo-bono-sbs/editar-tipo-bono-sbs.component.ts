@@ -38,7 +38,7 @@ export class EditarTipoBonoSbsComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.registroService.putModificarTipoBonoSBS(this.objRegistroEditado.idTipoBono, this.objRegistroEditado).subscribe(
+        this.registroService.putModificarTipoBono(this.objRegistroEditado.idTipoBono, this.objRegistroEditado).subscribe(
           (response: any) => {
             Swal.fire({
               icon: 'success',

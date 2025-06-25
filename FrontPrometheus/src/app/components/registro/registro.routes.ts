@@ -22,6 +22,12 @@ export const admin: Routes = [
                     import('./mantenedor/factores/mantenedor-factores/mantenedor-factores.component').then((m) => m.MantenedorFactoresComponent),
                 title: 'Mantenedor de Factores'
             },
+            {
+                path: 'mantenedor/portafolio',
+                loadComponent: () =>
+                    import('./mantenedor/portafolio/lista-portafolio/lista-portafolio.component').then((m) => m.ListaPortafolioComponent),
+                title: 'Mantenedor de Portafolios'
+            },
 
             {
                 path: 'portafolio/dashboard-portafolio',

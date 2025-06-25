@@ -24,6 +24,8 @@ export class ListaTasaInteresComponent {
   filaEditar: TasaInteres = new TasaInteres;
   selectedRow: any;
 
+  modalRef: any;
+  
   @ViewChild(MatMenuTrigger)
   contextMenu!: MatMenuTrigger;
 
@@ -71,12 +73,12 @@ export class ListaTasaInteresComponent {
   }
 
   registrar(modal: any){
-    const modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
+    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
   }
 
   editar(row: TasaInteres, modal: any) {
     this.filaEditar = row;
-    const modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
+    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
   }
 
   eliminar(row: TasaInteres) {
@@ -115,6 +117,7 @@ export class ListaTasaInteresComponent {
   }
 
   cerrarModal(event: any){
+    this.modalRef.close();
     this.listarRegistros();
   }
 }

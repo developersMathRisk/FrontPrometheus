@@ -1,0 +1,247 @@
+<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
+    <div role="document" class="msg_card_body" style="width: 100%;">
+        <div class="modal-header">
+            <table style="width: 100%;">
+                <tr style="width: 100%;">
+                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
+                        <h3 class="modal-title">Asignar Portafolio con Producto</h3>
+                    </td>
+                    <td style="text-align: right; padding-right: 1.3%;">
+                        <button type="button" class="icon-close" (click)="cerrar()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <ul ngbNav #nav="ngbNav" class="nav nav-tabs nav-justified mb-4 tab-style-6 p-0 d-block d-sm-flex">
+                <li [ngbNavItem]="2" class="nav-item">
+                    <a ngbNavLink
+                        class="nav-link icon-btn d-flex align-items-center justify-content-center gap-1 text-nowrap"
+                        data-bs-toggle="tab" data-toggle="tab">
+                        <span class="d-sm-inline">Cargar manualmente</span>
+                    </a>
+                    <ng-template ngbNavContent>
+                        <div class="card">
+                            <div class="card-header justify-content-between d-sm-flex d-block">
+                                <div class="card-title d-flex align-items-center gap-2">
+                                    Relación
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="card">
+                                            <div class="card-header justify-content-between d-sm-flex d-block">
+                                                <div class="card-title d-flex align-items-center gap-2">
+                                                    Portafolio
+                                                    <button class="btn btn-outline-primary btn-wave btn-agregar"
+                                                        (click)="abrirModalSecundario('portafolio')">
+                                                        <span class="icon">+</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+
+                                                <div class="list-group">
+                                                    <a href="javascript:void(0);" aria-current="true"
+                                                        class="list-group-item list-group-item-action" [ngClass]="{ 'active': portafolio.idPortafolio === idPortafolioSeleccionado }"
+                                                        (click)="seleccionarPortafolio(portafolio.idPortafolio)"
+                                                        *ngFor="let portafolio of listPortafolio">
+                                                        <p>{{portafolio.descripcionPortafolio}}</p>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="card">
+                                            <div class="card-header justify-content-between d-sm-flex d-block">
+                                                <div class="card-title d-flex align-items-center gap-2">
+                                                    Instrumento
+                                                    <ng-select placeholder="Seleccione una opción..."
+                                                        [items]="listTipoInstrumento" bindLabel="descripcionTipoInstrumento"
+                                                        bindValue="codTipoInstrumento" [(ngModel)]="idTipoInstrumentoSeleccionado" class="me-2"
+                                                        style="min-width: 200px;">
+                                                    </ng-select>
+                                                    <button class="btn btn-outline-primary btn-wave btn-agregar"
+                                                        (click)="abrirModalSecundario('instrumento')">
+                                                        <span class="icon">+</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="list-group grid-columns">
+                                                    <a href="javascript:void(0);" class="custom-item" [ngClass]="{ 'selected': instrumento.codBenchmark === idInstrumentoSeleccionado }"
+                                                        (click)="seleccionarInstrumento(instrumento.codBenchmark)"
+                                                        *ngFor="let instrumento of listBenchmark">
+                                                        <p>{{instrumento.descripcionBenchmark}}</p>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header justify-content-between d-sm-flex d-block">
+                                <div class="card-title d-flex align-items-center gap-2">
+                                    Atributos de la relación
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <!-- <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">ISIN</label>
+                                        <input type="text" placeholder="Nombre" minlength="3" maxlength="20"
+                                            class="form-control" [(ngModel)]="this.objPortafolioInstrumento.codISIN">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Ticker</label>
+                                        <input type="text" placeholder="Tipo Portafolio" minlength="3" maxlength="60"
+                                            class="form-control" [(ngModel)]="this.objPortafolioInstrumento.codticker">
+                                    </div>
+                                </div>
+
+                                <br> -->
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Cantidad</label>
+                                        <input type="number" placeholder="Cantidad" class="form-control"
+                                            [(ngModel)]="this.objPortafolioInstrumento.cantidad">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Precio</label>
+                                        <input type="number" placeholder="Precio" class="form-control"
+                                            [(ngModel)]="this.objPortafolioInstrumento.precio">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <button type="submit" class="btn btn-primary" (click)="agregarRelacion()">Agregar</button>
+
+                    </ng-template>
+                </li>
+
+                <li [ngbNavItem]="1" class="nav-item">
+                    <a ngbNavLink
+                        class="nav-link icon-btn d-flex align-items-center justify-content-center gap-1 text-nowrap"
+                        data-bs-toggle="tab" data-toggle="tab">
+                        <span class="d-sm-inline">Cargar desde archivo</span>
+                    </a>
+                    <ng-template ngbNavContent>
+                        <div>
+                            <file-pond #myPond [options]="singlepondOptions" class="multiple-fileupload"
+                                [files]="pondFiles" (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)"
+                                (onactivatefile)="pondHandleActivateFile($event)">
+                            </file-pond>
+                        </div>
+                    </ng-template>
+                </li>
+            </ul>
+
+            <div class="tab-content customtab" [ngbNavOutlet]="nav"></div>
+
+            <br>        
+            
+            <div class="card">
+                <div class="card-header justify-content-between d-sm-flex d-block">
+                    <div class="card-title d-flex align-items-center gap-2">
+                        Resumen
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div>
+                        <div class="table-responsive">
+                            <table mat-table [dataSource]="dataSource" matSort #sort="matSort"
+                                class="mat-elevation-z8 demo-table mt-3">
+                                <ng-container matColumnDef="accion">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Acción</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <button type="submit" class="btn btn-secondary" (click)="eliminarRelacion(element)"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="codISIN">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ISIN</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <input type="text" style="width: 100px;" placeholder="ISIN"
+                                            minlength="3" maxlength="20" class="form-control"
+                                            [(ngModel)]="element.codISIN">
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="codticker">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Ticker</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <input type="text" style="width: 100px;" placeholder="Ticker"
+                                            minlength="3" maxlength="20" class="form-control"
+                                            [(ngModel)]="element.codticker">
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="cantidad">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <input type="number" style="width: 100px;" placeholder="Cantidad"
+                                            class="form-control" [(ngModel)]="element.cantidad">
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="precio">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Precio</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <input type="number" style="width: 100px;" placeholder="Precio"
+                                            class="form-control" [(ngModel)]="element.precio">
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="fecha">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <input type="date" class="form-control" [(ngModel)]="element.fecha">
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                        </div>
+                        <mat-paginator #paginator [pageSizeOptions]="[8]" showFirstLastButtons
+                            aria-label="Seleccione la página">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" (click)="registrar()">Registrar</button>
+            <br>
+        </div>
+    </div>
+
+    <ng-template #cargaModalPortafolio let-modal>
+        <app-carga-portafolio (close)="cerrarModalSecundario($event)"></app-carga-portafolio>
+    </ng-template>
+
+    <ng-template #cargaModalBono let-modal>
+        <app-carga-bono (close)="cerrarModalSecundario($event)"></app-carga-bono>
+    </ng-template>
+
+     <ng-template #cargaModalAccion let-modal>
+        <app-carga-accion (close)="cerrarModalSecundario($event)"></app-carga-accion>
+    </ng-template>
+
+     <ng-template #cargaModalFondoInversion let-modal>
+        <app-carga-fondo-inversion (close)="cerrarModalSecundario($event)"></app-carga-fondo-inversion>
+    </ng-template>

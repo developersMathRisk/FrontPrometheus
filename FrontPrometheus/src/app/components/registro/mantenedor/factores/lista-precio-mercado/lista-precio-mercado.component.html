@@ -74,11 +74,6 @@
                     <td mat-cell *matCellDef="let element"> {{element.numTasaCupon}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="codMoneda">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Moneda</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codMoneda}} </td>
-                </ng-container>
-
                 <ng-container matColumnDef="maturity">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Maturity</th>
                     <td mat-cell *matCellDef="let element"> {{element.maturity}} </td>
@@ -87,6 +82,11 @@
                 <ng-container matColumnDef="codFuenteDatos">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Fuente de Datos</th>
                     <td mat-cell *matCellDef="let element"> {{element.codFuenteDatos}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idMoneda">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Moneda</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idMoneda}} </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

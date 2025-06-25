@@ -24,6 +24,8 @@ export class ListaPrecioMercadoComponent {
   filaEditar: PrecioMercado = new PrecioMercado;
   selectedRow: any;
 
+  modalRef: any;
+
   @ViewChild(MatMenuTrigger)
   contextMenu!: MatMenuTrigger;
 
@@ -46,9 +48,9 @@ export class ListaPrecioMercadoComponent {
     'numConvexidad',
     'numValorFacial',
     'numTasaCupon',
-    'codMoneda',
     'maturity',
-    'codFuenteDatos'
+    'codFuenteDatos',
+    'idMoneda'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}
@@ -81,12 +83,12 @@ export class ListaPrecioMercadoComponent {
   }
 
   registrar(modal: any){
-    const modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
+    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
   }
 
   editar(row: PrecioMercado, modal: any) {
     this.filaEditar = row;
-    const modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
+    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
   }
 
   eliminar(row: PrecioMercado) {
@@ -125,6 +127,7 @@ export class ListaPrecioMercadoComponent {
   }
 
   cerrarModal(event: any){
+    this.modalRef.close();
     this.listarRegistros();
   }
 }

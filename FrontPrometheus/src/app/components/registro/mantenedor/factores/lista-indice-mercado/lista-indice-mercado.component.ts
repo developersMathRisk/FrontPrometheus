@@ -21,8 +21,10 @@ import { EditarIndiceMercadoComponent } from "../editar-indice-mercado/editar-in
   styleUrl: './lista-indice-mercado.component.scss'
 })
 export class ListaIndiceMercadoComponent {
-  filaEditar: IndiceMercado = new IndiceMercado;
+  filaEditar: IndiceMercado = new IndiceMercado();
   selectedRow: any;
+
+  modalRef: any;
 
   @ViewChild(MatMenuTrigger)
   contextMenu!: MatMenuTrigger;
@@ -66,12 +68,12 @@ export class ListaIndiceMercadoComponent {
   }
 
   registrar(modal: any){
-    const modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
+    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
   }
 
   editar(row: IndiceMercado, modal: any) {
     this.filaEditar = row;
-    const modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
+    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
   }
 
   eliminar(row: IndiceMercado) {
@@ -110,6 +112,7 @@ export class ListaIndiceMercadoComponent {
   }
 
   cerrarModal(event: any){
+    this.modalRef.close();
     this.listarRegistros();
   }
 }

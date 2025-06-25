@@ -82,7 +82,7 @@ export class EditarBonoComponent {
   }
 
   obtenerListTipoBonoSBS(){
-    this.registroService.getListaTipoBonoSBS().subscribe(
+    this.registroService.getListaTipoBono().subscribe(
       (response: TipoBono[]) => {
         this.listTipoBonoSBS = response;
       }

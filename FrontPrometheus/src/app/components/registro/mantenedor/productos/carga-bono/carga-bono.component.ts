@@ -58,7 +58,7 @@ export class CargaBonoComponent implements OnInit{
   ngOnInit(): void {
     this.obtenerListEmisor();
     this.obtenerListMoneda();
-    this.obtenerListTipoBonoSBS();
+    this.obtenerListTipoBono();
     this.obtenerListCurvaReferencia();
     this.obtenerListMetodoAmortizacion();
     this.obtenerListCalculoBaseInteres();
@@ -83,8 +83,8 @@ export class CargaBonoComponent implements OnInit{
     )
   }
 
-  obtenerListTipoBonoSBS(){
-    this.registroService.getListaTipoBonoSBS().subscribe(
+  obtenerListTipoBono(){
+    this.registroService.getListaTipoBono().subscribe(
       (response: TipoBono[]) => {
         this.listTipoBonoSBS = response;
       }
@@ -155,7 +155,7 @@ export class CargaBonoComponent implements OnInit{
         Swal.fire({
           icon: 'success',
           title: 'Registro exitoso',
-          text: 'El bono ha sido registrado correctamente.',
+          text: 'El bono ha sido registrado correctamente. Ahora debe proceder a registrar la cuponera.',
           confirmButtonText: 'Aceptar'
         });
         this.cerrar();
@@ -190,7 +190,7 @@ export class CargaBonoComponent implements OnInit{
     this.modalRef.close();
     this.obtenerListEmisor();
     this.obtenerListMoneda();
-    this.obtenerListTipoBonoSBS();
+    this.obtenerListTipoBono();
     this.obtenerListCurvaReferencia();
     this.obtenerListMetodoAmortizacion();
     this.obtenerListCalculoBaseInteres();

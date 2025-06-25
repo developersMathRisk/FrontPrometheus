@@ -46,7 +46,7 @@ export class ListaTipoBonoSbsComponent {
   }
 
   listarRegistros(){
-    this.registroService.getListaTipoBonoSBS().subscribe(
+    this.registroService.getListaTipoBono().subscribe(
       (response: TipoBono[]) => {
         this.dataSource = new MatTableDataSource<TipoBono>(response);
         this.dataSource.paginator = this.paginator;
@@ -89,7 +89,7 @@ export class ListaTipoBonoSbsComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         let seleccionado = this.contextMenu.menuData.item;
-        this.registroService.eiminarTipoBonoSBS(row.idTipoBono).subscribe(
+        this.registroService.eiminarTipoBono(row.idTipoBono).subscribe(
           (response: any) => {
             this.listarRegistros();
             Swal.fire({

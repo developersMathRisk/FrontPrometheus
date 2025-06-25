@@ -1,0 +1,49 @@
+<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
+    <div role="document" class="msg_card_body" style="width: 100%;">
+        <div class="modal-header">
+            <table style="width: 100%;">
+                <tr style="width: 100%;">
+                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
+                        <h3 class="modal-title">Editar Tipo de Cambio</h3>
+                    </td>
+                    <td style="text-align: right; padding-right: 1.3%;">
+                        <button type="button" class="icon-close" (click)="cerrar()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Fuente de Datos</label>
+                    <input type="text" placeholder="Fuente de Datos" minlength="3" maxlength="50" class="form-control" [(ngModel)]="this.objRegistroEditado.codFuenteDatos">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Ticker</label>
+                    <input type="text" placeholder="Ticker" minlength="3" maxlength="50" class="form-control" [(ngModel)]="this.objRegistroEditado.desTicker">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de Proceso</label>
+                    <input type="date" class="form-control" [(ngModel)]="this.objRegistroEditado.fecProceso">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Valor</label>
+                    <input type="number" placeholder="Valor" class="form-control" [(ngModel)]="this.objRegistroEditado.valor">
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" (click)="guardarCambios()">Guardar Cambios</button>
+            <br>
+        </div>
+    </div>
+</div>

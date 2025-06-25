@@ -1,0 +1,87 @@
+<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
+    <div role="document" class="msg_card_body" style="width: 100%;">
+        <div class="modal-header">
+            <table style="width: 100%;">
+                <tr style="width: 100%;">
+                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
+                        <h3 class="modal-title">Cargar Portafolio</h3>
+                    </td>
+                    <td style="text-align: right; padding-right: 1.3%;">
+                        <button type="button" class="icon-close" (click)="cerrar()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Descripción</label>
+                    <input type="text" placeholder="Descripción" minlength="3" maxlength="255" class="form-control" [(ngModel)]="this.nuevoRegistro.descripcionPortafolio">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Tipo Portafolio</label>
+                    <input type="text" placeholder="Tipo Portafolio" minlength="3" maxlength="150" class="form-control" [(ngModel)]="this.nuevoRegistro.tipoPortafolio">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Gestor</label>
+                    <input type="text" placeholder="Gestor" minlength="3" maxlength="100" class="form-control" [(ngModel)]="this.nuevoRegistro.gestor">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Límite</label>
+                    <input type="number" placeholder="Límite" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.nuevoRegistro.limite">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Moneda Gestión</label>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listMoneda"
+                            bindLabel="desMoneda" bindValue="idMoneda"
+                            [(ngModel)]="this.nuevoRegistro.idMoneda"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar"
+                            (click)="abrirModalSecundario(cargaModalMoneda)"><span
+                                class="icon">+</span></button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Benchmark</label>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listBenchmark"
+                            bindLabel="descripcionBenchmark" bindValue="idBenchmark"
+                            [(ngModel)]="this.nuevoRegistro.idBenchmark"></ng-select>
+                        <!-- <button class="btn btn-outline-primary btn-wave btn-agregar"
+                            (click)="abrirModalSecundario(cargaModalBenchmark)"><span
+                                class="icon">+</span></button> -->
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="form-label">Notas</label>
+                    <textarea class="form-control" rows="4" placeholder="Notas"
+                        [(ngModel)]="this.nuevoRegistro.notas"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" (click)="registrar()">Registrar</button>
+            <br>
+        </div>
+    </div>
+</div>
+
+<ng-template #cargaModalMoneda let-modal>
+    <app-carga-moneda (close)="cerrarModalSecundario($event)"></app-carga-moneda>
+</ng-template>
+
+<ng-template #cargaModalBenchmark let-modal>
+    <app-carga-moneda (close)="cerrarModalSecundario($event)"></app-carga-moneda>
+</ng-template>

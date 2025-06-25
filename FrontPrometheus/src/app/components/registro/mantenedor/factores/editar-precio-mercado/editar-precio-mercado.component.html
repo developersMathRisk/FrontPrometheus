@@ -37,7 +37,7 @@
             <div class="col-md-4">
                 <label class="form-label">Moneda</label>
                 <div class="combo-contenedor">
-                    <ng-select placeholder="Seleccione una opción..." [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.objRegistroEditado.codMoneda"></ng-select>
+                    <ng-select placeholder="Seleccione una opción..." [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.objRegistroEditado.idMoneda"></ng-select>
                     <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalMoneda)"><span class="icon">+</span></button>
                 </div>
             </div>

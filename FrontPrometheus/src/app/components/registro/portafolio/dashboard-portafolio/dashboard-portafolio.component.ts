@@ -6,35 +6,45 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { IndiceMercado } from '../../../../shared/models/factor/indice-mercado';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { CargaIndiceMercadoComponent } from "../../mantenedor/factores/carga-indice-mercado/carga-indice-mercado.component";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { DetallePortafolioComponent } from "../detalle-portafolio/detalle-portafolio.component";
+import { Portafolio } from '../../../../shared/models/portafolio/portafolio';
+import { RegistroService } from '../../../../shared/services/registro.service';
+import { CargaPortafolioProductoComponent } from "../carga-portafolio-producto/carga-portafolio-producto.component";
+import { PortafolioInstrumento } from '../../../../shared/models/portafolio/portafolio-instrumento';
 
 @Component({
   selector: 'app-dashboard-portafolio',
   standalone: true,
-  imports: [SharedModule, NgApexchartsModule, MatTableModule, MatSortModule, MatPaginatorModule, CargaIndiceMercadoComponent],
+  imports: [SharedModule, NgApexchartsModule, MatTableModule, MatSortModule, MatPaginatorModule, FormsModule, NgSelectModule, DetallePortafolioComponent, CargaPortafolioProductoComponent],
   templateUrl: './dashboard-portafolio.component.html',
   styleUrl: './dashboard-portafolio.component.scss'
 })
 export class DashboardPortafolioComponent {
+  fechaConsulta = new Date().toLocaleDateString('sv-SE');
+  listaPortafolio: Portafolio[] = [];
+  portafolioSeleccionado: number = 0;
+
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions2: Partial<ChartOptions> | any;
   chartOptions4: any;
 
   modalRef: any;
 
-  listDataResumen:IndiceMercado[] = [];
+  listDataResumen:PortafolioInstrumento[] = [];
   listDataDetalle:IndiceMercado[] = [];
 
-  dsResumen!: MatTableDataSource<IndiceMercado>;
+  dsResumen!: MatTableDataSource<PortafolioInstrumento>;
   @ViewChild('paginatorResumen') paginatorResumen!: MatPaginator;
   @ViewChild('sortResumen') sortResumen!: MatSort;
   displayedColumnsResumen: string[] = [
-    'codigo',
-    'codigo',
-    'codigo',
-    'codigo',
-    'codigo'
+    'codISIN',
+    'codticker',
+    'cantidad',
+    'precio',
+    'fecha'
   ];
 
   dsDetalle!: MatTableDataSource<IndiceMercado>;
@@ -51,17 +61,11 @@ export class DashboardPortafolioComponent {
     'codigo'
   ];
 
-  constructor(private modalService: NgbModal) {}
+  constructor(private registroService: RegistroService, private modalService: NgbModal) {}
 
   ngOnInit(){
-    for(let i = 1; i < 5; i++){
-      let objDataResumen: IndiceMercado = new IndiceMercado();
-      objDataResumen.codigo = i;
-      this.listDataResumen.push(objDataResumen);
-    }
-    this.dsResumen = new MatTableDataSource<IndiceMercado>(this.listDataResumen);
-    this.dsResumen.paginator = this.paginatorResumen;
-    this.dsResumen.sort = this.sortResumen;
+    this.obtenerListPortafolio();
+    this.obtenerListPortafolioInstrumento();
 
     for(let i = 1; i < 10; i++){
       let objDataDetalle: IndiceMercado = new IndiceMercado();
@@ -138,12 +142,37 @@ export class DashboardPortafolioComponent {
     };
   }
 
+  obtenerListPortafolio(){
+    this.registroService.getListaPortafolio().subscribe(
+      (response: Portafolio[]) => {
+        this.listaPortafolio = response;
+      }
+    )
+  }
+
+  obtenerListPortafolioInstrumento(){
+    this.registroService.getListaPortafolioInstrumento().subscribe(
+      (response: PortafolioInstrumento[]) => {
+        this.listDataResumen = response;
+        this.dsResumen = new MatTableDataSource<PortafolioInstrumento>(this.listDataResumen);
+        this.dsResumen.paginator = this.paginatorResumen;
+        this.dsResumen.sort = this.sortResumen;
+      }
+    )
+  }
+
   abrirModalDetalle(modal: any){
     this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
   }
 
   cerrarModal(event: any){
     this.modalRef.close();
+    this.obtenerListPortafolio();
+    this.obtenerListPortafolioInstrumento();
+  }
+
+  registrar(modal: any){
+    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
   }
 
 }

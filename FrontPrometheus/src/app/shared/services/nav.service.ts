@@ -1551,7 +1551,13 @@ export class NavService implements OnDestroy {
           title: 'Atributos Financieros',
           type: 'link',
           dirchange: false,
-        }
+        },
+        {
+          path: 'registro/mantenedor/portafolio',
+          title: 'Portafolios',
+          type: 'link',
+          dirchange: false,
+        },
       ],
     },
     {

@@ -1,8 +1,11 @@
 export class Volatilidad{
-    id_VolatilitySurfacePoint!: number;
+    idVolatilitySurfacePoint!: number;
     fecProceso!: Date;
-    id_TipoCambio!: number;
     valor!: number;
-    id_SkewPoint!: number;
-    id_TermVolatility!: number;
+    idTermVolatility!: number;
+    descripcionTermVolatility!: string;
+    idSwekPoint!: number;
+    point!: string;
+    idTipoCambio!: number;
+    desTicker!: string;
 }

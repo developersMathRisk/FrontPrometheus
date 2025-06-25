@@ -24,6 +24,8 @@ export class ListaVolatilidadComponent {
   filaEditar: Volatilidad = new Volatilidad;
   selectedRow: any;
 
+  modalRef: any;
+
   @ViewChild(MatMenuTrigger)
   contextMenu!: MatMenuTrigger;
 
@@ -33,12 +35,12 @@ export class ListaVolatilidadComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
-    'id_VolatilitySurfacePoint',
+    'idVolatilitySurfacePoint',
     'fecProceso',
-    'id_TipoCambio',
+    'desTicker',
     'valor',
-    'id_SkewPoint',
-    'id_TermVolatility'
+    'point',
+    'descripcionTermVolatility'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}
@@ -71,12 +73,12 @@ export class ListaVolatilidadComponent {
   }
 
   registrar(modal: any){
-    const modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
+    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
   }
 
   editar(row: Volatilidad, modal: any) {
     this.filaEditar = row;
-    const modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
+    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
   }
 
   eliminar(row: Volatilidad) {
@@ -91,7 +93,7 @@ export class ListaVolatilidadComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         let seleccionado = this.contextMenu.menuData.item;
-        this.registroService.eiminarVolatilidad(row.id_VolatilitySurfacePoint).subscribe(
+        this.registroService.eiminarVolatilidad(row.idVolatilitySurfacePoint).subscribe(
           (response: any) => {
             this.listarRegistros();
             Swal.fire({
@@ -115,6 +117,7 @@ export class ListaVolatilidadComponent {
   }
 
   cerrarModal(event: any){
+    this.modalRef.close();
     this.listarRegistros();
   }
 }

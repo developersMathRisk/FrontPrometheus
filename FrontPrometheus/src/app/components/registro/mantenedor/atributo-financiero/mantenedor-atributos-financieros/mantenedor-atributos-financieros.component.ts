@@ -22,6 +22,9 @@ import { ListaMonedaComponent } from '../lista-moneda/lista-moneda.component';
 import { ListaSectorComponent } from '../lista-sector/lista-sector.component';
 import { ListaGrupoEconomicoComponent } from '../lista-grupo-economico/lista-grupo-economico.component';
 import { ListaTipoBonoSbsComponent } from '../lista-tipo-bono-sbs/lista-tipo-bono-sbs.component';
+import { ListaTermVolatilidadComponent } from '../lista-term-volatilidad/lista-term-volatilidad.component';
+import { ListaSkewPointComponent } from '../lista-skew-point/lista-skew-point.component';
+import { ListaTipoCambioComponent } from '../lista-tipo-cambio/lista-tipo-cambio.component';
 
 @Component({
   selector: 'app-mantenedor-atributos-financieros',
@@ -56,6 +59,9 @@ export class MantenedorAtributosFinancierosComponent {
       { id: 18, descripcion: 'Tipo Emisión' },
       { id: 19, descripcion: 'Tipo Fondo' },
       { id: 20, descripcion: 'Tipo Bono' },
+      { id: 21, descripcion: 'Term. Volatilidad' },
+      { id: 22, descripcion: 'Skew Point' },
+      { id: 23, descripcion: 'Tipo Cambio' },
     ];
     this.productoSeleccionado = 1;
   }
@@ -80,7 +86,10 @@ export class MantenedorAtributosFinancierosComponent {
     17: ListaCurvaReferenciaComponent,
     18: ListaTipoEmisionComponent,
     19: ListaTipoFondoComponent,
-    20: ListaTipoBonoSbsComponent
+    20: ListaTipoBonoSbsComponent,
+    21: ListaTermVolatilidadComponent,
+    22: ListaSkewPointComponent,
+    23: ListaTipoCambioComponent
   };
 
   get componenteSeleccionado() {

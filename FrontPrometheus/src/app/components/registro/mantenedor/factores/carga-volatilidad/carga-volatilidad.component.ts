@@ -7,25 +7,63 @@ import { Volatilidad } from '../../../../../shared/models/factor/volatilidad';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { TermVolatilidad } from '../../../../../shared/models/atributo-financiero/term-volatilidad';
+import { SkewPoint } from '../../../../../shared/models/atributo-financiero/skew-point';
+import { TipoCambio } from '../../../../../shared/models/atributo-financiero/tipo-cambio';
+import { CargaTermVolatilidadComponent } from "../../atributo-financiero/carga-term-volatilidad/carga-term-volatilidad.component";
+import { CargaSkewPointComponent } from "../../atributo-financiero/carga-skew-point/carga-skew-point.component";
+import { CargaTipoCambioComponent } from "../../atributo-financiero/carga-tipo-cambio/carga-tipo-cambio.component";
 
 @Component({
   selector: 'app-carga-volatilidad',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaTermVolatilidadComponent, CargaSkewPointComponent, CargaTipoCambioComponent],
   templateUrl: './carga-volatilidad.component.html',
   styleUrl: './carga-volatilidad.component.scss'
 })
 export class CargaVolatilidadComponent {
   @Output() close = new EventEmitter<any>();
+  modalRef: any;
+
+  listTermVolatilidad: TermVolatilidad[] = [];
+  listSkewPoint: SkewPoint[] = [];
+  listTipoCambio: TipoCambio[] = [];
 
   nuevoRegistro: Volatilidad = new Volatilidad();
 
-  constructor(private registroService: RegistroService, private modalService: NgbModal){}
+  constructor(private registroService: RegistroService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
+    this.obtenerListTermVolatilidad();
+    this.obtenerListSkewPoint();
+    this.obtenerListTipoCambio();
   }
 
-  registrar(){
+  obtenerListTermVolatilidad() {
+    this.registroService.getListaTermVolatilidad().subscribe(
+      (response: TermVolatilidad[]) => {
+        this.listTermVolatilidad = response;
+      }
+    )
+  }
+
+  obtenerListSkewPoint() {
+    this.registroService.getListaSkewPoint().subscribe(
+      (response: SkewPoint[]) => {
+        this.listSkewPoint = response;
+      }
+    )
+  }
+
+  obtenerListTipoCambio() {
+    this.registroService.getListaTipoCambio().subscribe(
+      (response: TipoCambio[]) => {
+        this.listTipoCambio = response;
+      }
+    )
+  }
+
+  registrar() {
     this.registroService.postRegistrarVolatilidad(this.nuevoRegistro).subscribe(
       (response: any) => {
         Swal.fire({
@@ -36,7 +74,7 @@ export class CargaVolatilidadComponent {
         });
         this.cerrar();
       },
-      (error: HttpErrorResponse) =>{
+      (error: HttpErrorResponse) => {
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -47,8 +85,18 @@ export class CargaVolatilidadComponent {
     )
   }
 
-  cerrar(){
+  cerrar() {
     this.close.emit();
-    //this.modalService.dismissAll();
+  }
+
+  abrirModalSecundario(modal: any){
+    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
+  }
+
+  cerrarModalSecundario(event: any){
+    this.modalRef.close();
+    this.obtenerListTermVolatilidad();
+    this.obtenerListSkewPoint();
+    this.obtenerListTipoCambio();
   }
 }

@@ -33,21 +33,30 @@
                     <input type="number" placeholder="Valor" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.valor">
                 </div>
             </div>
-            <!-- <br>
+            <br>
             <div class="row">
                 <div class="col-md-4">
-                    <label class="form-label">Tipo de Cambio</label>
-                    <ng-select placeholder="Seleccione una opción..." [items]="listTipoCambio" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.objRegistroEditado.id_TipoCambio"></ng-select>
+                    <label class="form-label">Term. Volatilidad</label>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listTermVolatilidad" bindLabel="descripcionTermVolatility" bindValue="idTermVolatility" [(ngModel)]="this.objRegistroEditado.idTermVolatility"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTermVolatility)"><span class="icon">+</span></button>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Skew Point</label>
-                    <ng-select placeholder="Seleccione una opción..." [items]="listSkewPoint" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.objRegistroEditado.id_SkewPoint"></ng-select>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listSkewPoint" bindLabel="point" bindValue="idSwekPoint" [(ngModel)]="this.objRegistroEditado.idSwekPoint"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalSwekPoint)"><span class="icon">+</span></button>
+                    </div>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Term. Volatilidad</label>
-                    <ng-select placeholder="Seleccione una opción..." [items]="listTermVolatility" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.objRegistroEditado.id_TermVolatility"></ng-select>
+                    <label class="form-label">Tipo de Cambio</label>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoCambio" bindLabel="desTicker" bindValue="idTipoCambio" [(ngModel)]="this.objRegistroEditado.idTipoCambio"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoCambio)"><span class="icon">+</span></button>
+                    </div>
                 </div>
-            </div> -->
+            </div>
         </div>
 
         <div class="card-footer">
@@ -56,3 +65,15 @@
         </div>
     </div>
 </div>
+
+<ng-template #cargaModalTermVolatility let-modal>
+    <app-carga-term-volatilidad (close)="cerrarModalSecundario($event)"></app-carga-term-volatilidad>
+</ng-template>
+
+<ng-template #cargaModalSwekPoint let-modal>
+    <app-carga-skew-point (close)="cerrarModalSecundario($event)"></app-carga-skew-point>
+</ng-template>
+
+<ng-template #cargaModalTipoCambio let-modal>
+    <app-carga-tipo-cambio (close)="cerrarModalSecundario($event)"></app-carga-tipo-cambio>
+</ng-template>
