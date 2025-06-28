@@ -26,12 +26,14 @@ import { CargaFrecuenciaPagoComponent } from "../../../mantenedor/atributo-finan
 import { CargaTipoTasaComponent } from "../../../mantenedor/atributo-financiero/carga-tipo-tasa/carga-tipo-tasa.component";
 import { CargaFormulaTasaComponent } from "../../../mantenedor/atributo-financiero/carga-formula-tasa/carga-formula-tasa.component";
 import { CargaBonoCuponComponent } from '../carga-bono-cupon/carga-bono-cupon.component';
+import { CargaTipoInstrumentoComponent } from "../../atributo-financiero/carga-tipo-instrumento/carga-tipo-instrumento.component";
+import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
 
 
 @Component({
   selector: 'app-carga-bono',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaBonoCuponComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaBonoCuponComponent, CargaTipoInstrumentoComponent],
   templateUrl: './carga-bono.component.html',
   styleUrl: './carga-bono.component.scss',
 })
@@ -49,6 +51,7 @@ export class CargaBonoComponent implements OnInit{
   listFrecPago: FrecuenciaPago[] = [];
   listTipoTasaInt: TipoTasa[] = [];
   listFormulaTasa: FormulaTasa[] = [];
+  listTipoInstrumento: TipoInstrumento[] = [];
 
   nuevoRegistro: Bono = new Bono();
   flgAutomatico: boolean = false;
@@ -65,6 +68,7 @@ export class CargaBonoComponent implements OnInit{
     this.obtenerListFrecuenciaPago();
     this.obtenerListTipoTasa();
     this.obtenerListFormulaTasa();
+    this.obtenerListTipoInstrumento();
   }
 
   obtenerListEmisor(){
@@ -139,6 +143,14 @@ export class CargaBonoComponent implements OnInit{
     )
   }
 
+  obtenerListTipoInstrumento(){
+    this.registroService.getListaTipoInstrumento().subscribe(
+      (response: TipoInstrumento[]) => {
+        this.listTipoInstrumento = response;
+      }
+    )
+  }
+
   registrar(modal: any){
         // Swal.fire({
         //   icon: 'success',
@@ -197,5 +209,6 @@ export class CargaBonoComponent implements OnInit{
     this.obtenerListFrecuenciaPago();
     this.obtenerListTipoTasa();
     this.obtenerListFormulaTasa();
+    this.obtenerListTipoInstrumento();
   }
 }

@@ -82,6 +82,15 @@
                     </div>
                 </div>
 
+                <div class="col-md-4">
+                    <label class="form-label">Tipo Instrumento</label>
+                    
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoInstrumento" bindLabel="descripcionTipoInstrumento" bindValue="idTipoInstrumento" [(ngModel)]="this.nuevoRegistro.idTipoInstrumento"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoInstrumento)"><span class="icon">+</span></button>
+                    </div>
+                </div>
+
                 <div class="col-md-4" *ngIf="this.nuevoRegistro.flgCargaAutom">
                     <label class="form-label">Fuente Información</label>
                     
@@ -129,4 +138,8 @@
 
 <ng-template #cargaModalFuenteInformacion let-modal>
     <app-carga-fuente-informacion (close)="cerrarModalSecundario($event)"></app-carga-fuente-informacion>
+</ng-template>
+
+<ng-template #cargaModalTipoInstrumento let-modal>
+    <app-carga-tipo-instrumento (close)="cerrarModalSecundario($event)"></app-carga-tipo-instrumento>
 </ng-template>

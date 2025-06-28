@@ -157,6 +157,18 @@
             <br>
 
             <div class="row">
+
+                <div class="col-md-4">
+                    <label class="form-label">Tipo Instrumento</label>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoInstrumento" bindLabel="descripcionTipoInstrumento" bindValue="idTipoInstrumento" [(ngModel)]="this.nuevoRegistro.idTipoInstrumento"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoInstrumento)"><span class="icon">+</span></button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
                 <div class="col-md-4">
                     <div class="form-check"><input type="checkbox" class="form-check-input" id="chkCargaAutomatica" name="chkCargaAutomatica" [(ngModel)]="this.flgAutomatico"><label for="chkCargaAutomatica" class="form-check-label"> Carga de cuponera automática </label></div>
                 </div>
@@ -197,6 +209,9 @@
 </ng-template>
 <ng-template #cargaModalFormulaTasa let-modal>
     <app-carga-formula-tasa (close)="cerrarModalSecundario($event)"></app-carga-formula-tasa>
+</ng-template>
+<ng-template #cargaModalTipoInstrumento let-modal>
+    <app-carga-tipo-instrumento (close)="cerrarModalSecundario($event)"></app-carga-tipo-instrumento>
 </ng-template>
 
 <ng-template #cargaBonoCupon let-modal>

@@ -36,7 +36,7 @@ import { TipoCambio } from '../models/atributo-financiero/tipo-cambio';
 import { Portafolio } from '../models/portafolio/portafolio';
 import { PortafolioInstrumento } from '../models/portafolio/portafolio-instrumento';
 import { Benchmark } from '../models/portafolio/benchmark';
-import { TipoInstrumento } from '../models/producto/tipo-instrumento';
+import { TipoInstrumento } from '../models/atributo-financiero/tipo-instrumento';
 
 @Injectable({
   providedIn: 'root',
@@ -56,12 +56,6 @@ export class RegistroService {
   }
 
   //INSTRUMENTOS
-
-  //Tipo Instrumento
-  public getListaTipoInstrumento(): Observable<TipoInstrumento[]>{
-    return this.http.get<TipoInstrumento[]>(`${this.apiServeURL}/mantenedores/tipoInstrumento/list`);
-  }
-
 
   //Acción
   public postRegistrarAccion(objAccion: Accion){
@@ -428,6 +422,23 @@ export class RegistroService {
 
   public eiminarTipoFondo(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarTipoFondo/${id}`);
+  }
+
+  //Tipo Instrumento
+  public postRegistrarTipoInstrumento(objTipoInstrumento: TipoInstrumento){
+    return this.http.post<TipoInstrumento>(`${this.apiServeURL}/mantenedores/crearTipoInstrumento`, objTipoInstrumento);
+  }
+
+  public getListaTipoInstrumento(): Observable<TipoInstrumento[]>{
+    return this.http.get<TipoInstrumento[]>(`${this.apiServeURL}/mantenedores/tipoInstrumento/list`);
+  }
+
+  public putModificarTipoInstrumento(id: number, objTipoInstrumento: TipoInstrumento): Observable<TipoInstrumento> {
+    return this.http.put<TipoInstrumento>(`${this.apiServeURL}/mantenedores/modificarTipoInstrumento/${id}`, objTipoInstrumento);
+  }
+
+  public eiminarTipoInstrumento(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarTipoInstrumento/${id}`);
   }
 
   //Tipo Tasa

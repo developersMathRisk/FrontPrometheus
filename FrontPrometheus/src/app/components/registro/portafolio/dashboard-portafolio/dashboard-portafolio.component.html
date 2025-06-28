@@ -3,7 +3,8 @@
         <h1 class="page-title my-auto" style="white-space: nowrap;">Portafolio: </h1>
         <ng-select style="margin-left: 10px; width: 250px;" placeholder="Seleccione un portafolio.."
             name="select-producto" [items]="listaPortafolio" bindLabel="descripcionPortafolio" bindValue="idPortafolio"
-            [(ngModel)]="this.portafolioSeleccionado"></ng-select>
+            (change)="filtrarPortafolioInstrumentoResumen()"
+            [(ngModel)]="this.idPortafolioSeleccionado"></ng-select>
         <h1 class="page-title my-auto">al</h1>
         <input type="date" class="form-control" style="width: 200px;" [(ngModel)]="this.fechaConsulta">
     </div>
@@ -26,6 +27,10 @@
                     <div class="mat-elevation-z8">
                         <div class="table-responsive">
                             <table mat-table [dataSource]="dsResumen" matSort #sortResumen="matSort">
+                                <ng-container matColumnDef="descripcionTipoInstrumento">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Instrumento</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.descripcionTipoInstrumento}} </td>
+                                </ng-container>
                                 <ng-container matColumnDef="codISIN">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header>ISIN</th>
                                     <td mat-cell *matCellDef="let element"> {{element.codISIN}} </td>
@@ -41,10 +46,6 @@
                                 <ng-container matColumnDef="precio">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Precio</th>
                                     <td mat-cell *matCellDef="let element"> {{element.precio}} </td>
-                                </ng-container>
-                                <ng-container matColumnDef="fecha">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
-                                    <td mat-cell *matCellDef="let element"> {{element.fecha}} </td>
                                 </ng-container>
 
                                 <tr mat-header-row *matHeaderRowDef="displayedColumnsResumen"></tr>

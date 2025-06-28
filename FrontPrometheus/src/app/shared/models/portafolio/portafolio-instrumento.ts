@@ -6,4 +6,6 @@ export class PortafolioInstrumento{
     precio!: number;
     idPortafolio!: number;
     descripcionPortafolio!: string;
+    idTipoInstrumento!: number;
+    descripcionTipoInstrumento!: string;
 }

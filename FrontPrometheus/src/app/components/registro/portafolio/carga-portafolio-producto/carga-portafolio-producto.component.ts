@@ -19,7 +19,7 @@ import { CargaBonoComponent } from "../../mantenedor/productos/carga-bono/carga-
 import { CargaAccionComponent } from "../../mantenedor/productos/carga-accion/carga-accion.component";
 import { CargaFondoInversionComponent } from "../../mantenedor/productos/carga-fondo-inversion/carga-fondo-inversion.component";
 import { Benchmark } from '../../../../shared/models/portafolio/benchmark';
-import { TipoInstrumento } from '../../../../shared/models/producto/tipo-instrumento';
+import { TipoInstrumento } from '../../../../shared/models/atributo-financiero/tipo-instrumento';
 
 @Component({
   selector: 'app-carga-portafolio-producto',
@@ -49,6 +49,7 @@ export class CargaPortafolioProductoComponent {
 
   listPortafolio: Portafolio[] = [];
   listBenchmark: Benchmark[] = [];
+  listBenchmarkFiltrado: Benchmark[] = [];
   listTipoInstrumento: TipoInstrumento[] = [];
 
   listPortafolioInstrumento: PortafolioInstrumento[] = [];
@@ -58,7 +59,9 @@ export class CargaPortafolioProductoComponent {
 
   idInstrumentoSeleccionado: string = '';
   idPortafolioSeleccionado: number = 0;
-  idTipoInstrumentoSeleccionado: string = '';
+  idTipoInstrumentoSeleccionado: number = 0;
+
+  objBenchmark: Benchmark = new Benchmark();
 
   singlepondOptions: FilePond.FilePondOptions = {
     allowMultiple: false,
@@ -85,7 +88,8 @@ export class CargaPortafolioProductoComponent {
   obtenerListBenchmark() {
     this.registroService.getListaBenchmark().subscribe(
       (response: Benchmark[]) => {
-        this.listBenchmark = response;
+        this.listBenchmark = response.filter(i => i.idTipoInstrumento != null);
+        this.listBenchmarkFiltrado = this.listBenchmark;
       }
     )
   }
@@ -112,7 +116,17 @@ export class CargaPortafolioProductoComponent {
       modal = this.cargaModalPortafolio
     }
     else if(tipoModal == 'instrumento'){
-      modal = this.cargaModalBono
+      switch(this.idTipoInstrumentoSeleccionado){
+        case 1:
+          modal = this.cargaModalAccion;
+          break;
+        case 2:
+          modal = this.cargaModalBono;
+          break;
+        case 3:
+          modal = this.cargaModalFondoInversion;
+          break;
+      }
     }
     
     this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
@@ -135,10 +149,14 @@ export class CargaPortafolioProductoComponent {
 
   seleccionarInstrumento(id: string) {
     this.idInstrumentoSeleccionado = id;
+    this.objBenchmark = this.listBenchmarkFiltrado.filter(e => e.codBenchmark == this.idInstrumentoSeleccionado)[0];
   }
 
   agregarRelacion(){
     this.objPortafolioInstrumento.idPortafolio = this.idPortafolioSeleccionado;
+    this.objPortafolioInstrumento.idTipoInstrumento = this.idTipoInstrumentoSeleccionado;
+    this.objPortafolioInstrumento.codISIN = this.objBenchmark.codBenchmark;
+    this.objPortafolioInstrumento.codticker = this.objBenchmark.descripcionBenchmark;
     this.listPortafolioInstrumento.push(this.objPortafolioInstrumento);
     this.dataSource = new MatTableDataSource<PortafolioInstrumento>(this.listPortafolioInstrumento);
     this.dataSource.paginator = this.paginator;
@@ -183,5 +201,9 @@ export class CargaPortafolioProductoComponent {
         });
       }
     )
+  }
+
+  filtrarInstrumentos(){
+    this.listBenchmarkFiltrado = this.listBenchmark.filter(i => i .idTipoInstrumento == this.idTipoInstrumentoSeleccionado);
   }
 }

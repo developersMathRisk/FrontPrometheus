@@ -66,10 +66,11 @@
                                                     Instrumento
                                                     <ng-select placeholder="Seleccione una opción..."
                                                         [items]="listTipoInstrumento" bindLabel="descripcionTipoInstrumento"
-                                                        bindValue="codTipoInstrumento" [(ngModel)]="idTipoInstrumentoSeleccionado" class="me-2"
+                                                        bindValue="idTipoInstrumento" [(ngModel)]="idTipoInstrumentoSeleccionado" class="me-2"
+                                                        (change)="filtrarInstrumentos()"
                                                         style="min-width: 200px;">
                                                     </ng-select>
-                                                    <button class="btn btn-outline-primary btn-wave btn-agregar"
+                                                    <button class="btn btn-outline-primary btn-wave btn-agregar" *ngIf="this.idTipoInstrumentoSeleccionado != 0"
                                                         (click)="abrirModalSecundario('instrumento')">
                                                         <span class="icon">+</span>
                                                     </button>
@@ -79,7 +80,7 @@
                                                 <div class="list-group grid-columns">
                                                     <a href="javascript:void(0);" class="custom-item" [ngClass]="{ 'selected': instrumento.codBenchmark === idInstrumentoSeleccionado }"
                                                         (click)="seleccionarInstrumento(instrumento.codBenchmark)"
-                                                        *ngFor="let instrumento of listBenchmark">
+                                                        *ngFor="let instrumento of listBenchmarkFiltrado">
                                                         <p>{{instrumento.descripcionBenchmark}}</p>
                                                     </a>
                                                 </div>

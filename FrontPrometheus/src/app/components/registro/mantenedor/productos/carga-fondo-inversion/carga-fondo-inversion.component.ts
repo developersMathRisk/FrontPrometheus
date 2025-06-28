@@ -20,11 +20,13 @@ import { CargaAccionComponent } from "../carga-accion/carga-accion.component";
 import { CargaEmisorComponent } from "../../../mantenedor/atributo-financiero/carga-emisor/carga-emisor.component";
 import { CargaTipoFondoComponent } from "../../../mantenedor/atributo-financiero/carga-tipo-fondo/carga-tipo-fondo.component";
 import { CargaFuenteInformacionComponent } from "../../../mantenedor/atributo-financiero/carga-fuente-informacion/carga-fuente-informacion.component";
+import { CargaTipoInstrumentoComponent } from "../../atributo-financiero/carga-tipo-instrumento/carga-tipo-instrumento.component";
+import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
 
 @Component({
   selector: 'app-carga-fondo-inversion',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaMonedaComponent, CargaPlazaComponent, CargaEmisorComponent, CargaTipoFondoComponent, CargaFuenteInformacionComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaMonedaComponent, CargaPlazaComponent, CargaEmisorComponent, CargaTipoFondoComponent, CargaFuenteInformacionComponent, CargaTipoInstrumentoComponent],
   templateUrl: './carga-fondo-inversion.component.html',
   styleUrl: './carga-fondo-inversion.component.scss'
 })
@@ -37,6 +39,7 @@ export class CargaFondoInversionComponent {
   listFuenteInformacion: FuenteInformacion[] = [];
   listEmisor: Emisor[] = [];
   listMoneda: Moneda[] = [];
+  listTipoInstrumento: TipoInstrumento[] = [];
 
   nuevoRegistro: FondoInversion = new FondoInversion();
 
@@ -48,6 +51,7 @@ export class CargaFondoInversionComponent {
     this.obtenerListFuenteInformacion();
     this.obtenerListEmisor();
     this.obtenerListMoneda();
+    this.obtenerListTipoInstrumento();
   }
 
   obtenerListPlaza(){
@@ -86,6 +90,14 @@ export class CargaFondoInversionComponent {
     this.registroService.getListaMoneda().subscribe(
       (response: Moneda[]) => {
         this.listMoneda = response;
+      }
+    )
+  }
+
+  obtenerListTipoInstrumento(){
+    this.registroService.getListaTipoInstrumento().subscribe(
+      (response: TipoInstrumento[]) => {
+        this.listTipoInstrumento = response;
       }
     )
   }
@@ -130,5 +142,6 @@ export class CargaFondoInversionComponent {
     this.obtenerListFuenteInformacion();
     this.obtenerListEmisor();
     this.obtenerListMoneda();
+    this.obtenerListTipoInstrumento();
   }
 }

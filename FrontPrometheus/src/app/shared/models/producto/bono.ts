@@ -8,12 +8,23 @@ export class Bono{
     tasaCupon !: number;
     spread!: number;
     idEmisor!: number;
+    nomEmisor!: string;
     idMoneda!: number;
+    desMoneda!: string;
     idTipoBono!: number;
+    descripcionTipoBono!: string;
     idCurvaReferencia!: number;
+    descripcionCurva!: string;
     idMetodoAmortizacion!: number;
+    descripcionMetodo!: string;
     idCalculobase!: number;
+    descripcionCalculoBase!: string;
     idFrecuenciaPago!: number;
+    descripcionFrecuencia!: string;
     idTipoTasaInteres!: number;
+    descripcionTipoTasa!: string;
     idFormulaTasa!: number;
+    descripcionFormula!: string;
+    idTipoInstrumento!: number;
+    descripcionTipoInstrumento!: string;
 }

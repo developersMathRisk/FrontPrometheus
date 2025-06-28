@@ -16,4 +16,6 @@ export class Accion {
     nomEmisor!: string;
     idMoneda!: number;
     desMoneda!: string;
+    idTipoInstrumento!: number;
+    descripcionTipoInstrumento!: string;
 }

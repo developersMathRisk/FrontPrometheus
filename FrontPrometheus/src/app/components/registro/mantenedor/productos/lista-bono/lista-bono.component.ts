@@ -44,15 +44,15 @@ export class ListaBonoComponent {
     'montoNominal',
     'tasaCupon',
     'spread',
-    'idEmisor',
-    'idMoneda',
-    'idTipoBono',
-    'idCurvaReferencia',
-    'idMetodoAmortizacion',
-    'idCalculobase',
-    'idFrecuenciaPago',
-    'idTipoTasaInteres',
-    'idFormulaTasa'
+    'nomEmisor',
+    'desMoneda',
+    'descripcionTipoBono',
+    'descripcionCurva',
+    'descripcionMetodo',
+    'descripcionCalculoBase',
+    'descripcionFrecuencia',
+    'descripcionTipoTasa',
+    'descripcionFormula'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}

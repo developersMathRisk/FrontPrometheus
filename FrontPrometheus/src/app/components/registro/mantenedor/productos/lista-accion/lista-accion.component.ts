@@ -42,11 +42,11 @@ export class ListaAccionComponent {
     'flgCargaAutom',
     'codIndAsociado',
     'flgVar',
-    'idPlaza',
-    'idTipoAccion',
-    'idFuenteInformacion',
-    'idEmisor',
-    'idMoneda'
+    'desPlaza',
+    'desTipoAccion',
+    'desFuenteInformacion',
+    'nomEmisor',
+    'desMoneda'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}

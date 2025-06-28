@@ -25,7 +25,7 @@ import { PortafolioInstrumento } from '../../../../shared/models/portafolio/port
 export class DashboardPortafolioComponent {
   fechaConsulta = new Date().toLocaleDateString('sv-SE');
   listaPortafolio: Portafolio[] = [];
-  portafolioSeleccionado: number = 0;
+  idPortafolioSeleccionado: number = 0;
 
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions2: Partial<ChartOptions> | any;
@@ -34,17 +34,18 @@ export class DashboardPortafolioComponent {
   modalRef: any;
 
   listDataResumen:PortafolioInstrumento[] = [];
+  listDataResumenFiltrado:PortafolioInstrumento[] = [];
   listDataDetalle:IndiceMercado[] = [];
 
   dsResumen!: MatTableDataSource<PortafolioInstrumento>;
   @ViewChild('paginatorResumen') paginatorResumen!: MatPaginator;
   @ViewChild('sortResumen') sortResumen!: MatSort;
   displayedColumnsResumen: string[] = [
+    'descripcionTipoInstrumento',
     'codISIN',
     'codticker',
     'cantidad',
-    'precio',
-    'fecha'
+    'precio'
   ];
 
   dsDetalle!: MatTableDataSource<IndiceMercado>;
@@ -154,7 +155,8 @@ export class DashboardPortafolioComponent {
     this.registroService.getListaPortafolioInstrumento().subscribe(
       (response: PortafolioInstrumento[]) => {
         this.listDataResumen = response;
-        this.dsResumen = new MatTableDataSource<PortafolioInstrumento>(this.listDataResumen);
+        this.listDataResumenFiltrado = this.listDataResumen;
+        this.dsResumen = new MatTableDataSource<PortafolioInstrumento>(this.listDataResumenFiltrado);
         this.dsResumen.paginator = this.paginatorResumen;
         this.dsResumen.sort = this.sortResumen;
       }
@@ -173,6 +175,13 @@ export class DashboardPortafolioComponent {
 
   registrar(modal: any){
     this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
+  }
+
+  filtrarPortafolioInstrumentoResumen(){
+    this.listDataResumenFiltrado = this.listDataResumen.filter(e => e.idPortafolio == this.idPortafolioSeleccionado);
+    this.dsResumen = new MatTableDataSource<PortafolioInstrumento>(this.listDataResumenFiltrado);
+    this.dsResumen.paginator = this.paginatorResumen;
+    this.dsResumen.sort = this.sortResumen;
   }
 
 }

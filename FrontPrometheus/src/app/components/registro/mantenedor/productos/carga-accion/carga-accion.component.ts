@@ -18,11 +18,13 @@ import { CargaTipoAccionComponent } from "../../../mantenedor/atributo-financier
 import { CargaEmisorComponent } from "../../../mantenedor/atributo-financiero/carga-emisor/carga-emisor.component";
 import { CargaMonedaComponent } from "../../../mantenedor/atributo-financiero/carga-moneda/carga-moneda.component";
 import { CargaFuenteInformacionComponent } from "../../../mantenedor/atributo-financiero/carga-fuente-informacion/carga-fuente-informacion.component";
+import { CargaTipoInstrumentoComponent } from "../../atributo-financiero/carga-tipo-instrumento/carga-tipo-instrumento.component";
+import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
 
 @Component({
   selector: 'app-carga-accion',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaPlazaComponent, CargaTipoAccionComponent, CargaEmisorComponent, CargaMonedaComponent, CargaFuenteInformacionComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaPlazaComponent, CargaTipoAccionComponent, CargaEmisorComponent, CargaMonedaComponent, CargaFuenteInformacionComponent, CargaTipoInstrumentoComponent],
   templateUrl: './carga-accion.component.html',
   styleUrl: './carga-accion.component.scss'
 })
@@ -35,6 +37,7 @@ export class CargaAccionComponent{
   listFuenteInformacion: FuenteInformacion[] = [];
   listEmisor: Emisor[] = [];
   listMoneda: Moneda[] = [];
+  listTipoInstrumento: TipoInstrumento[] = [];
 
   nuevoRegistro: Accion = new Accion()
 
@@ -46,6 +49,7 @@ export class CargaAccionComponent{
     this.obtenerListFuenteInformacion();
     this.obtenerListEmisor();
     this.obtenerListMoneda();
+    this.obtenerListTipoInstrumento();
   }
 
   obtenerListPlaza(){
@@ -84,6 +88,14 @@ export class CargaAccionComponent{
     this.registroService.getListaMoneda().subscribe(
       (response: Moneda[]) => {
         this.listMoneda = response;
+      }
+    )
+  }
+
+  obtenerListTipoInstrumento(){
+    this.registroService.getListaTipoInstrumento().subscribe(
+      (response: TipoInstrumento[]) => {
+        this.listTipoInstrumento = response;
       }
     )
   }
@@ -128,6 +140,7 @@ export class CargaAccionComponent{
     this.obtenerListFuenteInformacion();
     this.obtenerListEmisor();
     this.obtenerListMoneda();
+    this.obtenerListTipoInstrumento();
   }
 
 }
