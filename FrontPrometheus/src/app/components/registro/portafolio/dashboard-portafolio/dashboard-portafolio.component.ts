@@ -41,6 +41,7 @@ export class DashboardPortafolioComponent {
   @ViewChild('paginatorResumen') paginatorResumen!: MatPaginator;
   @ViewChild('sortResumen') sortResumen!: MatSort;
   displayedColumnsResumen: string[] = [
+    'descripcionPortafolio',
     'descripcionTipoInstrumento',
     'codISIN',
     'codticker',
@@ -147,6 +148,10 @@ export class DashboardPortafolioComponent {
     this.registroService.getListaPortafolio().subscribe(
       (response: Portafolio[]) => {
         this.listaPortafolio = response;
+        this.listaPortafolio = [
+          { idPortafolio: 0, descripcionPortafolio: 'Todos'} as Portafolio,
+          ...response
+        ];
       }
     )
   }
@@ -178,7 +183,7 @@ export class DashboardPortafolioComponent {
   }
 
   filtrarPortafolioInstrumentoResumen(){
-    this.listDataResumenFiltrado = this.listDataResumen.filter(e => e.idPortafolio == this.idPortafolioSeleccionado);
+    this.listDataResumenFiltrado = this.listDataResumen.filter(e => this.idPortafolioSeleccionado == 0 || e.idPortafolio == this.idPortafolioSeleccionado);
     this.dsResumen = new MatTableDataSource<PortafolioInstrumento>(this.listDataResumenFiltrado);
     this.dsResumen.paginator = this.paginatorResumen;
     this.dsResumen.sort = this.sortResumen;

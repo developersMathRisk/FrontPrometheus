@@ -25,11 +25,11 @@
         <div class="row">
             <div class="col-md-6">
                 <label class="form-label">ISIN</label>
-                <input type="text" placeholder="ISIN" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.codISIN">
+                <input type="text" placeholder="ISIN" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.codISIN">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Nemónico</label>
-                <input type="text" placeholder="Nemónico" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.nemonico">
+                <input type="text" placeholder="Nemónico" minlength="3" maxlength="60" class="form-control" [(ngModel)]="this.objRegistroEditado.nemonico">
             </div>
         </div>
         <br>
@@ -46,45 +46,45 @@
         <div class="row">
             <div class="col-md-4">
                 <label class="form-label">Precio Limpio</label>
-                <input type="number" placeholder="Precio Limpio" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.numPrecioLimpio">
+                <input type="number" placeholder="Precio Limpio" class="form-control" [(ngModel)]="this.objRegistroEditado.numPrecioLimpio">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Precio Sucio</label>
-                <input type="number" placeholder="Precio Sucio" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.numPrecioSucio">
+                <input type="number" placeholder="Precio Sucio" class="form-control" [(ngModel)]="this.objRegistroEditado.numPrecioSucio">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Interés Corrido</label>
-                <input type="number" placeholder="Interés Corrido" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.numInteresCorrido">
+                <input type="number" placeholder="Interés Corrido" class="form-control" [(ngModel)]="this.objRegistroEditado.numInteresCorrido">
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-md-4">
                 <label class="form-label">TIR</label>
-                <input type="number" placeholder="TIR" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.numTIR">
+                <input type="number" placeholder="TIR" class="form-control" [(ngModel)]="this.objRegistroEditado.numTIR">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Dur. Macaulay</label>
-                <input type="number" placeholder="Dur. Macaulay" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.numDurMacaulay">
+                <input type="number" placeholder="Dur. Macaulay" class="form-control" [(ngModel)]="this.objRegistroEditado.numDurMacaulay">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Dur. Modificada</label>
-                <input type="number" placeholder="Dur. Modificada" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.numDurModified">
+                <input type="number" placeholder="Dur. Modificada" class="form-control" [(ngModel)]="this.objRegistroEditado.numDurModified">
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-md-4">
                 <label class="form-label">Convexidad</label>
-                <input type="number" placeholder="Convexidad" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.numConvexidad">
+                <input type="number" placeholder="Convexidad" class="form-control" [(ngModel)]="this.objRegistroEditado.numConvexidad">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Valor Facial</label>
-                <input type="number" placeholder="Valor Facial" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.numValorFacial">
+                <input type="number" placeholder="Valor Facial" class="form-control" [(ngModel)]="this.objRegistroEditado.numValorFacial">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Tasa Cupón</label>
-                <input type="number" placeholder="Tasa Cupón" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.objRegistroEditado.numTasaCupon">
+                <input type="number" placeholder="Tasa Cupón" class="form-control" [(ngModel)]="this.objRegistroEditado.numTasaCupon">
             </div>
         </div>
         <br>

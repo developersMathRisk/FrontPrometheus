@@ -25,11 +25,13 @@ import { CargaCalculoBaseInteresComponent } from "../../../mantenedor/atributo-f
 import { CargaFrecuenciaPagoComponent } from "../../../mantenedor/atributo-financiero/carga-frecuencia-pago/carga-frecuencia-pago.component";
 import { CargaTipoTasaComponent } from "../../../mantenedor/atributo-financiero/carga-tipo-tasa/carga-tipo-tasa.component";
 import { CargaFormulaTasaComponent } from "../../../mantenedor/atributo-financiero/carga-formula-tasa/carga-formula-tasa.component";
+import { CargaTipoInstrumentoComponent } from "../../atributo-financiero/carga-tipo-instrumento/carga-tipo-instrumento.component";
+import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
 
 @Component({
   selector: 'app-editar-bono',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaTipoInstrumentoComponent],
   templateUrl: './editar-bono.component.html',
   styleUrl: './editar-bono.component.scss'
 })
@@ -49,6 +51,7 @@ export class EditarBonoComponent {
   listFrecPago: FrecuenciaPago[] = [];
   listTipoTasaInt: TipoTasa[] = [];
   listFormulaTasa: FormulaTasa[] = [];
+  listTipoInstrumento: TipoInstrumento[] = [];
   
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
@@ -63,6 +66,7 @@ export class EditarBonoComponent {
     this.obtenerListFrecuenciaPago();
     this.obtenerListTipoTasa();
     this.obtenerListFormulaTasa();
+    this.obtenerListTipoInstrumento();
   }
 
   obtenerListEmisor(){
@@ -137,6 +141,14 @@ export class EditarBonoComponent {
     )
   }
 
+  obtenerListTipoInstrumento(){
+    this.registroService.getListaTipoInstrumento().subscribe(
+      (response: TipoInstrumento[]) => {
+        this.listTipoInstrumento = response;
+      }
+    )
+  }
+
   guardarCambios(){
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
@@ -195,5 +207,6 @@ export class EditarBonoComponent {
     this.obtenerListFrecuenciaPago();
     this.obtenerListTipoTasa();
     this.obtenerListFormulaTasa();
+    this.obtenerListTipoInstrumento();
   }
 }

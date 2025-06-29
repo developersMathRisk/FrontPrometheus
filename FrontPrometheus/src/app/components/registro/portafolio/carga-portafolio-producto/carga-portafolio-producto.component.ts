@@ -36,18 +36,20 @@ export class CargaPortafolioProductoComponent {
   @ViewChild('cargaModalAccion') cargaModalAccion!: TemplateRef<any>;
   @ViewChild('cargaModalFondoInversion') cargaModalFondoInversion!: TemplateRef<any>;
 
-  dataSource = new MatTableDataSource<PortafolioInstrumento>;
+  dsResumen = new MatTableDataSource<PortafolioInstrumento>;
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
     'accion',
+    'descripcionPortafolio',
     // 'codISIN',
-    // 'codticker',
+    'codticker',
     'cantidad',
     'precio',
   ];
 
   listPortafolio: Portafolio[] = [];
+  listPortafolioFiltrado: Portafolio[] = [];
   listBenchmark: Benchmark[] = [];
   listBenchmarkFiltrado: Benchmark[] = [];
   listTipoInstrumento: TipoInstrumento[] = [];
@@ -62,6 +64,11 @@ export class CargaPortafolioProductoComponent {
   idTipoInstrumentoSeleccionado: number = 0;
 
   objBenchmark: Benchmark = new Benchmark();
+
+  txtFiltroNombrePortafolio: string = '';
+  txtFiltroNombreInstrumento: string = '';
+
+  txtDesPortafolioSeleccionado: string = '';
 
   singlepondOptions: FilePond.FilePondOptions = {
     allowMultiple: false,
@@ -81,6 +88,7 @@ export class CargaPortafolioProductoComponent {
     this.registroService.getListaPortafolio().subscribe(
       (response: Portafolio[]) => {
         this.listPortafolio = response;
+        this.listPortafolioFiltrado = this.listPortafolio;
       }
     )
   }
@@ -97,7 +105,10 @@ export class CargaPortafolioProductoComponent {
   obtenerListTipoInstrumento() {
     this.registroService.getListaTipoInstrumento().subscribe(
       (response: TipoInstrumento[]) => {
-        this.listTipoInstrumento = response;
+        this.listTipoInstrumento = [
+          { idTipoInstrumento: 0, descripcionTipoInstrumento: 'Todos' } as TipoInstrumento,
+          ...response
+        ];
       }
     )
   }
@@ -154,13 +165,14 @@ export class CargaPortafolioProductoComponent {
 
   agregarRelacion(){
     this.objPortafolioInstrumento.idPortafolio = this.idPortafolioSeleccionado;
-    this.objPortafolioInstrumento.idTipoInstrumento = this.idTipoInstrumentoSeleccionado;
+    this.objPortafolioInstrumento.idTipoInstrumento = this.objBenchmark.idTipoInstrumento;
     this.objPortafolioInstrumento.codISIN = this.objBenchmark.codBenchmark;
     this.objPortafolioInstrumento.codticker = this.objBenchmark.descripcionBenchmark;
+    this.objPortafolioInstrumento.descripcionPortafolio = this.listPortafolio.filter(e => e.idPortafolio == this.idPortafolioSeleccionado)[0].descripcionPortafolio;
     this.listPortafolioInstrumento.push(this.objPortafolioInstrumento);
-    this.dataSource = new MatTableDataSource<PortafolioInstrumento>(this.listPortafolioInstrumento);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dsResumen = new MatTableDataSource<PortafolioInstrumento>(this.listPortafolioInstrumento);
+    this.dsResumen.paginator = this.paginator;
+    this.dsResumen.sort = this.sort;
     this.objPortafolioInstrumento = new PortafolioInstrumento();
 
     this.idPortafolioSeleccionado = 0;
@@ -169,13 +181,14 @@ export class CargaPortafolioProductoComponent {
 
   eliminarRelacion(element:any){
     this.listPortafolioInstrumento = this.listPortafolioInstrumento.filter(obj => obj !== element);
-    this.dataSource = new MatTableDataSource<PortafolioInstrumento>(this.listPortafolioInstrumento);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dsResumen = new MatTableDataSource<PortafolioInstrumento>(this.listPortafolioInstrumento);
+    this.dsResumen.paginator = this.paginator;
+    this.dsResumen.sort = this.sort;
     this.objPortafolioInstrumento = new PortafolioInstrumento();
   }
 
   registrar(){
+    this.listPortafolioInstrumento.map(e => e.descripcionPortafolio = '');
     this.registroService.postRegistrarPortafolioInstrumentoMasivo(this.listPortafolioInstrumento).subscribe(
       (response: any) => {
         Swal.fire({
@@ -187,9 +200,9 @@ export class CargaPortafolioProductoComponent {
         this.idPortafolioSeleccionado = 0;
         this.idInstrumentoSeleccionado = '';
         this.listPortafolioInstrumento = [];
-        this.dataSource = new MatTableDataSource<PortafolioInstrumento>(this.listPortafolioInstrumento);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.dsResumen = new MatTableDataSource<PortafolioInstrumento>(this.listPortafolioInstrumento);
+        this.dsResumen.paginator = this.paginator;
+        this.dsResumen.sort = this.sort;
         this.objPortafolioInstrumento = new PortafolioInstrumento();
       },
       (error: HttpErrorResponse) =>{
@@ -204,6 +217,12 @@ export class CargaPortafolioProductoComponent {
   }
 
   filtrarInstrumentos(){
-    this.listBenchmarkFiltrado = this.listBenchmark.filter(i => i .idTipoInstrumento == this.idTipoInstrumentoSeleccionado);
+    const filtro = this.txtFiltroNombreInstrumento.toLowerCase();
+    this.listBenchmarkFiltrado = this.listBenchmark.filter(i => (this.idTipoInstrumentoSeleccionado == 0 || i .idTipoInstrumento == this.idTipoInstrumentoSeleccionado) && i.descripcionBenchmark?.toLowerCase().includes(filtro));
+  }
+
+  filtrarPortafolios(){
+    const filtro = this.txtFiltroNombrePortafolio.toLowerCase();
+    this.listPortafolioFiltrado = this.listPortafolio.filter(p => p.descripcionPortafolio?.toLowerCase().includes(filtro));
   }
 }

@@ -36,12 +36,12 @@
 
                 <div class="col-md-3">
                     <label class="form-label">Nemónico</label>
-                    <input type="text" placeholder="Nemónico" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.desNemonico">
+                    <input type="text" placeholder="Nemónico" minlength="3" maxlength="60" class="form-control" [(ngModel)]="this.objRegistroEditado.desNemonico">
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Monto Total</label>
-                    <input type="number" placeholder="Monto Total" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.montoTotal">
+                    <input type="number" placeholder="Monto Total" class="form-control" [(ngModel)]="this.objRegistroEditado.montoTotal">
                 </div>
             </div>
 
@@ -50,17 +50,26 @@
             <div class="row">
                 <div class="col-md-4">
                     <label class="form-label">Plaza</label>
-                    <ng-select placeholder="Seleccione una opción..." [items]="listPlaza" bindLabel="desPlaza" bindValue="idPlaza" [(ngModel)]="this.objRegistroEditado.idPlaza"></ng-select>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listPlaza" bindLabel="desPlaza" bindValue="idPlaza" [(ngModel)]="this.objRegistroEditado.idPlaza"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalPlaza)"><span class="icon">+</span></button>
+                    </div>
                 </div>
 
                 <div class="col-md-4">
                     <label class="form-label">Emisor</label>
-                    <ng-select placeholder="Seleccione una opción..." [items]="listEmisor" bindLabel="nomEmisor" bindValue="idEmisor" [(ngModel)]="this.objRegistroEditado.idEmisor"></ng-select>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listEmisor" bindLabel="nomEmisor" bindValue="idEmisor" [(ngModel)]="this.objRegistroEditado.idEmisor"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalEmisor)"><span class="icon">+</span></button>
+                    </div>
                 </div>
 
                 <div class="col-md-4">
                     <label class="form-label">Moneda</label>
-                    <ng-select placeholder="Seleccione una opción..." [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.objRegistroEditado.idMoneda"></ng-select>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.objRegistroEditado.idMoneda"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalMoneda)"><span class="icon">+</span></button>
+                    </div>
                 </div>
             </div>  
             
@@ -69,12 +78,26 @@
             <div class="row">
                 <div class="col-md-4">
                     <label class="form-label">Tipo Fondo</label>
-                    <ng-select placeholder="Seleccione una opción..." [items]="listTipoFondo" bindLabel="desTipoFondo" bindValue="idTipoFondo" [(ngModel)]="this.objRegistroEditado.idTipoFondo"></ng-select>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoFondo" bindLabel="desTipoFondo" bindValue="idTipoFondo" [(ngModel)]="this.objRegistroEditado.idTipoFondo"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoFondo)"><span class="icon">+</span></button>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Tipo Instrumento</label>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoInstrumento" bindLabel="descripcionTipoInstrumento" bindValue="idTipoInstrumento" [(ngModel)]="this.objRegistroEditado.idTipoInstrumento"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoInstrumento)"><span class="icon">+</span></button>
+                    </div>
                 </div>
 
                 <div class="col-md-4" *ngIf="this.objRegistroEditado.flgCargaAutom">
                     <label class="form-label">Fuente Información</label>
-                    <ng-select placeholder="Seleccione una opción..." [items]="listFuenteInformacion" bindLabel="desFuenteInformacion" bindValue="idFuenteInformacion" [(ngModel)]="this.objRegistroEditado.idFuenteInformacion"></ng-select>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listFuenteInformacion" bindLabel="desFuenteInformacion" bindValue="idFuenteInformacion" [(ngModel)]="this.objRegistroEditado.idFuenteInformacion"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalFuenteInformacion)"><span class="icon">+</span></button>
+                    </div>
                 </div>
             </div>
 
@@ -96,3 +119,27 @@
         </div>
     </div>
 </div>
+
+<ng-template #cargaModalPlaza let-modal>
+    <app-carga-plaza (close)="cerrarModalSecundario($event)"></app-carga-plaza>
+</ng-template>
+
+<ng-template #cargaModalEmisor let-modal>
+    <app-carga-emisor (close)="cerrarModalSecundario($event)"></app-carga-emisor>
+</ng-template>
+
+<ng-template #cargaModalMoneda let-modal>
+    <app-carga-moneda (close)="cerrarModalSecundario($event)"></app-carga-moneda>
+</ng-template>
+
+<ng-template #cargaModalTipoFondo let-modal>
+    <app-carga-tipo-fondo (close)="cerrarModalSecundario($event)"></app-carga-tipo-fondo>
+</ng-template>
+
+<ng-template #cargaModalFuenteInformacion let-modal>
+    <app-carga-fuente-informacion (close)="cerrarModalSecundario($event)"></app-carga-fuente-informacion>
+</ng-template>
+
+<ng-template #cargaModalTipoInstrumento let-modal>
+    <app-carga-tipo-instrumento (close)="cerrarModalSecundario($event)"></app-carga-tipo-instrumento>
+</ng-template>

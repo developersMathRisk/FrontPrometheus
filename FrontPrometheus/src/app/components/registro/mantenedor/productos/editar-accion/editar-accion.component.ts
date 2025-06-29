@@ -13,17 +13,25 @@ import { TipoAccion } from '../../../../../shared/models/atributo-financiero/tip
 import { FuenteInformacion } from '../../../../../shared/models/atributo-financiero/fuente-informacion';
 import { Emisor } from '../../../../../shared/models/atributo-financiero/emisor';
 import { CommonModule } from '@angular/common';
+import { CargaPlazaComponent } from "../../atributo-financiero/carga-plaza/carga-plaza.component";
+import { CargaTipoAccionComponent } from "../../atributo-financiero/carga-tipo-accion/carga-tipo-accion.component";
+import { CargaEmisorComponent } from "../../atributo-financiero/carga-emisor/carga-emisor.component";
+import { CargaMonedaComponent } from "../../atributo-financiero/carga-moneda/carga-moneda.component";
+import { CargaFuenteInformacionComponent } from "../../atributo-financiero/carga-fuente-informacion/carga-fuente-informacion.component";
+import { CargaTipoInstrumentoComponent } from "../../atributo-financiero/carga-tipo-instrumento/carga-tipo-instrumento.component";
+import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
 
 @Component({
   selector: 'app-editar-accion',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaPlazaComponent, CargaTipoAccionComponent, CargaEmisorComponent, CargaMonedaComponent, CargaFuenteInformacionComponent, CargaTipoInstrumentoComponent],
   templateUrl: './editar-accion.component.html',
   styleUrl: './editar-accion.component.scss'
 })
 export class EditarAccionComponent {
   @Input() data!: Accion;
   @Output() close = new EventEmitter<any>();
+  modalRef: any;
   
   objRegistroEditado: Accion = new Accion;
   
@@ -32,6 +40,7 @@ export class EditarAccionComponent {
   listFuenteInformacion: FuenteInformacion[] = [];
   listEmisor: Emisor[] = [];
   listMoneda: Moneda[] = [];
+  listTipoInstrumento: TipoInstrumento[] = [];
 
   
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
@@ -43,6 +52,7 @@ export class EditarAccionComponent {
     this.obtenerListFuenteInformacion();
     this.obtenerListEmisor();
     this.obtenerListMoneda();
+    this.obtenerListTipoInstrumento();
   }
 
   obtenerListPlaza(){
@@ -85,6 +95,14 @@ export class EditarAccionComponent {
     )
   }
 
+  obtenerListTipoInstrumento(){
+      this.registroService.getListaTipoInstrumento().subscribe(
+        (response: TipoInstrumento[]) => {
+          this.listTipoInstrumento = response;
+        }
+      )
+    }
+
   guardarCambios(){
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
@@ -124,5 +142,21 @@ export class EditarAccionComponent {
   cerrar(){
     this.close.emit();
     //this.modalService.dismissAll();
+  }
+
+  abrirModalSecundario(modal: any){
+    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
+  }
+
+  cerrarModalSecundario(event: any){
+    // this.close.emit();
+    // this.modalServiceSecundario.dismissAll();
+    this.modalRef.close();
+    this.obtenerListPlaza();
+    this.obtenerListTipoAccion();
+    this.obtenerListFuenteInformacion();
+    this.obtenerListEmisor();
+    this.obtenerListMoneda();
+    this.obtenerListTipoInstrumento();
   }
 }

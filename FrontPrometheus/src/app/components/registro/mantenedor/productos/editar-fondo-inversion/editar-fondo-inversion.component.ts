@@ -13,17 +13,25 @@ import { FuenteInformacion } from '../../../../../shared/models/atributo-financi
 import { Plaza } from '../../../../../shared/models/atributo-financiero/plaza';
 import { TipoFondo } from '../../../../../shared/models/atributo-financiero/tipo-fondo';
 import { CommonModule } from '@angular/common';
+import { CargaPlazaComponent } from "../../atributo-financiero/carga-plaza/carga-plaza.component";
+import { CargaEmisorComponent } from "../../atributo-financiero/carga-emisor/carga-emisor.component";
+import { CargaMonedaComponent } from "../../atributo-financiero/carga-moneda/carga-moneda.component";
+import { CargaTipoFondoComponent } from "../../atributo-financiero/carga-tipo-fondo/carga-tipo-fondo.component";
+import { CargaFuenteInformacionComponent } from "../../atributo-financiero/carga-fuente-informacion/carga-fuente-informacion.component";
+import { CargaTipoInstrumentoComponent } from "../../atributo-financiero/carga-tipo-instrumento/carga-tipo-instrumento.component";
+import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
 
 @Component({
   selector: 'app-editar-fondo-inversion',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaPlazaComponent, CargaEmisorComponent, CargaMonedaComponent, CargaTipoFondoComponent, CargaFuenteInformacionComponent, CargaTipoInstrumentoComponent],
   templateUrl: './editar-fondo-inversion.component.html',
   styleUrl: './editar-fondo-inversion.component.scss'
 })
 export class EditarFondoInversionComponent {
   @Input() data!: FondoInversion;
   @Output() close = new EventEmitter<any>();
+  modalRef: any;
   
   objRegistroEditado: FondoInversion = new FondoInversion;
   
@@ -32,6 +40,7 @@ export class EditarFondoInversionComponent {
   listFuenteInformacion: FuenteInformacion[] = [];
   listEmisor: Emisor[] = [];
   listMoneda: Moneda[] = [];
+  listTipoInstrumento: TipoInstrumento[] = [];
   
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
@@ -42,6 +51,7 @@ export class EditarFondoInversionComponent {
     this.obtenerListFuenteInformacion();
     this.obtenerListEmisor();
     this.obtenerListMoneda();
+    this.obtenerListTipoInstrumento();
   }
 
   obtenerListPlaza(){
@@ -84,6 +94,14 @@ export class EditarFondoInversionComponent {
     )
   }
 
+  obtenerListTipoInstrumento(){
+    this.registroService.getListaTipoInstrumento().subscribe(
+      (response: TipoInstrumento[]) => {
+        this.listTipoInstrumento = response;
+      }
+    )
+  }
+
   guardarCambios(){
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
@@ -121,5 +139,21 @@ export class EditarFondoInversionComponent {
   cerrar(){
     this.close.emit();
     //this.modalService.dismissAll();
+  }
+
+  abrirModalSecundario(modal: any){
+    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
+  }
+
+  cerrarModalSecundario(event: any){
+    // this.close.emit();
+    // this.modalServiceSecundario.dismissAll();
+    this.modalRef.close();
+    this.obtenerListPlaza();
+    this.obtenerListTipoFondo();
+    this.obtenerListFuenteInformacion();
+    this.obtenerListEmisor();
+    this.obtenerListMoneda();
+    this.obtenerListTipoInstrumento();
   }
 }

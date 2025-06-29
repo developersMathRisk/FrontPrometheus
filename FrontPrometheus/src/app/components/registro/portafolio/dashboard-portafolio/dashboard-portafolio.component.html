@@ -27,6 +27,10 @@
                     <div class="mat-elevation-z8">
                         <div class="table-responsive">
                             <table mat-table [dataSource]="dsResumen" matSort #sortResumen="matSort">
+                                <ng-container matColumnDef="descripcionPortafolio">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Portafolio</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.descripcionPortafolio}} </td>
+                                </ng-container>
                                 <ng-container matColumnDef="descripcionTipoInstrumento">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Instrumento</th>
                                     <td mat-cell *matCellDef="let element"> {{element.descripcionTipoInstrumento}} </td>
