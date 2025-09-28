@@ -26,6 +26,7 @@ import { ListaTermVolatilidadComponent } from '../lista-term-volatilidad/lista-t
 import { ListaSkewPointComponent } from '../lista-skew-point/lista-skew-point.component';
 import { ListaTipoCambioComponent } from '../lista-tipo-cambio/lista-tipo-cambio.component';
 import { ListaTipoInstrumentoComponent } from '../lista-tipo-instrumento/lista-tipo-instrumento.component';
+import { ListaTipoSectorComponent } from '../lista-tipo-sector/lista-tipo-sector.component';
 
 @Component({
   selector: 'app-mantenedor-atributos-financieros',
@@ -64,6 +65,7 @@ export class MantenedorAtributosFinancierosComponent {
       { id: 22, descripcion: 'Skew Point' },
       { id: 23, descripcion: 'Tipo Cambio' },
       { id: 24, descripcion: 'Tipo Instrumento' },
+      { id: 25, descripcion: 'Tipo Sector' },
     ];
     this.productoSeleccionado = 1;
   }
@@ -92,7 +94,8 @@ export class MantenedorAtributosFinancierosComponent {
     21: ListaTermVolatilidadComponent,
     22: ListaSkewPointComponent,
     23: ListaTipoCambioComponent,
-    24: ListaTipoInstrumentoComponent
+    24: ListaTipoInstrumentoComponent,
+    25: ListaTipoSectorComponent
   };
 
   get componenteSeleccionado() {

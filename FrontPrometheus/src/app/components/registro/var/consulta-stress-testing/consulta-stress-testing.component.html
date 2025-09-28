@@ -1,0 +1,102 @@
+<div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-3">
+        <h1 class="page-title my-auto" style="white-space: nowrap;">Análisis de Stress Testing</h1>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header justify-content-between d-sm-flex d-block">
+        <div class="card-title">
+            Filtros generales
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label">Fecha:</label>
+                <input type="date" class="form-control" style="width: 200px;" [(ngModel)]="this.fechaConsulta"
+                    (ngModelChange)="filtrarResultados()">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Tipo de Metodología:</label>
+                <ng-select style="margin-left: 10px; width: 250px;" placeholder="Seleccione un portafolio.."
+                    name="select-producto" [items]="listaTipoMetodologia" bindLabel="descripcionPortafolio"
+                    bindValue="idPortafolio" (change)="filtrarGraficoLinealVaR()"
+                    [(ngModel)]="this.idTipoMetodologia"></ng-select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Nivel de confianza:</label>
+                <ng-select style="margin-left: 10px; width: 250px;" placeholder="Seleccione un portafolio.."
+                    name="select-producto" [items]="listaNivelConfianza" bindLabel="descripcionPortafolio"
+                    bindValue="idPortafolio" (change)="filtrarGraficoLinealVaR()"
+                    [(ngModel)]="this.idNivelConfianza"></ng-select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-xl-2">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="mb-1 fw-bold">123</h2>
+                        <p class="mb-1">VaR 95%</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="mb-1 fw-bold">123</h2>
+                        <p class="mb-1">VaR Promedio</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="mb-1 fw-bold">123</h2>
+                        <p class="mb-1">Volatilidad</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="mb-1 fw-bold">123</h2>
+                        <p class="mb-1">Observaciones</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="mb-1 fw-bold">123</h2>
+                        <p class="mb-1">Confianza</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12 d-flex">
+        <div class="card custom-card w-100 d-flex flex-column">
+            <div class="card-header">
+                <div class="card-title text-center">Back Testing del VaR</div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <apx-chart [series]="chartLineaVaR.series" [chart]="chartLineaVaR.chart"
+                        [xaxis]="chartLineaVaR.xaxis" [yaxis]="chartLineaVaR.yaxis"
+                        [dataLabels]="chartLineaVaR.dataLabels" [grid]="chartLineaVaR.grid"
+                        [stroke]="chartLineaVaR.stroke" [colors]="chartLineaVaR.colors" [title]="chartLineaVaR.title"
+                        [legend]="chartLineaVaR.legend"></apx-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

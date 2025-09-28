@@ -41,7 +41,14 @@
 
             <div class="row">
                 <div class="col-md-3">
-                    <label class="form-label">Relación USD</label>
+                    <label class="form-label">
+                        Relación USD
+                        <i class="bi bi-info-circle-fill text-primary ms-2"
+                            data-bs-toggle="tooltip"
+                            data-bs-html="true"
+                            data-bs-placement="right"
+                            title="Ingrese la letra D(Directo) o I(Indirecto)"></i>
+                    </label>
                     <input type="text" placeholder="Relación USD" minlength="1" maxlength="1" class="form-control" [(ngModel)]="this.objRegistroEditado.codTipoRelacionUSD">
                 </div>
                 <div class="col-md-3">

@@ -18,4 +18,6 @@ export class Accion {
     desMoneda!: string;
     idTipoInstrumento!: number;
     descripcionTipoInstrumento!: string;
+    idTipoSector!: number;
+    descripcionTiposector!: string;
 }

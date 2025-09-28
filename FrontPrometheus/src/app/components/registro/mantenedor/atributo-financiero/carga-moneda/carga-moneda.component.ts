@@ -62,4 +62,12 @@ export class CargaMonedaComponent {
     this.close.emit();
     //this.modalService.dismissAll();
   }
+
+  permitirSoloDoI(event: KeyboardEvent) {
+    const tecla = event.key.toUpperCase();
+    if (tecla !== 'D' && tecla !== 'I' && tecla.length === 1) {
+      event.preventDefault();
+    }
+  }
+
 }

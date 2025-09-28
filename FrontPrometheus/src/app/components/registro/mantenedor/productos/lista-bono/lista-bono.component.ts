@@ -40,6 +40,7 @@ export class ListaBonoComponent {
     'codISIN',
     'ticker',
     'fechaEmision',
+    'fechaPrimerCupon',
     'fechaVencimiento',
     'montoNominal',
     'tasaCupon',

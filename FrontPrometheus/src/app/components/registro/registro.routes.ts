@@ -35,6 +35,25 @@ export const admin: Routes = [
                     import('./portafolio/dashboard-portafolio/dashboard-portafolio.component').then((m) => m.DashboardPortafolioComponent),
                 title: 'Portafolio'
             },
+
+            {
+                path: 'var/ejecutar',
+                loadComponent: () =>
+                    import('./var/ejecutar-var/ejecutar-var.component').then((m) => m.EjecutarVarComponent),
+                title: 'Ejecutar VaR'
+            },
+            {
+                path: 'var/consulta',
+                loadComponent: () =>
+                    import('./var/consulta-var/consulta-var.component').then((m) => m.ConsultaVarComponent),
+                title: 'Consultar VaR'
+            },
+            {
+                path: 'stress-testing/consulta',
+                loadComponent: () =>
+                    import('./var/consulta-stress-testing/consulta-stress-testing.component').then((m) => m.ConsultaStressTestingComponent),
+                title: 'Consultar VaR'
+            },
         ]
     }
 ];

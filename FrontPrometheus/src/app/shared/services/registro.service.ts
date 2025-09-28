@@ -37,6 +37,7 @@ import { Portafolio } from '../models/portafolio/portafolio';
 import { PortafolioInstrumento } from '../models/portafolio/portafolio-instrumento';
 import { Benchmark } from '../models/portafolio/benchmark';
 import { TipoInstrumento } from '../models/atributo-financiero/tipo-instrumento';
+import { TipoSector } from '../models/atributo-financiero/tipo-sector';
 
 @Injectable({
   providedIn: 'root',
@@ -473,6 +474,23 @@ export class RegistroService {
 
   public eiminarTipoTasa(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarTipoTasaInteres/${id}`);
+  }
+
+  //Tipo Sector
+  public postRegistrarTipoSector(objTipoSector: TipoSector){
+    return this.http.post<TipoSector>(`${this.apiServeURL}/mantenedores/crearTipoSector`, objTipoSector);
+  }
+
+  public getListaTipoSector(): Observable<TipoSector[]>{
+    return this.http.get<TipoSector[]>(`${this.apiServeURL}/mantenedores/tipoSector/list`);
+  }
+
+  public putModificarTipoSector(id: number, objTipoSector: TipoSector): Observable<TipoSector> {
+    return this.http.put<TipoSector>(`${this.apiServeURL}/mantenedores/modificarTipoSector/${id}`, objTipoSector);
+  }
+
+  public eiminarTipoSector(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiServeURL}/mantenedores/eliminarTipoSector/${id}`);
   }
 
   //Term. Volatilidad

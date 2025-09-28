@@ -41,6 +41,7 @@ export class CargaPortafolioProductoComponent {
   @ViewChild('sort') sort!: MatSort;
   displayedColumns: string[] = [
     'accion',
+    'fechaValor',
     'descripcionPortafolio',
     // 'codISIN',
     'codticker',
@@ -98,6 +99,7 @@ export class CargaPortafolioProductoComponent {
       (response: Benchmark[]) => {
         this.listBenchmark = response.filter(i => i.idTipoInstrumento != null);
         this.listBenchmarkFiltrado = this.listBenchmark;
+        this.filtrarInstrumentos();
       }
     )
   }
@@ -146,6 +148,8 @@ export class CargaPortafolioProductoComponent {
   cerrarModalSecundario(event: any){
     this.modalRef.close();
     this.obtenerListPortafolio();
+    this.obtenerListBenchmark();
+    this.obtenerListTipoInstrumento();
   }
 
   pondHandleInit() {}

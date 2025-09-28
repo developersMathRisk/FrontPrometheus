@@ -46,7 +46,8 @@ export class ListaAccionComponent {
     'desTipoAccion',
     'desFuenteInformacion',
     'nomEmisor',
-    'desMoneda'
+    'desMoneda',
+    'descripcionTiposector'
   ];
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}

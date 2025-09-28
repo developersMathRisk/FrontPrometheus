@@ -11,7 +11,6 @@ export class Emisor{
     codBloomberg !: string;
     flgContratoMarco !: boolean;
     flgContratoEspecifico !: boolean;
-    numThresHold !: number;
     codSBS !: string;
     codRUC !: string;
     codFuente !: string;

@@ -41,6 +41,11 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Emision</th>
                     <td mat-cell *matCellDef="let element"> {{element.fechaEmision}} </td>
                 </ng-container>
+
+                <ng-container matColumnDef="fechaPrimerCupon">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Primer Cupón</th>
+                    <td mat-cell *matCellDef="let element"> {{element.fechaPrimerCupon}} </td>
+                </ng-container>
                 
                 <ng-container matColumnDef="fechaVencimiento">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Vencimiento</th>
@@ -53,7 +58,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="tasaCupon">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tasa Cupón</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tasa Cupón (%)</th>
                     <td mat-cell *matCellDef="let element"> {{element.tasaCupon}} </td>
                 </ng-container>
 

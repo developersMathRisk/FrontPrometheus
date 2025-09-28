@@ -14,11 +14,12 @@ import { Portafolio } from '../../../../shared/models/portafolio/portafolio';
 import { RegistroService } from '../../../../shared/services/registro.service';
 import { CargaPortafolioProductoComponent } from "../carga-portafolio-producto/carga-portafolio-producto.component";
 import { PortafolioInstrumento } from '../../../../shared/models/portafolio/portafolio-instrumento';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard-portafolio',
   standalone: true,
-  imports: [SharedModule, NgApexchartsModule, MatTableModule, MatSortModule, MatPaginatorModule, FormsModule, NgSelectModule, DetallePortafolioComponent, CargaPortafolioProductoComponent],
+  imports: [SharedModule, NgApexchartsModule, MatTableModule, MatSortModule, MatPaginatorModule, FormsModule, NgSelectModule, CommonModule, DetallePortafolioComponent, CargaPortafolioProductoComponent],
   templateUrl: './dashboard-portafolio.component.html',
   styleUrl: './dashboard-portafolio.component.scss'
 })
@@ -41,12 +42,14 @@ export class DashboardPortafolioComponent {
   @ViewChild('paginatorResumen') paginatorResumen!: MatPaginator;
   @ViewChild('sortResumen') sortResumen!: MatSort;
   displayedColumnsResumen: string[] = [
+    'fechaValor',
     'descripcionPortafolio',
     'descripcionTipoInstrumento',
     'codISIN',
     'codticker',
     'cantidad',
-    'precio'
+    'precio',
+    'total'
   ];
 
   dsDetalle!: MatTableDataSource<IndiceMercado>;
@@ -164,6 +167,7 @@ export class DashboardPortafolioComponent {
         this.dsResumen = new MatTableDataSource<PortafolioInstrumento>(this.listDataResumenFiltrado);
         this.dsResumen.paginator = this.paginatorResumen;
         this.dsResumen.sort = this.sortResumen;
+        this.filtrarPortafolioInstrumentoResumen();
       }
     )
   }
@@ -183,7 +187,7 @@ export class DashboardPortafolioComponent {
   }
 
   filtrarPortafolioInstrumentoResumen(){
-    this.listDataResumenFiltrado = this.listDataResumen.filter(e => this.idPortafolioSeleccionado == 0 || e.idPortafolio == this.idPortafolioSeleccionado);
+    this.listDataResumenFiltrado = this.listDataResumen.filter(e => (this.idPortafolioSeleccionado == 0 || e.idPortafolio == this.idPortafolioSeleccionado) && (this.fechaConsulta ? new Date(e.fechaValor).toISOString().slice(0, 10) === this.fechaConsulta : true));
     this.dsResumen = new MatTableDataSource<PortafolioInstrumento>(this.listDataResumenFiltrado);
     this.dsResumen.paginator = this.paginatorResumen;
     this.dsResumen.sort = this.sortResumen;

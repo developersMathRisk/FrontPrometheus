@@ -18,13 +18,13 @@ import { CargaTipoAccionComponent } from "../../../mantenedor/atributo-financier
 import { CargaEmisorComponent } from "../../../mantenedor/atributo-financiero/carga-emisor/carga-emisor.component";
 import { CargaMonedaComponent } from "../../../mantenedor/atributo-financiero/carga-moneda/carga-moneda.component";
 import { CargaFuenteInformacionComponent } from "../../../mantenedor/atributo-financiero/carga-fuente-informacion/carga-fuente-informacion.component";
-import { CargaTipoInstrumentoComponent } from "../../atributo-financiero/carga-tipo-instrumento/carga-tipo-instrumento.component";
-import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
+import { CargaTipoSectorComponent } from "../../atributo-financiero/carga-tipo-sector/carga-tipo-sector.component";
+import { TipoSector } from '../../../../../shared/models/atributo-financiero/tipo-sector';
 
 @Component({
   selector: 'app-carga-accion',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaPlazaComponent, CargaTipoAccionComponent, CargaEmisorComponent, CargaMonedaComponent, CargaFuenteInformacionComponent, CargaTipoInstrumentoComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaPlazaComponent, CargaTipoAccionComponent, CargaEmisorComponent, CargaMonedaComponent, CargaFuenteInformacionComponent, CargaTipoSectorComponent],
   templateUrl: './carga-accion.component.html',
   styleUrl: './carga-accion.component.scss'
 })
@@ -37,7 +37,7 @@ export class CargaAccionComponent{
   listFuenteInformacion: FuenteInformacion[] = [];
   listEmisor: Emisor[] = [];
   listMoneda: Moneda[] = [];
-  listTipoInstrumento: TipoInstrumento[] = [];
+  listTipoSector: TipoSector[] = [];
 
   nuevoRegistro: Accion = new Accion()
 
@@ -49,7 +49,7 @@ export class CargaAccionComponent{
     this.obtenerListFuenteInformacion();
     this.obtenerListEmisor();
     this.obtenerListMoneda();
-    this.obtenerListTipoInstrumento();
+    this.obtenerListTipoSector();
   }
 
   obtenerListPlaza(){
@@ -92,10 +92,10 @@ export class CargaAccionComponent{
     )
   }
 
-  obtenerListTipoInstrumento(){
-    this.registroService.getListaTipoInstrumento().subscribe(
-      (response: TipoInstrumento[]) => {
-        this.listTipoInstrumento = response;
+  obtenerListTipoSector(){
+    this.registroService.getListaTipoSector().subscribe(
+      (response: TipoSector[]) => {
+        this.listTipoSector = response;
       }
     )
   }
@@ -140,7 +140,7 @@ export class CargaAccionComponent{
     this.obtenerListFuenteInformacion();
     this.obtenerListEmisor();
     this.obtenerListMoneda();
-    this.obtenerListTipoInstrumento();
+    this.obtenerListTipoSector();
   }
 
 }

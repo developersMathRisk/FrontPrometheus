@@ -7,6 +7,7 @@ export class Bono{
     montoNominal!: number;
     tasaCupon !: number;
     spread!: number;
+    fechaPrimerCupon!: Date;
     idEmisor!: number;
     nomEmisor!: string;
     idMoneda!: number;

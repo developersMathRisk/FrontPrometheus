@@ -28,12 +28,13 @@ import { CargaFormulaTasaComponent } from "../../../mantenedor/atributo-financie
 import { CargaBonoCuponComponent } from '../carga-bono-cupon/carga-bono-cupon.component';
 import { CargaTipoInstrumentoComponent } from "../../atributo-financiero/carga-tipo-instrumento/carga-tipo-instrumento.component";
 import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-carga-bono',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaBonoCuponComponent, CargaTipoInstrumentoComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaBonoCuponComponent, CargaTipoInstrumentoComponent, CommonModule],
   templateUrl: './carga-bono.component.html',
   styleUrl: './carga-bono.component.scss',
 })

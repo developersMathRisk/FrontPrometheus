@@ -1,0 +1,252 @@
+<div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-3">
+        <h1 class="page-title my-auto" style="white-space: nowrap;">Ejecución del VaR</h1>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header justify-content-between d-sm-flex d-block">
+        <div class="card-title d-flex align-items-center gap-2">
+            Configuración del Portafolio
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-label">Portafolio</label>
+                <div class="combo-contenedor">
+                    <ng-select placeholder="Seleccione una opción..." [items]="listaPortafolio"
+                        bindLabel="descripcionPortafolio" bindValue="idPortafolio"
+                        [(ngModel)]="this.idPortafolioSeleccionado"></ng-select>
+                    <button class="btn btn-outline-primary btn-wave btn-agregar"
+                        (click)="abrirModalSecundario(cargaModalPortafolio)"><span class="icon">+</span></button>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Valor del Portafolio (USD)</label>
+                <input type="number" placeholder="Valor" class="form-control" [(ngModel)]="this.valor">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Moneda</label>
+                <div class="combo-contenedor">
+                    <ng-select placeholder="Seleccione una opción..." [items]="listMoneda" bindLabel="desMoneda"
+                        bindValue="idMoneda" [(ngModel)]="this.moneda"></ng-select>
+                    <button class="btn btn-outline-primary btn-wave btn-agregar"
+                        (click)="abrirModalSecundario(cargaModalMoneda)"><span class="icon">+</span></button>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Fecha del Portafolio</label>
+                <input type="date" class="form-control" [(ngModel)]="this.fechaPortafolio">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Horizonte de tiempo (días)</label>
+                <input type="number" placeholder="Horizonte" class="form-control" [(ngModel)]="this.horizonteTiempo">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header justify-content-between d-sm-flex d-block">
+        <div class="card-title d-flex align-items-center gap-2">
+            Período Histórico
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-label">Fecha histórica máxima</label>
+                <input type="date" class="form-control" [(ngModel)]="this.fechaPortafolio">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Fecha histórica mínima</label>
+                <input type="date" class="form-control" [(ngModel)]="this.fechaPortafolio">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Número de observaciones (días)</label>
+                <input type="number" placeholder="Horizonte" class="form-control" [(ngModel)]="this.horizonteTiempo">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label"></label>
+                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
+                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
+                        class="form-check-label"> Aplicar control de datos de mercado </label></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header justify-content-between d-sm-flex d-block">
+        <div class="card-title d-flex align-items-center gap-2">
+            Metodología de Cálculo
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-label">Metodología:</label>
+            </div>
+            <div class="col-md-3">
+                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
+                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
+                        class="form-check-label"> Monte Carlo Simulation VaR </label></div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
+                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
+                        class="form-check-label"> Historical Simulation VaR (1,2,3 Year) </label></div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
+                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
+                        class="form-check-label"> Parametric VaR </label></div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-label">Niveles de confianza:</label>
+            </div>
+            <div class="col-md-3">
+                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
+                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
+                        class="form-check-label"> 95% </label></div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
+                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
+                        class="form-check-label"> 97.5% </label></div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
+                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
+                        class="form-check-label"> 99% </label></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header justify-content-between d-sm-flex d-block">
+        <div class="card-title d-flex align-items-center gap-2">
+            Productos Financieros
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-label">Productos</label>
+                <ng-select placeholder="Seleccione una opción..." [items]="listTipoInstrumento" [searchable]="false"
+                    bindLabel="descripcionTipoInstrumento" bindValue="idTipoInstrumento" [multiple]="true"
+                    [(ngModel)]="listTipoInstrumentoSeleccionado" class="me-2" style="min-width: 200px;">
+                </ng-select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="submit" class="btn btn-primary" (click)="ejecutarCalculoVar()">Ejecutar cálculo de VaR</button>
+
+<br><br>
+
+<div class="card" *ngIf="flgMostrarResultados">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card-title d-flex align-items-center gap-2">
+            Resultados del cálculo de VaR
+        </div>
+
+        <div class="d-flex gap-2">
+            <div class="form-floating mb-0">
+                <input type="text" id="floatingInputprimary1" [value]="'2,787,073 USD'" class="form-control"
+                    style="background-color: #f0f0f0; height: 30px;" readonly>
+                <label for="floatingInputprimary1">Portfolio Value</label>
+            </div>
+            <div class="form-floating mb-0">
+                <input type="text" id="floatingInputprimary2" [value]="'24.18%'" class="form-control"
+                    style="background-color: #f0f0f0; height: 30px;" readonly>
+                <label for="floatingInputprimary2">VaR Ratio</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <label>
+                    <b>
+                        Máximo VaR (99%)
+                        <i class="bi bi-info-circle-fill text-primary ms-2" data-bs-toggle="tooltip" data-bs-html="true"
+                            data-bs-placement="right" title="Mayor pérdida potencial"></i>
+                        :
+                    </b> {{'$228,830'}}
+                </label>
+            </div>
+            <div class="col-md-4">
+                <label>
+                    <b>
+                        VaR Promedio
+                        <i class="bi bi-info-circle-fill text-primary ms-2" data-bs-toggle="tooltip" data-bs-html="true"
+                            data-bs-placement="right" title="Promedio entre metodologías"></i>
+                        :
+                    </b> {{'$146,205'}}
+                </label>
+            </div>
+            <div class="col-md-4">
+                <label>
+                    <b>
+                        Volatilidad
+                        <i class="bi bi-info-circle-fill text-primary ms-2" data-bs-toggle="tooltip" data-bs-html="true"
+                            data-bs-placement="right" title="Desviación estándar anualizada"></i>
+                        :
+                    </b> {{'18.4%'}}
+                </label>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div id="mat-sorting">
+                <div class="mat-elevation-z8">
+                    <div class="table-responsive">
+                        <table mat-table [dataSource]="dsResumen" matSort #sortResumen="matSort">
+                            <ng-container matColumnDef="descripcionPortafolio">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Metodología</th>
+                                <td mat-cell *matCellDef="let element"> {{element.descripcionPortafolio}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="descripcionTipoInstrumento">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>95% VAR</th>
+                                <td mat-cell *matCellDef="let element"> {{element.descripcionTipoInstrumento}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="codISIN">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>97.5% VAR</th>
+                                <td mat-cell *matCellDef="let element"> {{element.codISIN}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="codticker">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>99% VAR</th>
+                                <td mat-cell *matCellDef="let element"> {{element.codticker}} </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsResumen"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsResumen;"></tr>
+                        </table>
+                    </div>
+                    <mat-paginator #paginatorResumen [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                    </mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<ng-template #cargaModalPortafolio let-modal>
+    <app-carga-portafolio (close)="cerrarModalSecundario($event)"></app-carga-portafolio>
+</ng-template>
+<ng-template #cargaModalMoneda let-modal>
+    <app-carga-moneda (close)="cerrarModalSecundario($event)"></app-carga-moneda>
+</ng-template>

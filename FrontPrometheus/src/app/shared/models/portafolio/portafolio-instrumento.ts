@@ -4,6 +4,7 @@ export class PortafolioInstrumento{
     codticker!: string;
     cantidad!: number;
     precio!: number;
+    fechaValor!: Date;
     idPortafolio!: number;
     descripcionPortafolio!: string;
     idTipoInstrumento!: number;

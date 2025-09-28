@@ -54,10 +54,10 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label class="form-label">Tipo Acción</label>
+                    <label class="form-label">Tipo Sector</label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoAccion" bindLabel="desTipoAccion" bindValue="idTipoAccion" [(ngModel)]="this.objRegistroEditado.idTipoAccion"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoAccion)"><span class="icon">+</span></button>
+                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoSector" bindLabel="descripcionTiposector" bindValue="idTipoSector" [(ngModel)]="this.objRegistroEditado.idTipoSector"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoSector)"><span class="icon">+</span></button>
                     </div>
                 </div>
 
@@ -83,11 +83,10 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label class="form-label">Tipo Instrumento</label>
-                    
+                    <label class="form-label">Tipo Acción</label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoInstrumento" bindLabel="descripcionTipoInstrumento" bindValue="idTipoInstrumento" [(ngModel)]="this.objRegistroEditado.idTipoInstrumento"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoInstrumento)"><span class="icon">+</span></button>
+                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoAccion" bindLabel="desTipoAccion" bindValue="idTipoAccion" [(ngModel)]="this.objRegistroEditado.idTipoAccion"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoAccion)"><span class="icon">+</span></button>
                     </div>
                 </div>
 
@@ -140,6 +139,6 @@
     <app-carga-fuente-informacion (close)="cerrarModalSecundario($event)"></app-carga-fuente-informacion>
 </ng-template>
 
-<ng-template #cargaModalTipoInstrumento let-modal>
-    <app-carga-tipo-instrumento (close)="cerrarModalSecundario($event)"></app-carga-tipo-instrumento>
+<ng-template #cargaModalTipoSector let-modal>
+    <app-carga-tipo-sector (close)="cerrarModalSecundario($event)"></app-carga-tipo-sector>
 </ng-template>

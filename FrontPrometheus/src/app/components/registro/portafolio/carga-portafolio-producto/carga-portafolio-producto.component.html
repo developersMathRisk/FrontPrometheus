@@ -139,13 +139,17 @@
                                         <input type="number" placeholder="Precio" class="form-control"
                                             [(ngModel)]="this.objPortafolioInstrumento.precio">
                                     </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Fecha</label>
+                                        <input type="date" class="form-control" [(ngModel)]="this.objPortafolioInstrumento.fechaValor">
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <br>
 
-                        <button type="submit" class="btn btn-primary" [disabled]="!(this.idInstrumentoSeleccionado != '' && this.idPortafolioSeleccionado != 0 && this.objPortafolioInstrumento.cantidad && this.objPortafolioInstrumento.precio)" (click)="agregarRelacion()">Agregar</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="!(this.idInstrumentoSeleccionado != '' && this.idPortafolioSeleccionado != 0 && this.objPortafolioInstrumento.cantidad && this.objPortafolioInstrumento.precio && this.objPortafolioInstrumento.fechaValor)" (click)="agregarRelacion()">Agregar</button>
 
                     </ng-template>
                 </li>
@@ -212,10 +216,10 @@
                                             class="form-control" [(ngModel)]="element.precio">
                                     </td>
                                 </ng-container>
-                                <ng-container matColumnDef="fecha">
+                                <ng-container matColumnDef="fechaValor">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
                                     <td mat-cell *matCellDef="let element">
-                                        <input type="date" class="form-control" [(ngModel)]="element.fecha">
+                                        <input type="date" class="form-control" [(ngModel)]="element.fechaValor">
                                     </td>
                                 </ng-container>
 

@@ -32,6 +32,13 @@
                     <label class="form-label">Ticker</label>
                     <input type="text" placeholder="Ticker" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.ticker">
                 </div>
+                <div class="col-md-4">
+                    <label class="form-label">Tipo Tasa Interés</label>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoTasaInt" bindLabel="descripcionTipoTasa" bindValue="idTipoTasaInteres" [(ngModel)]="this.objRegistroEditado.idTipoTasaInteres"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoTasaInteres)"><span class="icon">+</span></button>
+                    </div>
+                </div>
             </div>
 
             <br>
@@ -42,12 +49,20 @@
                     <input type="number" placeholder="Nominal" class="form-control" [(ngModel)]="this.objRegistroEditado.montoNominal">
                 </div>
 
-                <div class="col-md-4">
-                    <label class="form-label">Tasa Cupón</label>
-                    <input type="number" placeholder="Tasa Cupón" class="form-control" [(ngModel)]="this.objRegistroEditado.tasaCupon">
+                <div class="col-md-4" *ngIf="this.objRegistroEditado.idTipoTasaInteres == 1">
+                    <label class="form-label">Tasa Cupón (%)</label>
+                    <input type="number" placeholder="Tasa Cupón (%)" class="form-control" [(ngModel)]="this.objRegistroEditado.tasaCupon">
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4" *ngIf="this.objRegistroEditado.idTipoTasaInteres == 2">
+                    <label class="form-label">Curva Referencia</label>
+                    <div class="combo-contenedor">
+                        <ng-select placeholder="Seleccione una opción..." [items]="listCurvaReferencia" bindLabel="descripcionCurva" bindValue="idCurvaReferencia" [(ngModel)]="this.objRegistroEditado.idCurvaReferencia"></ng-select>
+                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalCurvaReferencia)"><span class="icon">+</span></button>
+                    </div>
+                </div>
+
+                <div class="col-md-4" *ngIf="this.objRegistroEditado.idTipoTasaInteres == 2">
                     <label class="form-label">Spread</label>
                     <input type="number" placeholder="Spread" class="form-control" [(ngModel)]="this.objRegistroEditado.spread">
                 </div>
@@ -59,6 +74,11 @@
                 <div class="col-md-4">
                     <label class="form-label">Fecha Emisión</label>
                     <input type="date" class="form-control" [(ngModel)]="this.objRegistroEditado.fechaEmision">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Fecha Primer Cupón</label>
+                    <input type="date" class="form-control" [(ngModel)]="this.objRegistroEditado.fechaPrimerCupon">
                 </div>
 
                 <div class="col-md-4">
@@ -99,13 +119,6 @@
             <br>
 
             <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Curva Referencia</label>
-                    <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listCurvaReferencia" bindLabel="descripcionCurva" bindValue="idCurvaReferencia" [(ngModel)]="this.objRegistroEditado.idCurvaReferencia"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalCurvaReferencia)"><span class="icon">+</span></button>
-                    </div>
-                </div>
 
                 <div class="col-md-4">
                     <label class="form-label">Método Amortización</label>
@@ -122,11 +135,6 @@
                         <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalCalculoBase)"><span class="icon">+</span></button>
                     </div>
                 </div>
-            </div>
-
-            <br>
-
-            <div class="row">
 
                 <div class="col-md-4">
                     <label class="form-label">Frecuencia Pago</label>
@@ -135,15 +143,11 @@
                         <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalFrecuenciaPago)"><span class="icon">+</span></button>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-md-4">
-                    <label class="form-label">Tipo Tasa Interés</label>
-                    <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoTasaInt" bindLabel="descripcionTipoTasa" bindValue="idTipoTasaInteres" [(ngModel)]="this.objRegistroEditado.idTipoTasaInteres"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoTasaInteres)"><span class="icon">+</span></button>
-                    </div>
-                </div>
+            <br>
 
+            <div class="row">
                 <div class="col-md-4">
                     <label class="form-label">Fórmula Tasa</label>
                     <div class="combo-contenedor">
@@ -151,23 +155,7 @@
                         <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalFormulaTasa)"><span class="icon">+</span></button>
                     </div>
                 </div>
-
             </div>
-
-            <br>
-
-            <div class="row">
-
-                <div class="col-md-4">
-                    <label class="form-label">Tipo Instrumento</label>
-                    <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoInstrumento" bindLabel="descripcionTipoInstrumento" bindValue="idTipoInstrumento" [(ngModel)]="this.objRegistroEditado.idTipoInstrumento"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoInstrumento)"><span class="icon">+</span></button>
-                    </div>
-                </div>
-
-            </div>
-
         </div>
 
         <div class="card-footer">

@@ -1527,6 +1527,12 @@ export class NavService implements OnDestroy {
     //     },
     //   ],
     // },
+
+
+
+
+
+
     {
       title: 'Mantenedores',
       type: 'sub',
@@ -1536,7 +1542,7 @@ export class NavService implements OnDestroy {
       children: [
         {
           path: 'registro/mantenedor/producto',
-          title: 'Instrumentos de Deuda',
+          title: 'Instrumentos Financieros',
           type: 'link',
           dirchange: false,
         },
@@ -1618,14 +1624,20 @@ export class NavService implements OnDestroy {
           dirchange: false,
           children: [
             {
-              path: 'registro/var/ejecucion',
+              path: 'registro/var/ejecutar',
               title: 'Ejecución de VaR y Stress Testing',
               type: 'link',
               dirchange: false,
             },
             {
               path: 'registro/var/consulta',
-              title: 'Consulta de resultados VaR y Stress Testing',
+              title: 'Consulta de resultados VaR',
+              type: 'link',
+              dirchange: false,
+            },
+            {
+              path: 'registro/stress-testing/consulta',
+              title: 'Consulta de resultados Stress Testing',
               type: 'link',
               dirchange: false,
             }

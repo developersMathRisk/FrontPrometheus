@@ -47,7 +47,6 @@ export class ListaEmisorComponent {
     'codBloomberg',
     'flgContratoMarco',
     'flgContratoEspecifico',
-    'numThresHold',
     'codSBS',
     'codRUC',
     'codFuente',

@@ -27,11 +27,12 @@ import { CargaTipoTasaComponent } from "../../../mantenedor/atributo-financiero/
 import { CargaFormulaTasaComponent } from "../../../mantenedor/atributo-financiero/carga-formula-tasa/carga-formula-tasa.component";
 import { CargaTipoInstrumentoComponent } from "../../atributo-financiero/carga-tipo-instrumento/carga-tipo-instrumento.component";
 import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-editar-bono',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaTipoInstrumentoComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaTipoInstrumentoComponent, CommonModule],
   templateUrl: './editar-bono.component.html',
   styleUrl: './editar-bono.component.scss'
 })
