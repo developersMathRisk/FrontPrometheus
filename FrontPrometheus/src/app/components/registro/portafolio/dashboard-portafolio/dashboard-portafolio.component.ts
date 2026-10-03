@@ -3,23 +3,24 @@ import { SharedModule } from "../../../../shared/shared.module";
 import { ChartOptions } from 'chart.js';
 import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { IndiceMercado } from '../../../../shared/models/factor/indice-mercado';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatIconModule } from '@angular/material/icon';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { DetallePortafolioComponent } from "../detalle-portafolio/detalle-portafolio.component";
 import { Portafolio } from '../../../../shared/models/portafolio/portafolio';
 import { RegistroService } from '../../../../shared/services/registro.service';
 import { CargaPortafolioProductoComponent } from "../carga-portafolio-producto/carga-portafolio-producto.component";
 import { PortafolioInstrumento } from '../../../../shared/models/portafolio/portafolio-instrumento';
 import { CommonModule } from '@angular/common';
 
+const COLORES_DISTRIBUCION = ['rgb(68,84,195)', 'rgb(247,45,102)', 'rgb(45,206,137)', 'rgb(240,165,30)', 'rgb(90,90,90)'];
+
 @Component({
   selector: 'app-dashboard-portafolio',
   standalone: true,
-  imports: [SharedModule, NgApexchartsModule, MatTableModule, MatSortModule, MatPaginatorModule, FormsModule, NgSelectModule, CommonModule, DetallePortafolioComponent, CargaPortafolioProductoComponent],
+  imports: [SharedModule, NgApexchartsModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, FormsModule, NgSelectModule, CommonModule, CargaPortafolioProductoComponent],
   templateUrl: './dashboard-portafolio.component.html',
   styleUrl: './dashboard-portafolio.component.scss'
 })
@@ -29,14 +30,17 @@ export class DashboardPortafolioComponent {
   idPortafolioSeleccionado: number = 0;
 
   @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions2: Partial<ChartOptions> | any;
-  chartOptions4: any;
+  // Distribución del valor de mercado por tipo de instrumento: se recalcula con datos reales
+  // cada vez que cambia el filtro (ver recalcularIndicadores). Nada de series de ejemplo.
+  public chartOptions2: Partial<ChartOptions> | any = { series: [], labels: [] };
+
+  // Valor de mercado total: suma real de cantidad × precio de las posiciones filtradas.
+  valorMercadoTotal = 0;
 
   modalRef: any;
 
   listDataResumen:PortafolioInstrumento[] = [];
   listDataResumenFiltrado:PortafolioInstrumento[] = [];
-  listDataDetalle:IndiceMercado[] = [];
 
   dsResumen!: MatTableDataSource<PortafolioInstrumento>;
   @ViewChild('paginatorResumen') paginatorResumen!: MatPaginator;
@@ -52,99 +56,11 @@ export class DashboardPortafolioComponent {
     'total'
   ];
 
-  dsDetalle!: MatTableDataSource<IndiceMercado>;
-  @ViewChild('paginatorDetalle') paginatorDetalle!: MatPaginator;
-  @ViewChild('sortDetalle') sortDetalle!: MatSort;
-  displayedColumnsDetalle: string[] = [
-    'codigo',
-    'codigo',
-    'codigo',
-    'codigo',
-    'codigo',
-    'codigo',
-    'codigo',
-    'codigo'
-  ];
-
   constructor(private registroService: RegistroService, private modalService: NgbModal) {}
 
   ngOnInit(){
     this.obtenerListPortafolio();
     this.obtenerListPortafolioInstrumento();
-
-    for(let i = 1; i < 10; i++){
-      let objDataDetalle: IndiceMercado = new IndiceMercado();
-      objDataDetalle.codigo = i;
-      this.listDataDetalle.push(objDataDetalle);
-    }
-    this.dsDetalle = new MatTableDataSource<IndiceMercado>(this.listDataDetalle);
-    this.dsDetalle.paginator = this.paginatorDetalle;
-    this.dsDetalle.sort = this.sortDetalle;
-
-
-    this.chartOptions2 = {
-      series: [68, 55, 45],
-      labels: ['Bono', 'Acción', 'Fondo de Inversión'],
-      chart: {
-        height: 200,
-        type: 'donut',
-      },
-      dataLabels: {
-        enabled: true,
-      },
-      legend: {
-        show: true,
-        customLegendItems: ['Bono', 'Acción', 'Fondo de Inversión'],
-      },
-      colors: ["rgb(247,45,102)", "rgb(68,84,195)", "rgb(45,206,137)"],
-    };
-
-    this.chartOptions4 = {
-      series: [
-        {
-          name: 'Madurez',
-          data: [
-            {
-              x: '2024',
-              y: 4000,
-            },
-            {
-              x: '2025',
-              y: 4432,
-            },
-            {
-              x: '2026',
-              y: 5423,
-            },
-            {
-              x: '2027',
-              y: 6653,
-            },
-          ],
-        },
-      ],
-      colors: ['#4454c3'],
-      chart: {
-        height: 300,
-        type: 'bar',
-      },
-      plotOptions: {
-        bar: {
-          columnWidth: '60%',
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      legend: {
-        show: true,
-        showForSingleSeries: true,
-        customLegendItems: ['Madurez por año'],
-        markers: {
-          fillColors: ['#4454c3'],
-        },
-      },
-    };
   }
 
   obtenerListPortafolio(){
@@ -172,10 +88,6 @@ export class DashboardPortafolioComponent {
     )
   }
 
-  abrirModalDetalle(modal: any){
-    this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
-  }
-
   cerrarModal(event: any){
     this.modalRef.close();
     this.obtenerListPortafolio();
@@ -191,6 +103,29 @@ export class DashboardPortafolioComponent {
     this.dsResumen = new MatTableDataSource<PortafolioInstrumento>(this.listDataResumenFiltrado);
     this.dsResumen.paginator = this.paginatorResumen;
     this.dsResumen.sort = this.sortResumen;
+    this.recalcularIndicadores();
+  }
+
+  // Valor de mercado total y distribución por tipo de instrumento, calculados a partir de las
+  // posiciones reales ya filtradas (nada de cifras de ejemplo).
+  private recalcularIndicadores() {
+    this.valorMercadoTotal = this.listDataResumenFiltrado.reduce(
+      (acc, p) => acc + (p.cantidad ?? 0) * (p.precio ?? 0), 0);
+
+    const valorPorTipo = new Map<string, number>();
+    for (const p of this.listDataResumenFiltrado) {
+      const tipo = p.descripcionTipoInstrumento || 'Sin clasificar';
+      valorPorTipo.set(tipo, (valorPorTipo.get(tipo) ?? 0) + (p.cantidad ?? 0) * (p.precio ?? 0));
+    }
+    const etiquetas = Array.from(valorPorTipo.keys());
+    this.chartOptions2 = {
+      series: Array.from(valorPorTipo.values()),
+      labels: etiquetas,
+      chart: { height: 200, type: 'donut' },
+      dataLabels: { enabled: true },
+      legend: { show: true, customLegendItems: etiquetas },
+      colors: COLORES_DISTRIBUCION,
+    };
   }
 
 }

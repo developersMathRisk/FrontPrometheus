@@ -2,16 +2,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
 import { RegistroService } from '../../../../../shared/services/registro.service';
 import { MetodoAmortizacion } from '../../../../../shared/models/atributo-financiero/metodo-amortizacion';
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 
 @Component({
   selector: 'app-carga-metodo-amortizacion',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule],
+  imports: [FormsModule, MatIconModule, ModalFormularioComponent],
   templateUrl: './carga-metodo-amortizacion.component.html',
   styleUrl: './carga-metodo-amortizacion.component.scss'
 })
@@ -19,16 +18,25 @@ export class CargaMetodoAmortizacionComponent {
   @Output() close = new EventEmitter<any>();
 
   nuevoRegistro: MetodoAmortizacion = new MetodoAmortizacion();
+  guardando = false;
 
-  constructor(private registroService: RegistroService, private modalService: NgbModal){}
-
-  ngOnInit(): void {
+  get faltantes(): string[] {
+    const r = this.nuevoRegistro;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.nombreMetodo)) f.push('Nombre');
+    if (vacio(r.descripcionMetodo)) f.push('Descripción');
+    return f;
   }
 
+  constructor(private registroService: RegistroService){}
 
   registrar(){
+    if (this.faltantes.length > 0) return;
+    this.guardando = true;
     this.registroService.postRegistrarMetodoAmortizacion(this.nuevoRegistro).subscribe(
       (response: any) => {
+        this.guardando = false;
         Swal.fire({
           icon: 'success',
           title: 'Registro exitoso',
@@ -38,6 +46,7 @@ export class CargaMetodoAmortizacionComponent {
         this.cerrar();
       },
       (error: HttpErrorResponse) =>{
+        this.guardando = false;
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -50,6 +59,5 @@ export class CargaMetodoAmortizacionComponent {
 
   cerrar(){
     this.close.emit();
-    //this.modalService.dismissAll();
   }
 }

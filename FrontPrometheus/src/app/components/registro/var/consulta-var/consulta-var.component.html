@@ -1,117 +1,78 @@
 <div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center gap-3">
-        <h1 class="page-title my-auto" style="white-space: nowrap;">Análisis de Valor en Riesgo (VaR)</h1>
+    <div class="d-flex flex-column">
+        <h1 class="page-title my-auto">Consulta de VaR</h1>
+        <p class="cvar-subtitulo">Revise los cálculos de VaR ya ejecutados.</p>
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header justify-content-between d-sm-flex d-block">
-        <div class="card-title">
-            Filtros generales
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-4">
-                <label class="form-label">Fecha:</label>
-                <input type="date" class="form-control" style="width: 200px;" [(ngModel)]="this.fechaConsulta"
-                    (ngModelChange)="filtrarResultados()">
+<div class="cvar-layout">
+<div class="cvar-layout__lista card">
+    <div class="card-body cvar-body">
+        <app-tabla-toolbar placeholder="Buscar por portafolio o fecha..." accion="Ejecutar nuevo cálculo"
+            [total]="lista.length" [filtrados]="listaFiltrada.length" [texto]="busqueda" (buscar)="buscar($event)"
+            (agregar)="irAEjecutar()">
+            <div filtros class="cvar-filtro-portafolio">
+                <ng-select placeholder="Todos los portafolios" [items]="listaPortafolio" bindLabel="descripcionPortafolio"
+                    bindValue="idPortafolio" [clearable]="true" [(ngModel)]="idPortafolioFiltro"
+                    (change)="alCambiarFiltroPortafolio()"></ng-select>
             </div>
-            <div class="col-md-4">
-                <label class="form-label">Tipo de Metodología:</label>
-                <ng-select style="margin-left: 10px; width: 250px;" placeholder="Seleccione un portafolio.."
-                    name="select-producto" [items]="listaTipoMetodologia" bindLabel="descripcionPortafolio"
-                    bindValue="idPortafolio" (change)="filtrarGraficoLinealVaR()"
-                    [(ngModel)]="this.idTipoMetodologia"></ng-select>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Nivel de confianza:</label>
-                <ng-select style="margin-left: 10px; width: 250px;" placeholder="Seleccione un portafolio.."
-                    name="select-producto" [items]="listaNivelConfianza" bindLabel="descripcionPortafolio"
-                    bindValue="idPortafolio" (change)="filtrarGraficoLinealVaR()"
-                    [(ngModel)]="this.idNivelConfianza"></ng-select>
-            </div>
-        </div>
-    </div>
-</div>
+        </app-tabla-toolbar>
 
-<div class="card">
-    <div class="card-body">
-        <div class="row d-flex justify-content-center align-items-center">
-            <div class="col-xl-2">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="mb-1 fw-bold">123</h2>
-                        <p class="mb-1">VaR 95%</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-2">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="mb-1 fw-bold">123</h2>
-                        <p class="mb-1">VaR Promedio</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-2">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="mb-1 fw-bold">123</h2>
-                        <p class="mb-1">Volatilidad</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-2">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="mb-1 fw-bold">123</h2>
-                        <p class="mb-1">Observaciones</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-2">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="mb-1 fw-bold">123</h2>
-                        <p class="mb-1">Confianza</p>
-                    </div>
-                </div>
-            </div>
+        <app-tabla-estado [estado]="estadoTabla" [busqueda]="busqueda" [mensajeError]="mensajeError"
+            tituloVacio="Aún no hay cálculos de VaR guardados"
+            detalleVacio="Ejecute uno desde «Ejecutar nuevo cálculo» para verlo aquí."
+            (reintentar)="listar()" (limpiar)="buscar('')"></app-tabla-estado>
+
+        <div class="cvar-tabla-contenedor" *ngIf="!estadoTabla">
+            <table class="cvar-tabla">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Portafolio</th>
+                        <th>Período histórico</th>
+                        <th>Moneda</th>
+                        <th class="col-num">VaR más exigente</th>
+                        <th class="col-num">% cartera</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let r of listaFiltrada" (click)="seleccionar(r)"
+                        [class.cvar-fila--activa]="seleccionado?.idResultadoVARDetalle === r.idResultadoVARDetalle"
+                        tabindex="0" (keydown.enter)="seleccionar(r)">
+                        <td>{{ r.fechaProceso }}</td>
+                        <td>{{ r.descripcionPortafolio }}</td>
+                        <td class="cvar-col-secundaria">{{ r.fechaInicio }} → {{ r.fechaFin }}</td>
+                        <td>{{ r.monedaReporte ?? '—' }}</td>
+                        <td class="col-num">{{ r.maxVar | number:'1.2-2' }}</td>
+                        <td class="col-num">{{ r.ratioVar * 100 | number:'1.2-2' }}%</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-xl-6 d-flex">
-        <div class="card custom-card w-100 d-flex flex-column">
-            <div class="card-header">
-                <div class="card-title text-center">Histograma de Pérdidas/Ganancias con VaR y Curva Normal</div>
-            </div>
-            <div class="card-body">
-                <div id="column-markers">
-                    <apx-chart [series]="chartHistogramaGyP.series" [chart]="chartHistogramaGyP.chart"
-                        [legend]="chartHistogramaGyP.legend" [dataLabels]="chartHistogramaGyP.dataLabels"
-                        [colors]="chartHistogramaGyP.colors" [plotOptions]="chartHistogramaGyP.plotOptions"
-                        [colors]="chartHistogramaGyP.colors" [annotations]="chartHistogramaGyP.annotations" [stroke]="chartHistogramaGyP.stroke" [xaxis]="chartHistogramaGyP.xaxis"></apx-chart>
-                </div>
-            </div>
+<div id="consulta-detalle" class="cvar-layout__detalle">
+    <div class="card cvar-placeholder" *ngIf="!seleccionado" [@fadeIn]>
+        <div class="card-body cvar-placeholder__cuerpo">
+            <mat-icon aria-hidden="true">touch_app</mat-icon>
+            <h3 class="cvar-placeholder__titulo">Seleccione un cálculo</h3>
+            <p class="cvar-placeholder__texto">Elija una fila de la lista para ver aquí el detalle completo.</p>
         </div>
     </div>
-    <div class="col-xl-6 d-flex">
-        <div class="card custom-card w-100 d-flex flex-column">
-            <div class="card-header">
-                <div class="card-title text-center">Serie Fluctuante de los Últimos 30 Valores en Riesgo (VaR)</div>
+
+    <div class="card" *ngIf="seleccionado" [@fadeSlideIn]>
+        <div class="card-header">
+            <div class="card-title">Detalle del cálculo</div>
+            <span class="cvar-subtitulo">{{ seleccionado.fechaProceso }} · {{ seleccionado.descripcionPortafolio }}</span>
+        </div>
+        <div class="card-body">
+            <div class="cvar-detalle-cargando" *ngIf="cargandoDetalle">
+                <app-loader tamano="normal" etiqueta="Cargando detalle..."></app-loader>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <apx-chart [series]="chartLineaVaR.series" [chart]="chartLineaVaR.chart"
-                        [xaxis]="chartLineaVaR.xaxis" [yaxis]="chartLineaVaR.yaxis"
-                        [dataLabels]="chartLineaVaR.dataLabels" [grid]="chartLineaVaR.grid"
-                        [stroke]="chartLineaVaR.stroke" [colors]="chartLineaVaR.colors" [title]="chartLineaVaR.title"
-                        [legend]="chartLineaVaR.legend" [annotations]="chartLineaVaR.annotations"></apx-chart>
-                </div>
-            </div>
+            <div class="alert alert-danger" role="alert" *ngIf="mensajeErrorDetalle">{{ mensajeErrorDetalle }}</div>
+            <app-resultado-var *ngIf="detalle" [resultado]="detalle"></app-resultado-var>
         </div>
     </div>
+</div>
 </div>

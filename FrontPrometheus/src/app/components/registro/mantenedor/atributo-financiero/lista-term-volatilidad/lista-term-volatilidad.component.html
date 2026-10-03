@@ -1,37 +1,51 @@
-<div>
-    <button type="submit" class="btn btn-primary" (click)="registrar(cargaModal)">Agregar Term. Volatilidad</button>
-</div>
+<div class="hig-tabla">
 
-<br>
+    <app-tabla-toolbar placeholder="Buscar descripción o código…" accion="Agregar Term. Volatilidad"
+        [total]="total" [filtrados]="filtrados" [ocultarResumen]="cargando || !!mensajeError" [texto]="busqueda"
+        (buscar)="buscar($event)" (agregar)="registrar(cargaModal)">
+    </app-tabla-toolbar>
 
-<div id="mat-sorting">
-    <div class="mat-elevation-z8">
-        <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" matSort #sort="matSort">
+    <div class="tabla-contenedor">
+        <table mat-table [dataSource]="dataSource" matSort #sort="matSort" matSortActive="descripcionTermVolatility"
+            matSortDirection="asc" aria-label="Listado de term. volatilidad">
 
-                <ng-container matColumnDef="idTermVolatility">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-                    <td mat-cell *matCellDef="let element"> {{element.idTermVolatility}} </td>
-                </ng-container>
+            <ng-container matColumnDef="idTermVolatility">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                <td mat-cell *matCellDef="let element" class="col-id">{{ element.idTermVolatility }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="descripcionTermVolatility">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
-                    <td mat-cell *matCellDef="let element"> {{element.descripcionTermVolatility}} </td>
-                </ng-container>
+            <ng-container matColumnDef="descripcionTermVolatility">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
+                <td mat-cell *matCellDef="let element"><span class="fw-semibold">{{ element.descripcionTermVolatility }}</span></td>
+            </ng-container>
 
-                <ng-container matColumnDef="code">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
-                    <td mat-cell *matCellDef="let element"> {{element.code}} </td>
-                </ng-container>
+            <ng-container matColumnDef="code">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+                <td mat-cell *matCellDef="let element">{{ element.code }}</td>
+            </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
-            </table>
-        </div>
-        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-        </mat-paginator>
+            <ng-container matColumnDef="acciones" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef class="col-acciones"><span class="solo-lector">Acciones</span></th>
+                <td mat-cell *matCellDef="let element" class="col-acciones">
+                    <button type="button" class="btn-fila" aria-label="Acciones del registro"
+                        (click)="abrirMenuFila($event, element)">
+                        <mat-icon aria-hidden="true">more_horiz</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
+        </table>
+
+        <app-tabla-estado [estado]="estadoTabla" tituloVacio="No hay term. volatilidad registrados"
+            detalleVacio="Agregue el primero con el botón «Agregar Term. Volatilidad»." [busqueda]="busqueda"
+            [mensajeError]="mensajeError" (reintentar)="listarRegistros()" (limpiar)="buscar('')"></app-tabla-estado>
     </div>
 
+    <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100]" [pageSize]="20" showFirstLastButtons
+        [style.display]="estadoTabla ? 'none' : null" aria-label="Paginación de term. volatilidad">
+    </mat-paginator>
 </div>
 
 <div style="visibility: hidden; position: fixed"

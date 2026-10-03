@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/registro/mantenedor/portafolio/editar-portafolio/editar-portafolio.component.scss"],
+  "sourcesContent": [".icon-close{\r\n    background: transparent !important;\r\n    border: none !important;\r\n    padding: 0 !important;\r\n    outline: none !important;\r\n}\r\n\r\n.combo-contenedor {\r\n    display: flex;\r\n    align-items: center;\r\n    width: 100%; /* Puedes ajustar esto según sea necesario */\r\n  }\r\n\r\n  ng-select {\r\n    flex-grow: 1; /* El combo ocupa el espacio restante */\r\n    margin-right: 10px; /* Separación entre el combo y el botón */\r\n  }\r\n  \r\n  .btn-agregar {\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    padding: 0 10px; /* Ajusta el padding para que el botón tenga un tamaño adecuado */\r\n    border-radius: 50%; /* Hace el botón circular */\r\n  }\r\n  \r\n  .icon {\r\n    font-size: 20px;\r\n  }"],
+  "mappings": ";;;AAAA,CAAA;AACI,cAAA;AACA,UAAA;AACA,WAAA;AACA,WAAA;;AAGJ,CAAA;AACI,WAAA;AACA,eAAA;AACA,SAAA;;AAGF;AACE,aAAA;AACA,gBAAA;;AAGF,CAAA;AACE,WAAA;AACA,mBAAA;AACA,eAAA;AACA,WAAA,EAAA;AACA,iBAAA;;AAGF,CAAA;AACE,aAAA;;",
+  "names": []
+}

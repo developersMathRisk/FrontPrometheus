@@ -15,6 +15,7 @@ export class PrecioMercado{
     maturity!: Date;
     codFuenteDatos!: string;
     idMoneda!: string;
-    
+    desMoneda?: string;
+
     
 }

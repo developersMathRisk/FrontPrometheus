@@ -1,39 +1,18 @@
-<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
-    <div role="document" class="msg_card_body" style="width: 100%;">
-        <div class="modal-header">
-            <table style="width: 100%;">
-                <tr style="width: 100%;">
-                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
-                        <h3 class="modal-title">Cargar Fuente de Información</h3>
-                    </td>
-                    <td style="text-align: right; padding-right: 1.3%;">
-                        <button type="button" class="icon-close" (click)="cerrar()">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+<app-modal-formulario titulo="Cargar Fuente de Información" subtitulo="Registre una fuente de información para asociarla a instrumentos y precios." accion="Registrar"
+    [faltantes]="faltantes" [datos]="nuevoRegistro" [guardando]="guardando" (cerrar)="cerrar()" (guardar)="registrar()">
 
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="form-label">Código</label>
-                    <input type="text" placeholder="Código" minlength="1" maxlength="6" class="form-control" [(ngModel)]="this.nuevoRegistro.codFuenteInformacion">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Descripción</label>
-                    <input type="text" placeholder="Descripción" minlength="1" maxlength="60" class="form-control" [(ngModel)]="this.nuevoRegistro.desFuenteInformacion">
-                </div>
+    <fieldset class="hig-seccion">
+        <legend>Identificación</legend>
+        <div class="hig-cuadricula">
+            <div class="hig-campo">
+                <label class="form-label" for="fi-c-codFuenteInformacion">Código<span class="hig-requerido" aria-hidden="true">*</span></label>
+                <input id="fi-c-codFuenteInformacion" type="text" class="form-control" autocomplete="off" placeholder="Código" minlength="1" maxlength="6" [(ngModel)]="nuevoRegistro.codFuenteInformacion" required>
             </div>
-
+            <div class="hig-campo">
+                <label class="form-label" for="fi-c-desFuenteInformacion">Descripción<span class="hig-requerido" aria-hidden="true">*</span></label>
+                <input id="fi-c-desFuenteInformacion" type="text" class="form-control" autocomplete="off" placeholder="Descripción" minlength="1" maxlength="60" [(ngModel)]="nuevoRegistro.desFuenteInformacion" required>
+            </div>
         </div>
+    </fieldset>
 
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary" (click)="registrar()">Registrar</button>
-            <br>
-        </div>
-    </div>
-</div>
+</app-modal-formulario>

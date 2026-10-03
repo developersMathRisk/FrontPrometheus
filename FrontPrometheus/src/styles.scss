@@ -43,5 +43,15 @@
 
 @import "swiper/scss";
 @import "swiper/scss/navigation";
-@import "swiper/scss/pagination"; 
+@import "swiper/scss/pagination";
 
+// elementos de página compartidos (subtítulos, estados vacíos)
+@import "./styles/hig-pagina";
+
+// tablas de datos de los mantenedores
+@import "./styles/hig-tabla";
+
+// modales de alta y edición
+@import "./styles/hig-modal";
+
+@import "./styles/hig-menu";

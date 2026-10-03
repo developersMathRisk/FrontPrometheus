@@ -1,9 +1,9 @@
 :root {
 	--body-bg-rgb : 									242 ,246, 249;
-	--primary-rgb: 										68, 84, 195;
-	--secondary-rgb :									247, 45, 102;
+	--primary-rgb: 										56, 116, 184;
+	--secondary-rgb :									200, 56, 43;
 	--warning-rgb :										236, 180, 3;
-	--info-rgb :										69, 170, 242;
+	--info-rgb :										91, 155, 213;
 	--success-rgb :										45, 206, 137; 
 	--danger-rgb :										255, 91, 81;
 	--light-rgb :										232, 235, 242;
@@ -27,7 +27,7 @@
 	--primary005: 										rgba(var(--primary-rgb), 0.05);
 	--default-font-family:    							"Roboto", sans-serif;
 	--default-font-weight:								400;
-	--default-text-color:       						#424e79;	
+	--default-text-color:       						#364a63;
 	--default-border:									#eff0f6;
 	--default-background: 								#f2f6f9;		
 	--menu-bg:											#fff;	
@@ -46,15 +46,15 @@
 	--form-control-bg: 									#fff;
 
 	/* Gray set */
-	--gray-1:											#f1f2f7;
-	--gray-2:											#e5e7f1;
-	--gray-3:											#d2d6e4;
-	--gray-4:											#b7bdd2;
-	--gray-5:											#a2aac7;
-	--gray-6:											#8d96b7;
-	--gray-7:											#7a85ad;
-	--gray-8:											#53608c;
-	--gray-9:											#424e79;
+	--gray-1:											#eff3f8;
+	--gray-2:											#e2e9f1;
+	--gray-3:											#cfd9e6;
+	--gray-4:											#b3c1d4;
+	--gray-5:											#9aabc2;
+	--gray-6:											#8395b0;
+	--gray-7:											#6d809d;
+	--gray-8:											#4f6280;
+	--gray-9:											#364a63;
 
 	/* White set */
 	--white-1:											rgba(255,255,255, 0.1);
@@ -177,7 +177,7 @@ $instagram: 											#de497b;
 $linkedin: 												#0077b5;
 
 /*gradient variables*/
-$primary-gradient:										-webkit-gradient(linear, left top, right top, from(var(--primary-color)), to(rgb(5, 24, 70)));
+$primary-gradient:										-webkit-gradient(linear, left top, right top, from(var(--primary-color)), to(rgb(16, 41, 74)));
 $secondary-gradient:									linear-gradient(to right, $secondary 0%, #8c0b47 100%);
 $success-gradient:										linear-gradient(to right,$success 0%, #9fe797 100%);
 $warning-gradient:										linear-gradient(to right, $warning 0%, #fece4d 100%);
@@ -229,8 +229,8 @@ $black-09:												var(--black-09);
 
 /* dark mode */
 [data-theme-mode="dark"] {
-	--body-bg-rgb : 									38, 43, 72;
-	--body-bg-rgb2 : 									16, 22, 58;
+	--body-bg-rgb : 									27, 40, 64;
+	--body-bg-rgb2 : 									14, 26, 46;
 	--menu-bg:										  	rgb(var(--body-bg-rgb2));
 	--menu-border-color:								rgba(255,255,255,0.1);
 	--menu-prime-color: 								rgba(255,255,255);
@@ -241,17 +241,17 @@ $black-09:												var(--black-09);
 	--custom-black:										#fff;		
 	--default-border:									rgba(255,255,255,0.1);	
 	--default-text-color:       						#edf0f5;
-	--light-rgb:										38, 43, 72;	
+	--light-rgb:										27, 40, 64;
 	--dark-rgb :										240 ,245 ,248; 	
 	--bootstrap-card-border:							rgba(255,255,255,0.1);		
 	--list-hover-focus-bg:								rgba(255,255,255,0.1);
 	--default-background:								rgba(255,255,255,0.1);
 	--default-body-bg-color:							rgb(var(--body-bg-rgb));	
 	--text-muted: 										rgba(255,255,255,0.4);
-	--input-border: 									#262b48;
+	--input-border: 									#1b2840;
 	--form-control-bg: 									rgb(var(--body-bg-rgb2));
-	--shadow-color:										38,43 ,72;
-	--shadow-color2:										38,43 ,72;
+	--shadow-color:										27,40 ,64;
+	--shadow-color2:										27,40 ,64;
 
 	/* Gray Set */
     --gray-100: 										rgba(0,0,0,0.1);

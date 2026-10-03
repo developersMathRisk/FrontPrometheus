@@ -10,10 +10,11 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { Moneda } from '../../../../../shared/models/atributo-financiero/moneda';
 import { CargaMonedaComponent } from "../../../mantenedor/atributo-financiero/carga-moneda/carga-moneda.component";
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-carga-precio-mercado',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaMonedaComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaMonedaComponent, ModalFormularioComponent],
   templateUrl: './carga-precio-mercado.component.html',
   styleUrl: './carga-precio-mercado.component.scss'
 })
@@ -23,6 +24,17 @@ export class CargaPrecioMercadoComponent {
 
   listMoneda: Moneda[] = [];
   nuevoRegistro: PrecioMercado = new PrecioMercado();
+
+  get faltantes(): string[] {
+    const r = this.nuevoRegistro;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.fecProceso)) f.push('Fecha Proceso');
+    if (vacio(r.nemonico)) f.push('Nemónico');
+    if (vacio(r.idMoneda)) f.push('Moneda');
+    if (vacio(r.numPrecioLimpio)) f.push('Precio Limpio');
+    return f;
+  }
 
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
@@ -39,6 +51,7 @@ export class CargaPrecioMercadoComponent {
   }
 
   registrar(){
+    if (this.faltantes.length > 0) return;
     this.registroService.postRegistrarPrecioMercado(this.nuevoRegistro).subscribe(
       (response: any) => {
         Swal.fire({

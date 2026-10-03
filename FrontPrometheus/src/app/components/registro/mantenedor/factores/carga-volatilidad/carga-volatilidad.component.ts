@@ -14,10 +14,11 @@ import { CargaTermVolatilidadComponent } from "../../atributo-financiero/carga-t
 import { CargaSkewPointComponent } from "../../atributo-financiero/carga-skew-point/carga-skew-point.component";
 import { CargaTipoCambioComponent } from "../../atributo-financiero/carga-tipo-cambio/carga-tipo-cambio.component";
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-carga-volatilidad',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaTermVolatilidadComponent, CargaSkewPointComponent, CargaTipoCambioComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaTermVolatilidadComponent, CargaSkewPointComponent, CargaTipoCambioComponent, ModalFormularioComponent],
   templateUrl: './carga-volatilidad.component.html',
   styleUrl: './carga-volatilidad.component.scss'
 })
@@ -30,6 +31,18 @@ export class CargaVolatilidadComponent {
   listTipoCambio: TipoCambio[] = [];
 
   nuevoRegistro: Volatilidad = new Volatilidad();
+
+  get faltantes(): string[] {
+    const r = this.nuevoRegistro;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.fecProceso)) f.push('Fecha Proceso');
+    if (vacio(r.valor)) f.push('Valor');
+    if (vacio(r.idTermVolatility)) f.push('Term. Volatilidad');
+    if (vacio(r.idSwekPoint)) f.push('Skew Point');
+    if (vacio(r.idTipoCambio)) f.push('Tipo de Cambio');
+    return f;
+  }
 
   constructor(private registroService: RegistroService, private modalService: NgbModal) { }
 
@@ -64,6 +77,7 @@ export class CargaVolatilidadComponent {
   }
 
   registrar() {
+    if (this.faltantes.length > 0) return;
     this.registroService.postRegistrarVolatilidad(this.nuevoRegistro).subscribe(
       (response: any) => {
         Swal.fire({

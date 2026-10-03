@@ -1,29 +1,326 @@
-.icon-close{
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-    outline: none !important;
+.var-subtitulo {
+    margin: 2px 0 0;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.78); // ≥ 4.5:1, también en modo oscuro
 }
 
-.combo-contenedor {
-    display: flex;
-    align-items: center;
-    width: 100%; /* Puedes ajustar esto según sea necesario */
-  }
+.hig-requerido {
+    margin-inline-start: 2px;
+    color: rgb(var(--danger-rgb));
+}
 
-  ng-select {
-    flex-grow: 1; /* El combo ocupa el espacio restante */
-    margin-right: 10px; /* Separación entre el combo y el botón */
-  }
-  
-  .btn-agregar {
+// ---- layout general: configuración persistente a la izquierda, resultado a la derecha -----------
+// Así se puede ajustar un parámetro y volver a calcular sin perder de vista ni la configuración ni
+// el resultado anterior (en vez de tener que bajar por la página cada vez que se ejecuta de nuevo).
+.var-layout {
+    display: grid;
+    grid-template-columns: minmax(340px, 400px) 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.var-layout__config {
+    position: sticky;
+    top: 82px;
+    max-height: calc(100vh - 98px);
+    overflow-y: auto;
+}
+
+.var-layout__resultado {
+    min-width: 0; // evita que tablas/gráficos anchos empujen el ancho de la columna del grid
+}
+
+@media (max-width: 1199px) {
+    .var-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .var-layout__config {
+        position: static;
+        max-height: none;
+    }
+}
+
+// ---- estados del panel de resultado: vacío, calculando, con datos --------------------------------
+.var-placeholder__cuerpo, .var-calculando__cuerpo {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    padding: 0 10px; /* Ajusta el padding para que el botón tenga un tamaño adecuado */
-    border-radius: 50%; /* Hace el botón circular */
-  }
-  
-  .icon {
-    font-size: 20px;
-  }
+    text-align: center;
+    gap: 6px;
+    padding: 56px 24px;
+}
+
+.var-placeholder__titulo {
+    margin: 4px 0 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.var-placeholder__texto {
+    margin: 0;
+    max-width: 360px;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.68);
+}
+
+// Todo el formulario vive en una sola tarjeta compacta: menos scroll, más contexto a la vista
+.var-config {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px 18px;
+}
+
+.var-config__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.var-config__input-inline {
+    width: 90px;
+    min-height: 28px;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+}
+
+.var-chip__detalle {
+    opacity: 0.7;
+    font-weight: 400;
+}
+
+.var-campo {
+    min-width: 0;
+
+    .form-label {
+        margin-bottom: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .form-control, .ng-select {
+        min-height: 34px;
+        font-size: 0.8125rem;
+    }
+}
+
+.var-config__fila {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(var(--dark-rgb), 0.1);
+}
+
+.var-config__etiqueta {
+    flex: none;
+    min-width: 84px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.var-config__ayuda {
+    font-size: 0.6875rem;
+    color: rgba(var(--dark-rgb), 0.6);
+}
+
+// ---- cobertura del portafolio (qué posiciones se van a usar) -----------------------
+.var-cobertura {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(var(--dark-rgb), 0.03);
+    border: 1px solid rgba(var(--dark-rgb), 0.12);
+    border-radius: 8px;
+}
+
+.var-cobertura__cargando {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+.var-cobertura__resumen {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+
+    .mat-icon {
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
+        color: rgb(var(--success-rgb, 40, 167, 69));
+    }
+
+    .var-cobertura__icono--alerta {
+        color: rgb(var(--danger-rgb));
+    }
+}
+
+.var-cobertura__motivos {
+    margin: 0;
+    padding-inline-start: 18px;
+    font-size: 0.6875rem;
+    color: rgba(var(--dark-rgb), 0.7);
+}
+
+// ---- chips compactos (metodología, confianza, cobertura) --------------------------
+.var-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.var-chip {
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--default-text-color);
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid rgba(var(--dark-rgb), 0.28);
+    border-radius: 999px;
+    transition: background-color 0.12s, border-color 0.12s;
+
+    &:hover {
+        background: rgba(var(--dark-rgb), 0.06);
+    }
+
+    // Seleccionado: se distingue por fondo, borde y peso, no solo por color
+    &.var-chip--activo {
+        font-weight: 600;
+        color: rgb(var(--primary-rgb));
+        background: rgba(var(--primary-rgb), 0.12);
+        border-color: rgb(var(--primary-rgb));
+    }
+}
+
+.var-chip--num {
+    font-variant-numeric: tabular-nums;
+}
+
+// Chips de solo lectura (cobertura del portafolio): no son botones interactivos
+.var-chip--elegible, .var-chip--excluido {
+    cursor: default;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.var-chip--elegible {
+    color: rgb(var(--success-rgb, 40, 167, 69));
+    background: rgba(var(--success-rgb, 40, 167, 69), 0.1);
+    border-color: rgba(var(--success-rgb, 40, 167, 69), 0.35);
+
+    em {
+        font-style: normal;
+        opacity: 0.75;
+    }
+}
+
+.var-chip--excluido {
+    color: rgba(var(--dark-rgb), 0.6);
+    text-decoration: line-through;
+    background: rgba(var(--dark-rgb), 0.04);
+
+    .mat-icon {
+        width: 13px;
+        height: 13px;
+        font-size: 13px;
+        text-decoration: none;
+    }
+}
+
+// ---- acción -----------------------------------------------------------------------
+.var-accion {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding-top: 4px;
+}
+
+.var-accion__boton {
+    min-height: 36px;
+    padding: 0 20px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.var-accion__aviso {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 0.75rem;
+    color: rgba(var(--dark-rgb), 0.78);
+
+    .mat-icon {
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
+        color: rgb(var(--warning-rgb));
+    }
+}
+
+.var-error {
+    font-size: 0.8125rem;
+    padding: 8px 12px;
+}
+
+.var-modal-duplicado__cuerpo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 28px 24px;
+    text-align: center;
+}
+
+.var-modal-duplicado__icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(var(--warning-rgb), 0.14);
+
+    .mat-icon {
+        width: 26px;
+        height: 26px;
+        font-size: 26px;
+        color: rgb(var(--warning-rgb));
+    }
+}
+
+.var-modal-duplicado__titulo {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 700;
+}
+
+.var-modal-duplicado__texto {
+    margin: 0;
+    max-width: 420px;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+.var-modal-duplicado__acciones {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.var-resultados__fecha {
+    font-size: 0.75rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+

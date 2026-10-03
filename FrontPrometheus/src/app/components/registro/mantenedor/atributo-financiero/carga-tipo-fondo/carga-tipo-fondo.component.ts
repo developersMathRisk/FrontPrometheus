@@ -1,17 +1,16 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { RegistroService } from '../../../../../shared/services/registro.service';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { NgSelectModule } from '@ng-select/ng-select';
 import { TipoFondo } from '../../../../../shared/models/atributo-financiero/tipo-fondo';
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 
 @Component({
   selector: 'app-carga-tipo-fondo',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule],
+  imports: [FormsModule, MatIconModule, ModalFormularioComponent],
   templateUrl: './carga-tipo-fondo.component.html',
   styleUrl: './carga-tipo-fondo.component.scss'
 })
@@ -19,16 +18,25 @@ export class CargaTipoFondoComponent {
   @Output() close = new EventEmitter<any>();
 
   nuevoRegistro: TipoFondo = new TipoFondo();
+  guardando = false;
 
-  constructor(private registroService: RegistroService, private modalService: NgbModal){}
-
-  ngOnInit(): void {
+  get faltantes(): string[] {
+    const r = this.nuevoRegistro;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codTipoFondo)) f.push('Código');
+    if (vacio(r.desTipoFondo)) f.push('Descripción');
+    return f;
   }
 
+  constructor(private registroService: RegistroService){}
 
   registrar(){
+    if (this.faltantes.length > 0) return;
+    this.guardando = true;
     this.registroService.postRegistrarTipoFondo(this.nuevoRegistro).subscribe(
       (response: any) => {
+        this.guardando = false;
         Swal.fire({
           icon: 'success',
           title: 'Registro exitoso',
@@ -38,6 +46,7 @@ export class CargaTipoFondoComponent {
         this.cerrar();
       },
       (error: HttpErrorResponse) =>{
+        this.guardando = false;
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -50,6 +59,5 @@ export class CargaTipoFondoComponent {
 
   cerrar(){
     this.close.emit();
-    //this.modalService.dismissAll();
   }
 }

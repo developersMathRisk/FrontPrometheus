@@ -1,8 +1,10 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, TemplateRef, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { SwitcherComponent } from '../switcher/switcher.component';
 import { Menu, NavService } from '../../services/nav.service';
 import { AppStateService } from '../../services/app-state.service';
+import { MenuLateralService } from '../../services/menu-lateral.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -12,10 +14,11 @@ export class HeaderComponent {
 
   public localdata:any;
 
-  constructor(private cdr: ChangeDetectorRef, public elementRef: ElementRef,private appStateService: AppStateService,){
+  constructor(private cdr: ChangeDetectorRef, public elementRef: ElementRef,private appStateService: AppStateService, public menu: MenuLateralService, private navService: NavService, private router: Router){
     this.appStateService.state$.subscribe(state => {
       this.localdata = state;
     });
+    this.navService.items.subscribe(items => this.pantallas = this.aplanar(items));
   }
 
   SwitcherClick() {
@@ -52,7 +55,6 @@ export class HeaderComponent {
         html?.style.removeProperty( '--input-border' );
         // html?.style.removeProperty('--primary');
         html?.style.removeProperty('--primary-rgb');
-        html?.setAttribute('data-toggled','close')
       }
     if(theme=='dark'){
       this.appStateService.updateState({ theme,themeBackground : '',headerColor:'dark',menuColor:'dark' });
@@ -63,7 +65,6 @@ export class HeaderComponent {
         html?.style.removeProperty( '--form-control-bg');
         html?.style.removeProperty( '--input-border' );
         // html?.style.removeProperty('--primary');
-        html?.setAttribute('data-toggled','close')
         html?.style.removeProperty('--primary-rgb');
       
     }
@@ -103,6 +104,11 @@ export class HeaderComponent {
 	}
   toggleSidebar() {
     let html = this.elementRef.nativeElement.ownerDocument.documentElement;
+    // Escritorio con menú vertical: alterna entre menú fijo y menú de iconos con despliegue al pasar el mouse
+    if (html?.getAttribute('data-nav-layout') == 'vertical' && window.innerWidth > 992) {
+      this.menu.alternar();
+      return;
+    }
     if (html?.getAttribute('data-toggled') == 'true') {
       document.querySelector('html')?.getAttribute('data-toggled') ==
         'icon-overlay-close';
@@ -222,9 +228,6 @@ export class HeaderComponent {
   //Toggled Shortcuts 
   private offcanvasService = inject(NgbOffcanvas);
 
-  SearchModal(SearchModal: any) {
-    this.modalService.open(SearchModal);
-  }
   //Notifications 
 
   handleCardClick(event: MouseEvent) {
@@ -282,65 +285,73 @@ export class HeaderComponent {
     });
   }
 
-    //search 
-    public menuItems!: Menu[];
-    public items!: Menu[];
-    public text!: string;
-    public SearchResultEmpty:boolean = false;
+  // Búsqueda de pantallas: filtra las opciones del menú y navega a la elegida
+  pantallas: { titulo: string; ruta: string; path: string }[] = [];
+  resultados: { titulo: string; ruta: string; path: string }[] = [];
+  consulta = '';
+  indiceActivo = 0;
 
-  Search(searchText: any) {
-    if (!searchText) return this.menuItems = [];
-    // items array which stores the elements
-    let items:any[] = [];
-    // Converting the text to lower case by using toLowerCase() and trim() used to remove the spaces from starting and ending
-    searchText = searchText.toLowerCase().trim();
-    this.items.filter((menuItems:any) => {
-      // checking whether menuItems having title property, if there was no title property it will return
-      if (!menuItems?.title) return false;
-      //  checking wheteher menuitems type is text or string and checking the titles of menuitems
-      if (menuItems.type === 'link' && menuItems.title.toLowerCase().includes(searchText)) {
-        // Converting the menuitems title to lowercase and checking whether title is starting with same text of searchText
-        if( menuItems.title.toLowerCase().startsWith(searchText)){// If you want to get all the data with matching to letter entered remove this line(condition and leave items.push(menuItems))
-          // If both are matching then the code is pushed to items array
-          items.push(menuItems);
-        }
+  private aplanar(items: Menu[], migas: string[] = []): { titulo: string; ruta: string; path: string }[] {
+    const salida: { titulo: string; ruta: string; path: string }[] = [];
+    for (const item of items ?? []) {
+      if (!item.title) continue;
+      if (item.path && item.type === 'link') {
+        salida.push({ titulo: item.title, ruta: migas.join(' › '), path: item.path });
       }
-      //  checking whether the menuItems having children property or not if there was no children the return
-      if (!menuItems.children) return false;
-      menuItems.children.filter((subItems:any) => {
-        if (subItems.type === 'link' && subItems.title.toLowerCase().includes(searchText)) {
-          if( subItems.title.toLowerCase().startsWith(searchText)){         // If you want to get all the data with matching to letter entered remove this line(condition and leave items.push(subItems))
-            items.push(subItems);
-          }
-
-        }
-        if (!subItems.children) return false;
-        subItems.children.filter((subSubItems:any) => {
-          if (subSubItems.title.toLowerCase().includes(searchText)) {
-            if( subSubItems.title.toLowerCase().startsWith(searchText)){// If you want to get all the data with matching to letter entered remove this line(condition and leave items.push(subSubItems))
-              items.push(subSubItems);
-            }
-          }
-        })
-        return;
-      })
-      return this.menuItems = items;
-    });
-    // Used to show the No search result found box if the length of the items is 0
-    if(!items.length){
-      this.SearchResultEmpty = true;
+      if (item.children?.length) {
+        salida.push(...this.aplanar(item.children, [...migas, item.title]));
+      }
     }
-    else{
-      this.SearchResultEmpty = false;
-    }
-    return;
+    return salida;
   }
 
-   //  Used to clear previous search result
-   clearSearch() {
-    this.text = '';
-    this.menuItems = [];
-    this.SearchResultEmpty = false;
-    return this.text, this.menuItems
+  private normalizar(texto: string): string {
+    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  }
+
+  abrirBusqueda(plantilla: TemplateRef<any>) {
+    this.consulta = '';
+    this.resultados = [];
+    this.indiceActivo = 0;
+    this.modalService.open(plantilla, { windowClass: 'busqueda-ventana', size: 'lg', scrollable: false });
+    // El campo recibe el foco al abrir, para escribir de inmediato
+    setTimeout(() => document.querySelector<HTMLInputElement>('.busqueda__entrada')?.focus(), 50);
+  }
+
+  buscarPantalla(texto: string) {
+    this.consulta = texto ?? '';
+    const q = this.normalizar(this.consulta);
+    this.indiceActivo = 0;
+    this.resultados = !q ? [] : this.pantallas
+      .filter(p => this.normalizar(`${p.titulo} ${p.ruta}`).includes(q))
+      .slice(0, 8);
+  }
+
+  teclaBusqueda(evento: KeyboardEvent, modal: any) {
+    if (evento.key === 'ArrowDown' && this.resultados.length) {
+      evento.preventDefault();
+      this.indiceActivo = (this.indiceActivo + 1) % this.resultados.length;
+    } else if (evento.key === 'ArrowUp' && this.resultados.length) {
+      evento.preventDefault();
+      this.indiceActivo = (this.indiceActivo - 1 + this.resultados.length) % this.resultados.length;
+    } else if (evento.key === 'Enter' && this.resultados[this.indiceActivo]) {
+      evento.preventDefault();
+      this.irA(this.resultados[this.indiceActivo], modal);
+    }
+  }
+
+  irA(resultado: { path: string }, modal: any) {
+    modal?.close?.();
+    this.router.navigateByUrl(resultado.path.startsWith('/') ? resultado.path : '/' + resultado.path);
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  atajoBusqueda(evento: KeyboardEvent) {
+    if ((evento.ctrlKey || evento.metaKey) && evento.key.toLowerCase() === 'k') {
+      evento.preventDefault();
+      if (document.querySelector('.busqueda')) return;
+      const boton = this.elementRef.nativeElement.querySelector('.header-buscar__boton') as HTMLElement | null;
+      boton?.click();
+    }
   }
 }

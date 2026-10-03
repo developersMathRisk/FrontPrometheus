@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -12,11 +12,13 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { RegistroService } from '../../../../../shared/services/registro.service';
 import { Subsidiaria } from '../../../../../shared/models/atributo-financiero/subsidiaria';
+import { TablaToolbarComponent } from '../../../../../shared/components/tabla-toolbar/tabla-toolbar.component';
+import { EstadoTabla, TablaEstadoComponent, mensajeDeError } from '../../../../../shared/components/tabla-estado/tabla-estado.component';
 
 @Component({
   selector: 'app-lista-subsidiaria',
   standalone: true,
-  imports: [MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, MatCheckboxModule, MatMenuModule, CargaSubsidiariaComponent, EditarSubsidiariaComponent],
+  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, MatMenuModule, CargaSubsidiariaComponent, EditarSubsidiariaComponent, TablaToolbarComponent, TablaEstadoComponent],
   templateUrl: './lista-subsidiaria.component.html',
   styleUrl: './lista-subsidiaria.component.scss'
 })
@@ -34,12 +36,30 @@ export class ListaSubsidiariaComponent {
   dataSource!: MatTableDataSource<Subsidiaria>;
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild('sort') sort!: MatSort;
-  displayedColumns: string[] = [
+  cargando = true;
+  mensajeError = '';
+  total = 0;
+  busqueda = '';
+
+  readonly displayedColumns: string[] = [
     'id',
     'codCorp',
     'descripcion',
-    'codMonedaFunc'
+    'codMonedaFunc',
+    'acciones',
   ];
+
+  get filtrados(): number {
+    return this.dataSource?.filteredData?.length ?? 0;
+  }
+
+  get estadoTabla(): EstadoTabla {
+    if (this.cargando) return 'cargando';
+    if (this.mensajeError) return 'error';
+    if (this.total === 0) return 'vacio';
+    if (this.filtrados === 0) return 'sin-resultados';
+    return null;
+  }
 
   constructor(private modalService: NgbModal, private registroService: RegistroService){}
 
@@ -48,21 +68,46 @@ export class ListaSubsidiariaComponent {
   }
 
   listarRegistros(){
+    this.cargando = true;
+    this.mensajeError = '';
     this.registroService.getListaSubsidiaria().subscribe(
       (response: Subsidiaria[]) => {
         this.dataSource = new MatTableDataSource<Subsidiaria>(response);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.total = response.length;
+        this.cargando = false;
+        this.buscar(this.busqueda);
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        this.cargando = false;
+        this.mensajeError = mensajeDeError(error);
       }
     )
   }
 
+  buscar(texto: string) {
+    this.busqueda = texto;
+    if (!this.dataSource) return;
+    this.dataSource.filter = texto.trim().toLowerCase();
+    this.dataSource.paginator?.firstPage();
+  }
+
+  // Mismo menú que el clic derecho, pero accesible con un botón visible y con teclado
+  abrirMenuFila(event: MouseEvent, item: any) {
+    event.stopPropagation();
+    const boton = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    this.selectedRow = item;
+    this.contextMenuPosition.x = boton.left + 'px';
+    this.contextMenuPosition.y = boton.bottom + 'px';
+    this.contextMenu.menuData = { 'item': item };
+    this.contextMenu.menu?.focusFirstItem(event.detail === 0 ? 'keyboard' : 'mouse');
+    this.contextMenu.openMenu();
+  }
+
   onContextMenu(event: MouseEvent, item: any) {
     event.preventDefault();
-    this.selectedRow = item; 
+    this.selectedRow = item;
     this.contextMenuPosition.x = event.clientX + 'px';
     this.contextMenuPosition.y = event.clientY + 'px';
     this.contextMenu.menuData = { 'item': item };

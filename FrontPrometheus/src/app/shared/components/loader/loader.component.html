@@ -1,7 +1,38 @@
+<span class="ldr ldr--inline" *ngIf="tamano === 'inline'" role="status" aria-label="Cargando">
+    <span class="ldr-anillo" aria-hidden="true"></span>
+    <span class="ldr-etiqueta ldr-etiqueta--inline" *ngIf="etiqueta">{{ etiqueta }}</span>
+</span>
 
-    <!-- Loader -->
-      <!-- <div id="loader">
-        <img src="./assets/images/media/loader.svg" alt="">
-    </div>
-   -->
-  <!-- Loader -->
+<div class="ldr" [class.ldr--grande]="tamano === 'grande'" *ngIf="tamano !== 'inline'" role="status" aria-label="Cargando">
+    <svg class="ldr-icono" viewBox="0 0 200 160" aria-hidden="true">
+        <defs>
+            <linearGradient id="ldrGrad" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stop-color="rgb(var(--primary-rgb))" />
+                <stop offset="100%" stop-color="#9fb0ff" />
+            </linearGradient>
+            <radialGradient id="ldrGlow" cx="50%" cy="100%" r="65%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+        </defs>
+
+        <ellipse class="ldr-brillo" cx="100" cy="140" rx="78" ry="16" fill="url(#ldrGlow)" />
+        <path class="ldr-arco" d="M14,146 Q100,122 186,146" />
+
+        <!-- silueta base: siempre visible, marca el ícono completo aunque no haya cargado nada -->
+        <g class="ldr-silueta">
+            <polygon points="46,70 62,85 62,140 30,140 30,85" />
+            <polygon points="100,30 124,55 124,140 76,140 76,55" />
+            <polygon points="154,70 170,85 170,140 138,140 138,85" />
+        </g>
+
+        <!-- relleno de color: crece desde la base, como si se "cargara" el ícono -->
+        <g class="ldr-relleno" [class.ldr-relleno--determinado]="progreso !== null"
+            [style.--ldr-escala]="progreso !== null ? escala : null">
+            <polygon points="46,70 62,85 62,140 30,140 30,85" />
+            <polygon points="100,30 124,55 124,140 76,140 76,55" />
+            <polygon points="154,70 170,85 170,140 138,140 138,85" />
+        </g>
+    </svg>
+    <span class="ldr-etiqueta" *ngIf="etiqueta">{{ etiqueta }}</span>
+</div>

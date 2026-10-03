@@ -1,0 +1,393 @@
+// Modales de alta y edición (ventana `my-classModal`).
+// Convive con dos generaciones de marcado: el componente <app-modal-formulario> y el formato anterior
+// (encabezado en tabla + .card). Los colores salen de las variables del tema, así que respetan el modo oscuro.
+
+.my-classModal {
+    --hig-borde-campo: rgba(var(--dark-rgb), 0.3);
+    --hig-texto-sec: rgba(var(--dark-rgb), 0.78); // ≥ 4.5:1 sobre el fondo, en claro y oscuro
+
+    // ---- ventana -------------------------------------------------------------
+    .modal-dialog {
+        --bs-modal-width: 820px;
+        max-width: min(var(--bs-modal-width), calc(100vw - 32px));
+        margin-block: 1.75rem;
+    }
+
+    // Formularios con tabla editable (p. ej. cuponera) necesitan más ancho
+    .modal-dialog:has(.hoja-ancha) {
+        --bs-modal-width: 1140px;
+    }
+
+    // El tema dibuja un recuadro alrededor de cada panel de pestaña; dentro del modal sobra
+    .cuponera-contenido > .tab-pane {
+        padding: 0;
+        border: 0;
+    }
+
+    .modal-content {
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100vh - 3.5rem);
+        overflow: hidden;
+        background: var(--custom-white);
+        border: 0;
+        border-radius: 14px;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(var(--dark-rgb), 0.1);
+    }
+
+    // El componente raíz no genera caja propia: su contenido participa del layout del modal
+    .modal-content > * {
+        display: contents;
+    }
+
+    .modal-content > * > * {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+        overflow-y: auto;
+    }
+
+    // ---- campos --------------------------------------------------------------
+    .form-label {
+        margin-bottom: 6px;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--default-text-color);
+    }
+
+    .form-control,
+    .form-select {
+        height: 38px;
+        font-size: 0.875rem;
+        color: var(--default-text-color);
+        background-color: var(--form-control-bg, #fff);
+        border: 1px solid var(--hig-borde-campo);
+        border-radius: 8px;
+        transition: border-color 0.15s, box-shadow 0.15s;
+
+        &::placeholder {
+            font-weight: 400; // el tema lo pone en negrita y a 0.3 de opacidad: el texto guía queda ilegible
+            color: rgba(var(--dark-rgb), 0.7); // ≥ 4.5:1 sobre el fondo, pero más tenue que el valor escrito
+            opacity: 1;
+        }
+
+        &:focus {
+            border-color: rgb(var(--primary-rgb));
+            box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.25);
+        }
+    }
+
+    textarea.form-control {
+        height: auto;
+    }
+
+    // Un campo obligatorio vacío se marca con borde y con el aviso del pie (no solo con color)
+    .form-control.ng-invalid.ng-touched {
+        border-color: rgb(var(--danger-rgb));
+    }
+
+    // ---- listas desplegables (ng-select) ---------------------------------------
+    .ng-select .ng-select-container {
+        min-height: 38px;
+        font-size: 0.875rem;
+        color: var(--default-text-color);
+        background: var(--form-control-bg, #fff);
+        border: 1px solid var(--hig-borde-campo);
+        border-radius: 8px;
+    }
+
+    .ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+        border-color: rgb(var(--primary-rgb));
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.25);
+    }
+
+    .ng-select.ng-invalid.ng-touched .ng-select-container {
+        border-color: rgb(var(--danger-rgb));
+    }
+
+    .ng-select .ng-placeholder {
+        color: rgba(var(--dark-rgb), 0.72) !important;
+    }
+
+    .ng-dropdown-panel {
+        color: var(--default-text-color);
+        background: var(--custom-white);
+        border-color: var(--hig-borde-campo);
+        border-radius: 8px;
+    }
+
+    // Lista + botón «+» para crear una opción nueva, con la altura de los demás campos
+    .combo-contenedor {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .combo-contenedor ng-select {
+        flex: 1 1 auto;
+        min-width: 0;
+        margin: 0;
+    }
+
+    // Especificidad mayor a propósito: cada modal antiguo trae su propio estilo circular para este botón
+    .combo-contenedor .btn-agregar {
+        display: inline-flex;
+        flex: none;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        line-height: 1;
+        border-radius: 8px;
+    }
+
+    .combo-contenedor .btn-agregar .icon {
+        font-size: 20px;
+        line-height: 1;
+    }
+
+    // Casillas más visibles
+    .form-check-input {
+        width: 1.125rem;
+        height: 1.125rem;
+        border: 1px solid rgba(var(--dark-rgb), 0.55);
+    }
+
+    .form-check-input:focus-visible {
+        outline: 2px solid rgb(var(--primary-rgb));
+        outline-offset: 2px;
+    }
+
+    .form-check-label {
+        font-size: 0.875rem;
+        color: var(--default-text-color);
+    }
+
+    // ---- bloques de formulario (componente nuevo) -------------------------------
+    .hig-seccion {
+        min-width: 0;
+        margin: 0 0 24px;
+        padding: 0;
+        border: 0;
+    }
+
+    .hig-seccion > legend {
+        float: none;
+        width: auto;
+        margin: 0 0 4px;
+        padding: 0;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--default-text-color);
+    }
+
+    .hig-seccion__ayuda {
+        margin: 0 0 12px;
+        font-size: 0.8125rem;
+        color: var(--hig-texto-sec);
+    }
+
+    .hig-cuadricula {
+        display: grid;
+        grid-template-columns: repeat(var(--columnas, 2), minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .hig-columnas-3 {
+        --columnas: 3;
+    }
+
+    .hig-columnas-1 {
+        --columnas: 1;
+    }
+
+    .hig-ocupa-2 {
+        grid-column: span 2;
+    }
+
+    .hig-ocupa-todo {
+        grid-column: 1 / -1;
+    }
+
+    @media (max-width: 680px) {
+        .hig-cuadricula {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .hig-ocupa-2 {
+            grid-column: auto;
+        }
+    }
+
+    .hig-campo {
+        min-width: 0;
+    }
+
+    .hig-requerido {
+        margin-inline-start: 2px;
+        color: rgb(var(--danger-rgb));
+    }
+
+    .hig-campo__ayuda {
+        margin: 4px 0 0;
+        font-size: 0.75rem;
+        color: var(--hig-texto-sec);
+    }
+
+    // Sección plegable para datos opcionales (divulgación progresiva)
+    .hig-detalles {
+        margin: 0 0 24px;
+        padding-top: 4px;
+        border-top: 1px solid rgba(var(--dark-rgb), 0.14);
+    }
+
+    .hig-detalles > summary {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 0 8px;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--default-text-color);
+        list-style: none;
+        cursor: pointer;
+    }
+
+    .hig-detalles > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .hig-detalles > summary::before {
+        flex: none;
+        width: 7px;
+        height: 7px;
+        content: "";
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: rotate(-45deg);
+        transition: transform 0.15s;
+    }
+
+    .hig-detalles[open] > summary::before {
+        transform: rotate(45deg);
+    }
+
+    .hig-detalles > summary:focus-visible {
+        outline: 2px solid rgb(var(--primary-rgb));
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+
+    .hig-detalles__nota {
+        padding: 1px 8px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--hig-texto-sec);
+        background: rgba(var(--dark-rgb), 0.08);
+        border-radius: 999px;
+    }
+
+    // Opción con explicación (casilla + texto de ayuda)
+    .hig-opcion {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 12px 14px;
+        border: 1px solid rgba(var(--dark-rgb), 0.16);
+        border-radius: 10px;
+    }
+
+    .hig-opcion .form-check-input {
+        flex: none;
+        margin: 2px 0 0;
+    }
+
+    .hig-opcion__titulo {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--default-text-color);
+        cursor: pointer;
+    }
+
+    .hig-opcion__ayuda {
+        display: block;
+        margin-top: 2px;
+        font-size: 0.8125rem;
+        color: var(--hig-texto-sec);
+    }
+
+    // ---- formato anterior (encabezado en tabla + tarjeta) -------------------------
+    .modal-header {
+        padding: 18px 24px 14px;
+        border-bottom: 1px solid rgba(var(--dark-rgb), 0.14);
+    }
+
+    .modal-title {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--default-text-color);
+    }
+
+    .icon-close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        color: var(--hig-texto-sec);
+        cursor: pointer;
+        border-radius: 50%;
+
+        &:hover {
+            color: var(--default-text-color);
+            background: rgba(var(--dark-rgb), 0.1) !important;
+        }
+    }
+
+    .card {
+        margin: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+    }
+
+    .card-body {
+        padding: 20px 24px 8px;
+    }
+
+    .card-body br {
+        display: none;
+    }
+
+    .card-body .row {
+        --bs-gutter-y: 16px;
+        margin-bottom: 16px;
+    }
+
+    .card-footer {
+        position: sticky;
+        bottom: 0;
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 14px 24px;
+        background: var(--custom-white);
+        border-top: 1px solid rgba(var(--dark-rgb), 0.14);
+    }
+
+    .card-footer br {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .my-classModal .form-control,
+    .my-classModal .form-select {
+        transition: none;
+    }
+}

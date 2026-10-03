@@ -1,252 +1,192 @@
 <div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center gap-3">
-        <h1 class="page-title my-auto" style="white-space: nowrap;">Ejecución del VaR</h1>
+    <div class="d-flex flex-column">
+        <h1 class="page-title my-auto">Ejecución de VaR</h1>
+        <p class="var-subtitulo">Calcule el Valor en Riesgo de un portafolio con datos y precios reales.</p>
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header justify-content-between d-sm-flex d-block">
-        <div class="card-title d-flex align-items-center gap-2">
-            Configuración del Portafolio
-        </div>
-    </div>
-
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-3">
-                <label class="form-label">Portafolio</label>
+<div class="var-layout">
+<div class="var-layout__config card">
+    <div class="card-body var-config">
+        <div class="var-config__grid">
+            <div class="var-campo var-campo--ancho">
+                <label class="form-label">Portafolio(s) <span class="hig-requerido" aria-hidden="true">*</span></label>
                 <div class="combo-contenedor">
-                    <ng-select placeholder="Seleccione una opción..." [items]="listaPortafolio"
-                        bindLabel="descripcionPortafolio" bindValue="idPortafolio"
-                        [(ngModel)]="this.idPortafolioSeleccionado"></ng-select>
-                    <button class="btn btn-outline-primary btn-wave btn-agregar"
-                        (click)="abrirModalSecundario(cargaModalPortafolio)"><span class="icon">+</span></button>
+                    <ng-select placeholder="Seleccione uno o varios..." [items]="listaPortafolio" bindLabel="descripcionPortafolio"
+                        bindValue="idPortafolio" [multiple]="true" [(ngModel)]="idsPortafolioSeleccionados"
+                        (change)="alCambiarPortafolio()"></ng-select>
+                    <button type="button" class="btn btn-outline-primary btn-wave btn-agregar"
+                        (click)="abrirModalSecundario(cargaModalPortafolio)" aria-label="Agregar portafolio"><span
+                            class="icon">+</span></button>
                 </div>
+                <p class="var-config__ayuda" *ngIf="esMultiPortafolio">
+                    Se combinan en un solo cálculo consolidado (si un instrumento se repite, se suman sus posiciones).
+                </p>
             </div>
-            <div class="col-md-2">
-                <label class="form-label">Valor del Portafolio (USD)</label>
-                <input type="number" placeholder="Valor" class="form-control" [(ngModel)]="this.valor">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Moneda</label>
+            <div class="var-campo var-campo--ancho">
+                <label class="form-label">Moneda de reporte <span class="hig-requerido" aria-hidden="true">*</span></label>
                 <div class="combo-contenedor">
-                    <ng-select placeholder="Seleccione una opción..." [items]="listMoneda" bindLabel="desMoneda"
-                        bindValue="idMoneda" [(ngModel)]="this.moneda"></ng-select>
-                    <button class="btn btn-outline-primary btn-wave btn-agregar"
-                        (click)="abrirModalSecundario(cargaModalMoneda)"><span class="icon">+</span></button>
+                    <ng-select placeholder="Seleccione..." [items]="listMoneda" bindLabel="desMoneda"
+                        bindValue="idMoneda" [(ngModel)]="idMonedaSeleccionada" (change)="alCambiarMoneda()"></ng-select>
+                    <button type="button" class="btn btn-outline-primary btn-wave btn-agregar"
+                        (click)="abrirModalSecundario(cargaModalMoneda)" aria-label="Agregar moneda"><span
+                            class="icon">+</span></button>
                 </div>
             </div>
-            <div class="col-md-2">
-                <label class="form-label">Fecha del Portafolio</label>
-                <input type="date" class="form-control" [(ngModel)]="this.fechaPortafolio">
-            </div>
-            <div class="col-md-2">
-                <label class="form-label">Horizonte de tiempo (días)</label>
-                <input type="number" placeholder="Horizonte" class="form-control" [(ngModel)]="this.horizonteTiempo">
+            <div class="var-campo">
+                <label class="form-label">Horizonte (días)</label>
+                <input type="number" min="1" step="1" class="form-control" [(ngModel)]="horizonteDias">
             </div>
         </div>
-    </div>
-</div>
 
-<div class="card">
-    <div class="card-header justify-content-between d-sm-flex d-block">
-        <div class="card-title d-flex align-items-center gap-2">
-            Período Histórico
-        </div>
-    </div>
-
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-3">
-                <label class="form-label">Fecha histórica máxima</label>
-                <input type="date" class="form-control" [(ngModel)]="this.fechaPortafolio">
+        <!-- Ventana histórica: se expresa en años de mercado (250/500/750 días hábiles), la convención
+             estándar, en vez de un número de días sin contexto que no se sabía a qué equivalía. -->
+        <div class="var-config__fila">
+            <span class="var-config__etiqueta">Ventana histórica <span class="hig-requerido" aria-hidden="true">*</span></span>
+            <div class="var-chips">
+                <button type="button" *ngFor="let v of ventanasHistoricas" class="var-chip"
+                    [class.var-chip--activo]="ventanaActivaDias === v.dias"
+                    (click)="elegirVentana(v.dias)">
+                    {{ v.etiqueta }} <span class="var-chip__detalle">({{ v.dias }} d.)</span>
+                </button>
+                <button type="button" class="var-chip" [class.var-chip--activo]="ventanaPersonalizada"
+                    (click)="elegirVentanaPersonalizada()">
+                    Personalizada
+                </button>
+                <input *ngIf="ventanaPersonalizada" type="number" min="31" step="1"
+                    class="form-control var-config__input-inline" [(ngModel)]="numObservaciones"
+                    placeholder="Días">
             </div>
-            <div class="col-md-3">
-                <label class="form-label">Fecha histórica mínima</label>
-                <input type="date" class="form-control" [(ngModel)]="this.fechaPortafolio">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Número de observaciones (días)</label>
-                <input type="number" placeholder="Horizonte" class="form-control" [(ngModel)]="this.horizonteTiempo">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label"></label>
-                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
-                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
-                        class="form-check-label"> Aplicar control de datos de mercado </label></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="card">
-    <div class="card-header justify-content-between d-sm-flex d-block">
-        <div class="card-title d-flex align-items-center gap-2">
-            Metodología de Cálculo
-        </div>
-    </div>
-
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-3">
-                <label class="form-label">Metodología:</label>
-            </div>
-            <div class="col-md-3">
-                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
-                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
-                        class="form-check-label"> Monte Carlo Simulation VaR </label></div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
-                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
-                        class="form-check-label"> Historical Simulation VaR (1,2,3 Year) </label></div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
-                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
-                        class="form-check-label"> Parametric VaR </label></div>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-3">
-                <label class="form-label">Niveles de confianza:</label>
-            </div>
-            <div class="col-md-3">
-                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
-                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
-                        class="form-check-label"> 95% </label></div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
-                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
-                        class="form-check-label"> 97.5% </label></div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-check"><input type="checkbox" class="form-check-input" id="chkControlDatos"
-                        name="chkControlDatos" [(ngModel)]="this.flgControl"><label for="chkControlDatos"
-                        class="form-check-label"> 99% </label></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="card">
-    <div class="card-header justify-content-between d-sm-flex d-block">
-        <div class="card-title d-flex align-items-center gap-2">
-            Productos Financieros
-        </div>
-    </div>
-
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-3">
-                <label class="form-label">Productos</label>
-                <ng-select placeholder="Seleccione una opción..." [items]="listTipoInstrumento" [searchable]="false"
-                    bindLabel="descripcionTipoInstrumento" bindValue="idTipoInstrumento" [multiple]="true"
-                    [(ngModel)]="listTipoInstrumentoSeleccionado" class="me-2" style="min-width: 200px;">
-                </ng-select>
-            </div>
-        </div>
-    </div>
-</div>
-
-<button type="submit" class="btn btn-primary" (click)="ejecutarCalculoVar()">Ejecutar cálculo de VaR</button>
-
-<br><br>
-
-<div class="card" *ngIf="flgMostrarResultados">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <div class="card-title d-flex align-items-center gap-2">
-            Resultados del cálculo de VaR
+            <p class="var-config__ayuda">
+                Días hábiles de precios usados para calcular el VaR (1 año ≈ 250 días de mercado). Puede
+                cambiarse: más años suavizan la estimación pero reaccionan más lento a cambios recientes.
+            </p>
         </div>
 
-        <div class="d-flex gap-2">
-            <div class="form-floating mb-0">
-                <input type="text" id="floatingInputprimary1" [value]="'2,787,073 USD'" class="form-control"
-                    style="background-color: #f0f0f0; height: 30px;" readonly>
-                <label for="floatingInputprimary1">Portfolio Value</label>
+        <!-- Un portafolio es un conjunto fijo de posiciones: en vez de un filtro por tipo que podría no
+             tener nada que ver con lo que hay adentro, se muestra exactamente qué trae y qué puede calcularse. -->
+        <div class="var-cobertura" *ngIf="idsPortafolioSeleccionados.length">
+            <div class="var-cobertura__cargando" *ngIf="cargandoInstrumentos">
+                <app-loader tamano="inline" etiqueta="Revisando posiciones de los portafolios..."></app-loader>
             </div>
-            <div class="form-floating mb-0">
-                <input type="text" id="floatingInputprimary2" [value]="'24.18%'" class="form-control"
-                    style="background-color: #f0f0f0; height: 30px;" readonly>
-                <label for="floatingInputprimary2">VaR Ratio</label>
-            </div>
-        </div>
-    </div>
-
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-4">
-                <label>
-                    <b>
-                        Máximo VaR (99%)
-                        <i class="bi bi-info-circle-fill text-primary ms-2" data-bs-toggle="tooltip" data-bs-html="true"
-                            data-bs-placement="right" title="Mayor pérdida potencial"></i>
-                        :
-                    </b> {{'$228,830'}}
-                </label>
-            </div>
-            <div class="col-md-4">
-                <label>
-                    <b>
-                        VaR Promedio
-                        <i class="bi bi-info-circle-fill text-primary ms-2" data-bs-toggle="tooltip" data-bs-html="true"
-                            data-bs-placement="right" title="Promedio entre metodologías"></i>
-                        :
-                    </b> {{'$146,205'}}
-                </label>
-            </div>
-            <div class="col-md-4">
-                <label>
-                    <b>
-                        Volatilidad
-                        <i class="bi bi-info-circle-fill text-primary ms-2" data-bs-toggle="tooltip" data-bs-html="true"
-                            data-bs-placement="right" title="Desviación estándar anualizada"></i>
-                        :
-                    </b> {{'18.4%'}}
-                </label>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div id="mat-sorting">
-                <div class="mat-elevation-z8">
-                    <div class="table-responsive">
-                        <table mat-table [dataSource]="dsResumen" matSort #sortResumen="matSort">
-                            <ng-container matColumnDef="descripcionPortafolio">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Metodología</th>
-                                <td mat-cell *matCellDef="let element"> {{element.descripcionPortafolio}} </td>
-                            </ng-container>
-                            <ng-container matColumnDef="descripcionTipoInstrumento">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>95% VAR</th>
-                                <td mat-cell *matCellDef="let element"> {{element.descripcionTipoInstrumento}} </td>
-                            </ng-container>
-                            <ng-container matColumnDef="codISIN">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>97.5% VAR</th>
-                                <td mat-cell *matCellDef="let element"> {{element.codISIN}} </td>
-                            </ng-container>
-                            <ng-container matColumnDef="codticker">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>99% VAR</th>
-                                <td mat-cell *matCellDef="let element"> {{element.codticker}} </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsResumen"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumnsResumen;"></tr>
-                        </table>
-                    </div>
-                    <mat-paginator #paginatorResumen [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-                    </mat-paginator>
+            <ng-container *ngIf="!cargandoInstrumentos && instrumentos.length">
+                <div class="var-cobertura__resumen">
+                    <mat-icon aria-hidden="true" [class.var-cobertura__icono--alerta]="instrumentosElegibles.length === 0">
+                        {{ instrumentosElegibles.length === 0 ? 'error_outline' : 'check_circle' }}
+                    </mat-icon>
+                    <span>
+                        Se calculará con <strong>{{ instrumentosElegibles.length }}</strong> de {{ instrumentos.length }}
+                        posiciones{{ esMultiPortafolio ? ' (de los portafolios elegidos)' : ' del portafolio' }}.
+                    </span>
                 </div>
+                <div class="var-chips">
+                    <span class="var-chip var-chip--elegible" *ngFor="let i of instrumentosElegibles"
+                        [title]="esMultiPortafolio ? i.codISIN + ' · ' + i.descripcionPortafolio : i.codISIN">
+                        {{ i.codTicker }}<em *ngIf="esMultiPortafolio"> · {{ i.descripcionPortafolio }}</em>
+                    </span>
+                    <span class="var-chip var-chip--excluido" *ngFor="let i of instrumentosExcluidos"
+                        [title]="i.motivo">
+                        {{ i.codTicker }} <mat-icon aria-hidden="true">info</mat-icon>
+                    </span>
+                </div>
+                <ul class="var-cobertura__motivos" *ngIf="instrumentosExcluidos.length">
+                    <li *ngFor="let i of instrumentosExcluidos">{{ i.codTicker }} ({{ i.nombreTipoInstrumento }}): {{ i.motivo }}</li>
+                </ul>
+            </ng-container>
+        </div>
+
+        <div class="var-config__fila">
+            <span class="var-config__etiqueta">Metodología <span class="hig-requerido" aria-hidden="true">*</span></span>
+            <div class="var-chips">
+                <button type="button" *ngFor="let m of listTipoMetodologiaVAR" class="var-chip"
+                    [class.var-chip--activo]="idsTipoMetodologiaSeleccionados.includes(m.idTipoMetodologiaVAR)"
+                    (click)="toggleMetodologia(m.idTipoMetodologiaVAR)">
+                    {{ m.nombreTipoMetodologiaVAR }}
+                </button>
             </div>
+        </div>
+
+        <div class="var-config__fila">
+            <span class="var-config__etiqueta">Confianza <span class="hig-requerido" aria-hidden="true">*</span></span>
+            <div class="var-chips">
+                <button type="button" *ngFor="let nc of listNivelConfianza" class="var-chip var-chip--num"
+                    [class.var-chip--activo]="idsNivelConfianzaSeleccionados.includes(nc.idNivelConfianza)"
+                    (click)="toggleNivelConfianza(nc.idNivelConfianza)">
+                    {{ nc.valorNivelConfianza * 100 | number:'1.1-2' }}%
+                </button>
+            </div>
+        </div>
+
+        <div class="var-accion">
+            <button type="button" class="btn btn-primary var-accion__boton" [disabled]="faltantes.length > 0 || ejecutando"
+                (click)="ejecutar()">
+                <app-loader tamano="inline" *ngIf="ejecutando" class="me-2"></app-loader>
+                {{ ejecutando ? 'Calculando...' : 'Ejecutar cálculo de VaR' }}
+            </button>
+            <p class="var-accion__aviso" *ngIf="faltantes.length && !cargandoCatalogos" role="status">
+                <mat-icon aria-hidden="true">info</mat-icon>
+                <span>Falta seleccionar: {{ faltantes.join(', ') }}</span>
+            </p>
+        </div>
+
+        <div class="alert alert-danger d-flex align-items-center gap-2 var-error mb-0" role="alert" *ngIf="mensajeError">
+            <mat-icon aria-hidden="true">error</mat-icon>
+            <span>{{ mensajeError }}</span>
+        </div>
+
+    </div>
+</div>
+
+<div id="var-resultados" class="var-layout__resultado">
+    <div class="card var-placeholder" *ngIf="!resultado && !ejecutando" [@fadeIn]>
+        <div class="card-body var-placeholder__cuerpo">
+            <app-loader tamano="grande"></app-loader>
+            <h3 class="var-placeholder__titulo">Configure y ejecute el cálculo</h3>
+            <p class="var-placeholder__texto">
+                Elija portafolio, moneda, ventana histórica, metodología y nivel de confianza a la izquierda.
+                El resultado aparecerá aquí mismo, sin perder de vista la configuración.
+            </p>
         </div>
     </div>
 
+    <div class="card var-calculando" *ngIf="ejecutando" [@fadeIn]>
+        <div class="card-body var-calculando__cuerpo">
+            <app-loader tamano="grande" etiqueta="Calculando el VaR con el motor real..."></app-loader>
+        </div>
+    </div>
+
+    <div class="card" *ngIf="resultado && !ejecutando" [@fadeSlideIn]>
+        <div class="card-header">
+            <div class="card-title">Resultado</div>
+            <span class="var-resultados__fecha">{{ resultado.fechaProceso }}</span>
+        </div>
+        <div class="card-body">
+            <app-resultado-var [resultado]="resultado"></app-resultado-var>
+        </div>
+    </div>
 </div>
+</div>
+
+<ng-template #duplicadoModal let-modal>
+    <div class="var-modal-duplicado__cuerpo">
+        <div class="var-modal-duplicado__icono">
+            <mat-icon aria-hidden="true">warning</mat-icon>
+        </div>
+        <h3 class="var-modal-duplicado__titulo">Ya existe un cálculo para hoy</h3>
+        <p class="var-modal-duplicado__texto">{{ duplicado?.mensaje }}</p>
+        <div class="var-modal-duplicado__acciones">
+            <button type="button" class="btn btn-outline-secondary" (click)="cancelarReemplazo()">Cancelar</button>
+            <button type="button" class="btn btn-warning" [disabled]="ejecutando" (click)="confirmarYReemplazar()">
+                <app-loader tamano="inline" *ngIf="ejecutando" class="me-2"></app-loader>
+                Reemplazar último valor
+            </button>
+        </div>
+    </div>
+</ng-template>
 
 <ng-template #cargaModalPortafolio let-modal>
-    <app-carga-portafolio (close)="cerrarModalSecundario($event)"></app-carga-portafolio>
+    <app-carga-portafolio (close)="cerrarModalSecundario()"></app-carga-portafolio>
 </ng-template>
 <ng-template #cargaModalMoneda let-modal>
-    <app-carga-moneda (close)="cerrarModalSecundario($event)"></app-carga-moneda>
+    <app-carga-moneda (close)="cerrarModalSecundario()"></app-carga-moneda>
 </ng-template>

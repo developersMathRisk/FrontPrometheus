@@ -1,87 +1,59 @@
-<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
-    <div role="document" class="msg_card_body" style="width: 100%;">
-        <div class="modal-header">
-            <table style="width: 100%;">
-                <tr style="width: 100%;">
-                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
-                        <h3 class="modal-title">Cargar Portafolio</h3>
-                    </td>
-                    <td style="text-align: right; padding-right: 1.3%;">
-                        <button type="button" class="icon-close" (click)="cerrar()">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+<app-modal-formulario titulo="Cargar Portafolio" subtitulo="Registre un portafolio para agrupar instrumentos y hacer seguimiento de su valorización y riesgo." accion="Registrar"
+    [faltantes]="faltantes" [datos]="nuevoRegistro" [guardando]="guardando" (cerrar)="cerrar()" (guardar)="registrar()">
 
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Descripción</label>
-                    <input type="text" placeholder="Descripción" minlength="3" maxlength="255" class="form-control" [(ngModel)]="this.nuevoRegistro.descripcionPortafolio">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Tipo Portafolio</label>
-                    <input type="text" placeholder="Tipo Portafolio" minlength="3" maxlength="150" class="form-control" [(ngModel)]="this.nuevoRegistro.tipoPortafolio">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Gestor</label>
-                    <input type="text" placeholder="Gestor" minlength="3" maxlength="100" class="form-control" [(ngModel)]="this.nuevoRegistro.gestor">
-                </div>
+    <fieldset class="hig-seccion">
+        <legend>Identificación</legend>
+        <div class="hig-cuadricula hig-columnas-3">
+            <div class="hig-campo">
+                <label class="form-label" for="po-c-descripcionPortafolio">Descripción<span class="hig-requerido" aria-hidden="true">*</span></label>
+                <input id="po-c-descripcionPortafolio" type="text" class="form-control" autocomplete="off" placeholder="Ej. Fondo Renta Variable Global" minlength="3" maxlength="255" [(ngModel)]="nuevoRegistro.descripcionPortafolio" required>
             </div>
-            <br>
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Límite</label>
-                    <input type="number" placeholder="Límite" class="form-control" [(ngModel)]="this.nuevoRegistro.limite">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Moneda Gestión</label>
-                    <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listMoneda"
-                            bindLabel="desMoneda" bindValue="idMoneda"
-                            [(ngModel)]="this.nuevoRegistro.idMoneda"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar"
-                            (click)="abrirModalSecundario(cargaModalMoneda)"><span
-                                class="icon">+</span></button>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Benchmark</label>
-                    <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listBenchmark"
-                            bindLabel="descripcionBenchmark" bindValue="idBenchmark"
-                            [(ngModel)]="this.nuevoRegistro.idBenchmark"></ng-select>
-                        <!-- <button class="btn btn-outline-primary btn-wave btn-agregar"
-                            (click)="abrirModalSecundario(cargaModalBenchmark)"><span
-                                class="icon">+</span></button> -->
-                    </div>
-                </div>
+            <div class="hig-campo">
+                <label class="form-label" for="po-c-tipoPortafolio">Tipo Portafolio</label>
+                <input id="po-c-tipoPortafolio" type="text" class="form-control" autocomplete="off" placeholder="Ej. Renta Variable" minlength="3" maxlength="150" [(ngModel)]="nuevoRegistro.tipoPortafolio">
             </div>
-            <br>
-            <div class="row">
-                <div class="col-md-12">
-                    <label class="form-label">Notas</label>
-                    <textarea class="form-control" rows="4" minlength="3" maxlength="255" placeholder="Notas"
-                        [(ngModel)]="this.nuevoRegistro.notas"></textarea>
-                </div>
+            <div class="hig-campo">
+                <label class="form-label" for="po-c-gestor">Gestor</label>
+                <input id="po-c-gestor" type="text" class="form-control" autocomplete="off" placeholder="Ej. Juan Pérez" minlength="3" maxlength="100" [(ngModel)]="nuevoRegistro.gestor">
             </div>
         </div>
+    </fieldset>
 
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary" (click)="registrar()">Registrar</button>
-            <br>
+    <fieldset class="hig-seccion">
+        <legend>Gestión</legend>
+        <div class="hig-cuadricula hig-columnas-3">
+            <div class="hig-campo">
+                <label class="form-label" for="po-c-limite">Límite</label>
+                <input id="po-c-limite" type="number" class="form-control" autocomplete="off" placeholder="Ej. 1000000" [(ngModel)]="nuevoRegistro.limite">
+            </div>
+            <div class="hig-campo">
+                <label class="form-label" for="po-c-idMoneda">Moneda Gestión<span class="hig-requerido" aria-hidden="true">*</span></label>
+                <div class="combo-contenedor">
+                    <ng-select labelForId="po-c-idMoneda" placeholder="Seleccione una opción…" [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="nuevoRegistro.idMoneda" required></ng-select>
+                    <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar moneda" aria-label="Agregar moneda" (click)="abrirModalSecundario(cargaModalMoneda)"><span class="icon" aria-hidden="true">+</span></button>
+                </div>
+            </div>
+            <div class="hig-campo">
+                <label class="form-label" for="po-c-idBenchmark">Benchmark</label>
+                <div class="combo-contenedor">
+                    <ng-select labelForId="po-c-idBenchmark" placeholder="Seleccione una opción…" [items]="listBenchmark" bindLabel="descripcionBenchmark" bindValue="idBenchmark" [(ngModel)]="nuevoRegistro.idBenchmark"></ng-select>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    </fieldset>
+
+    <fieldset class="hig-seccion">
+        <legend>Notas</legend>
+        <div class="hig-cuadricula hig-columnas-1">
+            <div class="hig-campo">
+                <label class="form-label" for="po-c-notas">Notas</label>
+                <textarea id="po-c-notas" class="form-control" rows="4" minlength="3" maxlength="255" placeholder="Notas adicionales sobre el portafolio" [(ngModel)]="nuevoRegistro.notas"></textarea>
+            </div>
+        </div>
+    </fieldset>
+
+</app-modal-formulario>
 
 <ng-template #cargaModalMoneda let-modal>
-    <app-carga-moneda (close)="cerrarModalSecundario($event)"></app-carga-moneda>
-</ng-template>
-
-<ng-template #cargaModalBenchmark let-modal>
     <app-carga-moneda (close)="cerrarModalSecundario($event)"></app-carga-moneda>
 </ng-template>

@@ -1,169 +1,128 @@
-<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
-    <div role="document" class="msg_card_body" style="width: 100%;">
-        <div class="modal-header">
-            <table style="width: 100%;">
-                <tr style="width: 100%;">
-                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
-                        <h3 class="modal-title">Editar Bono (ID: {{data.idBono}})</h3>
-                    </td>
-                    <td style="text-align: right; padding-right: 1.3%;">
-                        <button type="button" class="icon-close" (click)="cerrar()">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+<app-modal-formulario titulo="Editar Bono" subtitulo="Código {{ data.idBono }}. Modifique los datos y guarde los cambios." accion="Guardar Cambios"
+    [faltantes]="faltantes" [datos]="objRegistroEditado" (cerrar)="cerrar()" (guardar)="guardarCambios()">
 
-    <div class="card">
-        <!-- <div class="card-header justify-content-between d-sm-flex d-block">
-            <div class="card-title">
-                Datos Generales
-            </div>
-        </div> -->
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Código ISIN</label>
-                    <input type="text" placeholder="Código ISIN" minlength="3" maxlength="12" class="form-control" [(ngModel)]="this.objRegistroEditado.codISIN">
+        <fieldset class="hig-seccion">
+            <legend>Identificación</legend>
+            <div class="hig-cuadricula hig-columnas-3">
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-codISIN">Código ISIN<span class="hig-requerido" aria-hidden="true">*</span></label>
+                    <input id="bo-e-codISIN" type="text" class="form-control" autocomplete="off" placeholder="Ej. PEP01000C5D1" maxlength="12" [(ngModel)]="this.objRegistroEditado.codISIN" required>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">Ticker</label>
-                    <input type="text" placeholder="Ticker" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.ticker">
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-ticker">Ticker<span class="hig-requerido" aria-hidden="true">*</span></label>
+                    <input id="bo-e-ticker" type="text" class="form-control" autocomplete="off" placeholder="Ej. SB12AGO28" maxlength="20" [(ngModel)]="this.objRegistroEditado.ticker" required>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">Tipo Tasa Interés</label>
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-idTipoBono">Tipo Bono<span class="hig-requerido" aria-hidden="true">*</span></label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoTasaInt" bindLabel="descripcionTipoTasa" bindValue="idTipoTasaInteres" [(ngModel)]="this.objRegistroEditado.idTipoTasaInteres"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoTasaInteres)"><span class="icon">+</span></button>
+                        <ng-select labelForId="bo-e-idTipoBono" placeholder="Seleccione una opción…" [items]="listTipoBonoSBS" bindLabel="descripcionTipoBono" bindValue="idTipoBono" [(ngModel)]="this.objRegistroEditado.idTipoBono" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar tipo bono" aria-label="Agregar tipo bono" (click)="abrirModalSecundario(cargaModalTipoBono)"><span class="icon" aria-hidden="true">+</span></button>
                     </div>
                 </div>
             </div>
+        </fieldset>
 
-            <br>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Nominal</label>
-                    <input type="number" placeholder="Nominal" class="form-control" [(ngModel)]="this.objRegistroEditado.montoNominal">
+        <fieldset class="hig-seccion">
+            <legend>Condiciones financieras</legend>
+            <div class="hig-cuadricula hig-columnas-3">
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-montoNominal">Nominal</label>
+                    <input id="bo-e-montoNominal" type="number" class="form-control" autocomplete="off" step="any" inputmode="decimal" [(ngModel)]="this.objRegistroEditado.montoNominal">
                 </div>
-
-                <div class="col-md-4" *ngIf="this.objRegistroEditado.idTipoTasaInteres == 1">
-                    <label class="form-label">Tasa Cupón (%)</label>
-                    <input type="number" placeholder="Tasa Cupón (%)" class="form-control" [(ngModel)]="this.objRegistroEditado.tasaCupon">
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-tasaCupon">Tasa Cupón (%)</label>
+                    <input id="bo-e-tasaCupon" type="number" class="form-control" autocomplete="off" step="any" inputmode="decimal" [(ngModel)]="this.objRegistroEditado.tasaCupon">
+                    <p class="hig-campo__ayuda">Expresada en porcentaje, por ejemplo 6.35.</p>
                 </div>
-
-                <div class="col-md-4" *ngIf="this.objRegistroEditado.idTipoTasaInteres == 2">
-                    <label class="form-label">Curva Referencia</label>
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-spread">Spread</label>
+                    <input id="bo-e-spread" type="number" class="form-control" autocomplete="off" step="any" inputmode="decimal" [(ngModel)]="this.objRegistroEditado.spread">
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-idTipoTasaInteres">Tipo Tasa Interés<span class="hig-requerido" aria-hidden="true">*</span></label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listCurvaReferencia" bindLabel="descripcionCurva" bindValue="idCurvaReferencia" [(ngModel)]="this.objRegistroEditado.idCurvaReferencia"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalCurvaReferencia)"><span class="icon">+</span></button>
+                        <ng-select labelForId="bo-e-idTipoTasaInteres" placeholder="Seleccione una opción…" [items]="listTipoTasaInt" bindLabel="descripcionTipoTasa" bindValue="idTipoTasaInteres" [(ngModel)]="this.objRegistroEditado.idTipoTasaInteres" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar tipo tasa interés" aria-label="Agregar tipo tasa interés" (click)="abrirModalSecundario(cargaModalTipoTasaInteres)"><span class="icon" aria-hidden="true">+</span></button>
                     </div>
                 </div>
-
-                <div class="col-md-4" *ngIf="this.objRegistroEditado.idTipoTasaInteres == 2">
-                    <label class="form-label">Spread</label>
-                    <input type="number" placeholder="Spread" class="form-control" [(ngModel)]="this.objRegistroEditado.spread">
-                </div>
-            </div>
-
-            <br>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Fecha Emisión</label>
-                    <input type="date" class="form-control" [(ngModel)]="this.objRegistroEditado.fechaEmision">
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Fecha Primer Cupón</label>
-                    <input type="date" class="form-control" [(ngModel)]="this.objRegistroEditado.fechaPrimerCupon">
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Fecha Vencimiento</label>
-                    <input type="date" class="form-control" [(ngModel)]="this.objRegistroEditado.fechaVencimiento">
-                </div>
-            </div>
-
-            <br>
-
-            <div class="row">
-
-                <div class="col-md-4">
-                    <label class="form-label">Emisor</label>
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-idFormulaTasa">Fórmula Tasa<span class="hig-requerido" aria-hidden="true">*</span></label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listEmisor" bindLabel="nomEmisor" bindValue="idEmisor" [(ngModel)]="this.objRegistroEditado.idEmisor"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalEmisor)"><span class="icon">+</span></button>
+                        <ng-select labelForId="bo-e-idFormulaTasa" placeholder="Seleccione una opción…" [items]="listFormulaTasa" bindLabel="descripcionFormula" bindValue="idFormulaTasa" [(ngModel)]="this.objRegistroEditado.idFormulaTasa" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar fórmula tasa" aria-label="Agregar fórmula tasa" (click)="abrirModalSecundario(cargaModalFormulaTasa)"><span class="icon" aria-hidden="true">+</span></button>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Moneda</label>
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-idCurvaReferencia">Curva Referencia<span class="hig-requerido" aria-hidden="true">*</span></label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.objRegistroEditado.idMoneda"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalMoneda)"><span class="icon">+</span></button>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Tipo Bono</label>
-                    <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoBonoSBS" bindLabel="descripcionTipoBono" bindValue="idTipoBono" [(ngModel)]="this.objRegistroEditado.idTipoBono"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoBono)"><span class="icon">+</span></button>
+                        <ng-select labelForId="bo-e-idCurvaReferencia" placeholder="Seleccione una opción…" [items]="listCurvaReferencia" bindLabel="descripcionCurva" bindValue="idCurvaReferencia" [(ngModel)]="this.objRegistroEditado.idCurvaReferencia" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar curva referencia" aria-label="Agregar curva referencia" (click)="abrirModalSecundario(cargaModalCurvaReferencia)"><span class="icon" aria-hidden="true">+</span></button>
                     </div>
                 </div>
             </div>
+        </fieldset>
 
-            <br>
+        <fieldset class="hig-seccion">
+            <legend>Fechas</legend>
+            <p class="hig-seccion__ayuda">Son obligatorias si activa la generación automática de la cuponera.</p>
+            <div class="hig-cuadricula hig-columnas-3">
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-fechaEmision">Fecha Emisión</label>
+                    <input id="bo-e-fechaEmision" type="date" class="form-control" autocomplete="off" [(ngModel)]="this.objRegistroEditado.fechaEmision">
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-fechaPrimerCupon">Fecha Primer Cupón</label>
+                    <input id="bo-e-fechaPrimerCupon" type="date" class="form-control" autocomplete="off" [(ngModel)]="this.objRegistroEditado.fechaPrimerCupon">
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-fechaVencimiento">Fecha Vencimiento</label>
+                    <input id="bo-e-fechaVencimiento" type="date" class="form-control" autocomplete="off" [(ngModel)]="this.objRegistroEditado.fechaVencimiento">
+                </div>
+            </div>
+        </fieldset>
 
-            <div class="row">
-
-                <div class="col-md-4">
-                    <label class="form-label">Método Amortización</label>
+        <fieldset class="hig-seccion">
+            <legend>Emisor y cálculo</legend>
+            <div class="hig-cuadricula hig-columnas-3">
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-idEmisor">Emisor<span class="hig-requerido" aria-hidden="true">*</span></label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listMetodoAmotizacion" bindLabel="descripcionMetodo" bindValue="idMetodoAmortizacion" [(ngModel)]="this.objRegistroEditado.idMetodoAmortizacion"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalMetodoAmortizacion)"><span class="icon">+</span></button>
+                        <ng-select labelForId="bo-e-idEmisor" placeholder="Seleccione una opción…" [items]="listEmisor" bindLabel="nomEmisor" bindValue="idEmisor" [(ngModel)]="this.objRegistroEditado.idEmisor" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar emisor" aria-label="Agregar emisor" (click)="abrirModalSecundario(cargaModalEmisor)"><span class="icon" aria-hidden="true">+</span></button>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Cálculo Base</label>
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-idMoneda">Moneda<span class="hig-requerido" aria-hidden="true">*</span></label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listCalculoBase" bindLabel="descripcionCalculoBase" bindValue="idCalculobase" [(ngModel)]="this.objRegistroEditado.idCalculobase"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalCalculoBase)"><span class="icon">+</span></button>
+                        <ng-select labelForId="bo-e-idMoneda" placeholder="Seleccione una opción…" [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.objRegistroEditado.idMoneda" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar moneda" aria-label="Agregar moneda" (click)="abrirModalSecundario(cargaModalMoneda)"><span class="icon" aria-hidden="true">+</span></button>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Frecuencia Pago</label>
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-idMetodoAmortizacion">Método Amortización<span class="hig-requerido" aria-hidden="true">*</span></label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listFrecPago" bindLabel="descripcionFrecuencia" bindValue="idFrecuenciaPago" [(ngModel)]="this.objRegistroEditado.idFrecuenciaPago"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalFrecuenciaPago)"><span class="icon">+</span></button>
+                        <ng-select labelForId="bo-e-idMetodoAmortizacion" placeholder="Seleccione una opción…" [items]="listMetodoAmotizacion" bindLabel="descripcionMetodo" bindValue="idMetodoAmortizacion" [(ngModel)]="this.objRegistroEditado.idMetodoAmortizacion" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar método amortización" aria-label="Agregar método amortización" (click)="abrirModalSecundario(cargaModalMetodoAmortizacion)"><span class="icon" aria-hidden="true">+</span></button>
+                    </div>
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-idCalculobase">Cálculo Base<span class="hig-requerido" aria-hidden="true">*</span></label>
+                    <div class="combo-contenedor">
+                        <ng-select labelForId="bo-e-idCalculobase" placeholder="Seleccione una opción…" [items]="listCalculoBase" bindLabel="descripcionCalculoBase" bindValue="idCalculobase" [(ngModel)]="this.objRegistroEditado.idCalculobase" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar cálculo base" aria-label="Agregar cálculo base" (click)="abrirModalSecundario(cargaModalCalculoBase)"><span class="icon" aria-hidden="true">+</span></button>
+                    </div>
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="bo-e-idFrecuenciaPago">Frecuencia Pago<span class="hig-requerido" aria-hidden="true">*</span></label>
+                    <div class="combo-contenedor">
+                        <ng-select labelForId="bo-e-idFrecuenciaPago" placeholder="Seleccione una opción…" [items]="listFrecPago" bindLabel="descripcionFrecuencia" bindValue="idFrecuenciaPago" [(ngModel)]="this.objRegistroEditado.idFrecuenciaPago" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar frecuencia pago" aria-label="Agregar frecuencia pago" (click)="abrirModalSecundario(cargaModalFrecuenciaPago)"><span class="icon" aria-hidden="true">+</span></button>
                     </div>
                 </div>
             </div>
+        </fieldset>
 
-            <br>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Fórmula Tasa</label>
-                    <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listFormulaTasa" bindLabel="descripcionFormula" bindValue="idFormulaTasa" [(ngModel)]="this.objRegistroEditado.idFormulaTasa"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalFormulaTasa)"><span class="icon">+</span></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary" (click)="guardarCambios()">Guardar Cambios</button>
-            <br>
-        </div>
-    </div>
-</div>
+</app-modal-formulario>
 
 <ng-template #cargaModalEmisor let-modal>
     <app-carga-emisor (close)="cerrarModalSecundario($event)"></app-carga-emisor>

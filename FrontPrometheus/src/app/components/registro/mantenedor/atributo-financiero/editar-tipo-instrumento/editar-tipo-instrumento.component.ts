@@ -1,25 +1,35 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
-import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
 import { RegistroService } from '../../../../../shared/services/registro.service';
 import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 
 @Component({
   selector: 'app-editar-tipo-instrumento',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule],
+  imports: [FormsModule, MatIconModule, ModalFormularioComponent],
   templateUrl: './editar-tipo-instrumento.component.html',
   styleUrl: './editar-tipo-instrumento.component.scss'
 })
 export class EditarTipoInstrumentoComponent {
   @Input() data!: TipoInstrumento;
   @Output() close = new EventEmitter<any>();
-  
+
   objRegistroEditado: TipoInstrumento = new TipoInstrumento;
-  
+  guardando = false;
+
+  get faltantes(): string[] {
+    const r = this.objRegistroEditado;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codTipoInstrumento)) f.push('Código');
+    if (vacio(r.descripcionTipoInstrumento)) f.push('Descripción');
+    return f;
+  }
+
   constructor(private registroService: RegistroService){}
 
   ngOnInit(): void {
@@ -27,6 +37,7 @@ export class EditarTipoInstrumentoComponent {
   }
 
   guardarCambios(){
+    if (this.faltantes.length > 0) return;
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
       text: 'Este cambio no puede deshacerse.',
@@ -37,8 +48,10 @@ export class EditarTipoInstrumentoComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
+        this.guardando = true;
         this.registroService.putModificarTipoInstrumento(this.objRegistroEditado.idTipoInstrumento, this.objRegistroEditado).subscribe(
           (response: any) => {
+            this.guardando = false;
             Swal.fire({
               icon: 'success',
               title: 'Modificación exitosa',
@@ -48,6 +61,7 @@ export class EditarTipoInstrumentoComponent {
             this.cerrar();
           },
           (error: HttpErrorResponse) => {
+            this.guardando = false;
             Swal.fire({
               icon: 'error',
               title: 'Error',
@@ -58,8 +72,6 @@ export class EditarTipoInstrumentoComponent {
         )
       }
     });
-
-    
   }
 
   cerrar(){

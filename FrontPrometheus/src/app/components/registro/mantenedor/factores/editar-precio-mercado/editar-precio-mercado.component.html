@@ -1,111 +1,85 @@
-<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
-    <div role="document" class="msg_card_body" style="width: 100%;">
-        <div class="modal-header">
-            <table style="width: 100%;">
-                <tr style="width: 100%;">
-                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
-                        <h3 class="modal-title">Editar Precio de Mercado</h3>
-                    </td>
-                    <td style="text-align: right; padding-right: 1.3%;">
-                        <button type="button" class="icon-close" (click)="cerrar()">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+<app-modal-formulario titulo="Editar Precio de Mercado" subtitulo="Modifique los datos y guarde los cambios." accion="Guardar Cambios"
+    [faltantes]="faltantes" [datos]="objRegistroEditado" (cerrar)="cerrar()" (guardar)="guardarCambios()">
 
-    <div class="card">
-        <!-- <div class="card-header justify-content-between d-sm-flex d-block">
-            <div class="card-title">
-                Datos Generales
-            </div>
-        </div> -->
-        <div class="row">
-            <div class="col-md-6">
-                <label class="form-label">ISIN</label>
-                <input type="text" placeholder="ISIN" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.objRegistroEditado.codISIN">
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Nemónico</label>
-                <input type="text" placeholder="Nemónico" minlength="3" maxlength="60" class="form-control" [(ngModel)]="this.objRegistroEditado.nemonico">
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-4">
-                <label class="form-label">Moneda</label>
-                <div class="combo-contenedor">
-                    <ng-select placeholder="Seleccione una opción..." [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.objRegistroEditado.idMoneda"></ng-select>
-                    <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalMoneda)"><span class="icon">+</span></button>
+        <fieldset class="hig-seccion">
+            <legend>Instrumento y fecha</legend>
+            <div class="hig-cuadricula ">
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-fecProceso">Fecha Proceso<span class="hig-requerido" aria-hidden="true">*</span></label>
+                    <input id="pm-e-fecProceso" type="date" class="form-control" autocomplete="off" [(ngModel)]="this.objRegistroEditado.fecProceso" required>
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-idMoneda">Moneda<span class="hig-requerido" aria-hidden="true">*</span></label>
+                    <div class="combo-contenedor">
+                        <ng-select labelForId="pm-e-idMoneda" placeholder="Seleccione una opción…" [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.objRegistroEditado.idMoneda" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar moneda" aria-label="Agregar moneda" (click)="abrirModalSecundario(cargaModalMoneda)"><span class="icon" aria-hidden="true">+</span></button>
+                    </div>
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-nemonico">Nemónico<span class="hig-requerido" aria-hidden="true">*</span></label>
+                    <input id="pm-e-nemonico" type="text" class="form-control" autocomplete="off" placeholder="Ej. AMZN" maxlength="60" [(ngModel)]="this.objRegistroEditado.nemonico" required>
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-codISIN">ISIN</label>
+                    <input id="pm-e-codISIN" type="text" class="form-control" autocomplete="off" placeholder="Ej. US0231351067" maxlength="20" [(ngModel)]="this.objRegistroEditado.codISIN">
                 </div>
             </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-4">
-                <label class="form-label">Precio Limpio</label>
-                <input type="number" placeholder="Precio Limpio" class="form-control" [(ngModel)]="this.objRegistroEditado.numPrecioLimpio">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Precio Sucio</label>
-                <input type="number" placeholder="Precio Sucio" class="form-control" [(ngModel)]="this.objRegistroEditado.numPrecioSucio">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Interés Corrido</label>
-                <input type="number" placeholder="Interés Corrido" class="form-control" [(ngModel)]="this.objRegistroEditado.numInteresCorrido">
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-4">
-                <label class="form-label">TIR</label>
-                <input type="number" placeholder="TIR" class="form-control" [(ngModel)]="this.objRegistroEditado.numTIR">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Dur. Macaulay</label>
-                <input type="number" placeholder="Dur. Macaulay" class="form-control" [(ngModel)]="this.objRegistroEditado.numDurMacaulay">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Dur. Modificada</label>
-                <input type="number" placeholder="Dur. Modificada" class="form-control" [(ngModel)]="this.objRegistroEditado.numDurModified">
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-4">
-                <label class="form-label">Convexidad</label>
-                <input type="number" placeholder="Convexidad" class="form-control" [(ngModel)]="this.objRegistroEditado.numConvexidad">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Valor Facial</label>
-                <input type="number" placeholder="Valor Facial" class="form-control" [(ngModel)]="this.objRegistroEditado.numValorFacial">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Tasa Cupón (%)</label>
-                <input type="number" placeholder="Tasa Cupón (%)" class="form-control" [(ngModel)]="this.objRegistroEditado.numTasaCupon">
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-6">
-                <label class="form-label">Fecha Proceso</label>
-                <input type="date" class="form-control" [(ngModel)]="this.objRegistroEditado.fecProceso">
-            </div>
+        </fieldset>
 
-            <div class="col-md-6">
-                <label class="form-label">Fecha Vencimiento</label>
-                <input type="date" class="form-control" [(ngModel)]="this.objRegistroEditado.maturity">
+        <fieldset class="hig-seccion">
+            <legend>Precio</legend>
+            <div class="hig-cuadricula hig-columnas-3">
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-numPrecioLimpio">Precio Limpio<span class="hig-requerido" aria-hidden="true">*</span></label>
+                    <input id="pm-e-numPrecioLimpio" type="number" class="form-control" autocomplete="off" placeholder="0.00" step="any" inputmode="decimal" [(ngModel)]="this.objRegistroEditado.numPrecioLimpio" required>
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-numPrecioSucio">Precio Sucio</label>
+                    <input id="pm-e-numPrecioSucio" type="number" class="form-control" autocomplete="off" step="any" inputmode="decimal" [(ngModel)]="this.objRegistroEditado.numPrecioSucio">
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-numInteresCorrido">Interés Corrido</label>
+                    <input id="pm-e-numInteresCorrido" type="number" class="form-control" autocomplete="off" step="any" inputmode="decimal" [(ngModel)]="this.objRegistroEditado.numInteresCorrido">
+                </div>
             </div>
-        </div>
+        </fieldset>
 
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary" (click)="guardarCambios()">Guardar Cambios</button>
-            <br>
-        </div>
-    </div>
-</div>
+        <details class="hig-detalles" [open]="objRegistroEditado.numPrecioSucio != null || objRegistroEditado.numInteresCorrido != null || objRegistroEditado.numTIR != null || objRegistroEditado.numDurMacaulay != null || objRegistroEditado.numDurModified != null || objRegistroEditado.numConvexidad != null || objRegistroEditado.numValorFacial != null || objRegistroEditado.numTasaCupon != null || !!objRegistroEditado.maturity">
+            <summary>Datos de renta fija<span class="hig-detalles__nota">Opcional</span></summary>
+            <p class="hig-seccion__ayuda">Solo aplican a bonos y otros instrumentos de deuda.</p>
+            <div class="hig-cuadricula hig-columnas-3">
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-numTIR">TIR</label>
+                    <input id="pm-e-numTIR" type="number" class="form-control" autocomplete="off" step="any" inputmode="decimal" [(ngModel)]="this.objRegistroEditado.numTIR">
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-numDurMacaulay">Dur. Macaulay</label>
+                    <input id="pm-e-numDurMacaulay" type="number" class="form-control" autocomplete="off" step="any" inputmode="decimal" [(ngModel)]="this.objRegistroEditado.numDurMacaulay">
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-numDurModified">Dur. Modificada</label>
+                    <input id="pm-e-numDurModified" type="number" class="form-control" autocomplete="off" step="any" inputmode="decimal" [(ngModel)]="this.objRegistroEditado.numDurModified">
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-numConvexidad">Convexidad</label>
+                    <input id="pm-e-numConvexidad" type="number" class="form-control" autocomplete="off" step="any" inputmode="decimal" [(ngModel)]="this.objRegistroEditado.numConvexidad">
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-numValorFacial">Valor Facial</label>
+                    <input id="pm-e-numValorFacial" type="number" class="form-control" autocomplete="off" step="any" inputmode="decimal" [(ngModel)]="this.objRegistroEditado.numValorFacial">
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-numTasaCupon">Tasa Cupón (%)</label>
+                    <input id="pm-e-numTasaCupon" type="number" class="form-control" autocomplete="off" step="any" inputmode="decimal" [(ngModel)]="this.objRegistroEditado.numTasaCupon">
+                </div>
+                <div class="hig-campo">
+                    <label class="form-label" for="pm-e-maturity">Fecha Vencimiento</label>
+                    <input id="pm-e-maturity" type="date" class="form-control" autocomplete="off" [(ngModel)]="this.objRegistroEditado.maturity">
+                </div>
+            </div>
+        </details>
+
+</app-modal-formulario>
 
 <ng-template #cargaModalMoneda let-modal>
     <app-carga-moneda (close)="cerrarModalSecundario($event)"></app-carga-moneda>

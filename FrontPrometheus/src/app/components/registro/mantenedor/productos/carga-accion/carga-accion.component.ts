@@ -21,10 +21,11 @@ import { CargaFuenteInformacionComponent } from "../../../mantenedor/atributo-fi
 import { CargaTipoSectorComponent } from "../../atributo-financiero/carga-tipo-sector/carga-tipo-sector.component";
 import { TipoSector } from '../../../../../shared/models/atributo-financiero/tipo-sector';
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-carga-accion',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaPlazaComponent, CargaTipoAccionComponent, CargaEmisorComponent, CargaMonedaComponent, CargaFuenteInformacionComponent, CargaTipoSectorComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaPlazaComponent, CargaTipoAccionComponent, CargaEmisorComponent, CargaMonedaComponent, CargaFuenteInformacionComponent, CargaTipoSectorComponent, ModalFormularioComponent],
   templateUrl: './carga-accion.component.html',
   styleUrl: './carga-accion.component.scss'
 })
@@ -40,6 +41,19 @@ export class CargaAccionComponent{
   listTipoSector: TipoSector[] = [];
 
   nuevoRegistro: Accion = new Accion()
+
+  get faltantes(): string[] {
+    const r = this.nuevoRegistro;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codTicker)) f.push('Ticker');
+    if (vacio(r.idPlaza)) f.push('Plaza');
+    if (vacio(r.idTipoSector)) f.push('Tipo Sector');
+    if (vacio(r.idTipoAccion)) f.push('Tipo Acción');
+    if (vacio(r.idEmisor)) f.push('Emisor');
+    if (vacio(r.idMoneda)) f.push('Moneda');
+    return f;
+  }
 
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
@@ -101,6 +115,7 @@ export class CargaAccionComponent{
   }
 
   registrar(){
+    if (this.faltantes.length > 0) return;
     this.registroService.postRegistrarAccion(this.nuevoRegistro).subscribe(
       (response: any) => {
         Swal.fire({

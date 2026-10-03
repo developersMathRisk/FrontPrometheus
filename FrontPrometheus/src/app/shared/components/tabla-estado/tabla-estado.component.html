@@ -1,0 +1,27 @@
+<div class="tabla-estado" *ngIf="estado" role="status" aria-live="polite" [ngSwitch]="estado">
+
+    <ng-container *ngSwitchCase="'cargando'">
+        <app-loader tamano="normal" etiqueta="Cargando registros…"></app-loader>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'vacio'">
+        <mat-icon class="tabla-estado__icono" aria-hidden="true">inbox</mat-icon>
+        <p class="tabla-estado__titulo">{{ tituloVacio }}</p>
+        <p class="tabla-estado__detalle">{{ detalleVacio }}</p>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'sin-resultados'">
+        <mat-icon class="tabla-estado__icono" aria-hidden="true">search_off</mat-icon>
+        <p class="tabla-estado__titulo">Sin resultados</p>
+        <p class="tabla-estado__detalle">Ningún registro coincide con los filtros aplicados<ng-container *ngIf="busqueda"> («{{ busqueda }}»)</ng-container>.</p>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="limpiar.emit()">Borrar filtros</button>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'error'">
+        <mat-icon class="tabla-estado__icono tabla-estado__icono--error" aria-hidden="true">error_outline</mat-icon>
+        <p class="tabla-estado__titulo">No se pudieron cargar los registros</p>
+        <p class="tabla-estado__detalle" *ngIf="mensajeError">{{ mensajeError }}</p>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="reintentar.emit()">Reintentar</button>
+    </ng-container>
+
+</div>

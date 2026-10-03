@@ -21,6 +21,8 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from '../environments/environment';
 import { SortablejsModule } from '@maksim_m/ngx-sortablejs';
 import { HttpClientModule } from '@angular/common/http';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { PaginadorEs } from './shared/services/paginador-es';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
@@ -31,6 +33,7 @@ export const appConfig: ApplicationConfig = {
     AngularFirestoreModule,
     AngularFireDatabaseModule,  
     AngularFireModule,
+    { provide: MatPaginatorIntl, useClass: PaginadorEs },
     importProvidersFrom(
       SortablejsModule.forRoot({ animation: 150 }),
       FlatpickrModule.forRoot(),

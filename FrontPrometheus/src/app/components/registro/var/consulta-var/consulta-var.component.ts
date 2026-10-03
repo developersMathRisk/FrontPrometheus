@@ -1,246 +1,111 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
+import { RegistroService } from '../../../../shared/services/registro.service';
+import { Portafolio } from '../../../../shared/models/portafolio/portafolio';
+import { VarEjecucionResumen } from '../../../../shared/models/var/var-ejecucion-resumen';
+import { EjecutarVarResponse } from '../../../../shared/models/var/ejecutar-var-response';
+import { TablaToolbarComponent } from '../../../../shared/components/tabla-toolbar/tabla-toolbar.component';
+import { EstadoTabla, TablaEstadoComponent, mensajeDeError } from '../../../../shared/components/tabla-estado/tabla-estado.component';
+import { ResultadoVarComponent } from '../../../../shared/components/resultado-var/resultado-var.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { fadeIn, fadeSlideIn } from '../../../../shared/animations/transiciones';
 
 @Component({
   selector: 'app-consulta-var',
   standalone: true,
-  imports: [FormsModule, NgApexchartsModule, NgSelectModule],
+  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, TablaToolbarComponent, TablaEstadoComponent, ResultadoVarComponent, LoaderComponent],
   templateUrl: './consulta-var.component.html',
-  styleUrl: './consulta-var.component.scss'
+  styleUrl: './consulta-var.component.scss',
+  animations: [fadeIn, fadeSlideIn],
 })
 export class ConsultaVarComponent {
-  fechaConsulta = new Date().toLocaleDateString('sv-SE');
-  idTipoMetodologia: number = 0;
-  idNivelConfianza: number = 0;
-  listaTipoMetodologia: any[] = [];
-  listaNivelConfianza: any[] = [];
+  listaPortafolio: Portafolio[] = [];
+  idPortafolioFiltro: number | null = null;
 
-  chartHistogramaGyP: any;
-  public chartLineaVaR: any;
+  lista: VarEjecucionResumen[] = [];
+  listaFiltrada: VarEjecucionResumen[] = [];
+  busqueda = '';
+  cargando = true;
+  mensajeError = '';
+
+  seleccionado: VarEjecucionResumen | null = null;
+  detalle: EjecutarVarResponse | null = null;
+  cargandoDetalle = false;
+  mensajeErrorDetalle = '';
+
+  constructor(private registroService: RegistroService, private router: Router) {}
 
   ngOnInit() {
-    const datos = [
-  { x: '-5.00', y: 0.00113 },
-  { x: '-4.00', y: 0.00365 },
-  { x: '-3.00', y: 0.02642 },
-  { x: '-2.00', y: 0.06598 },
-  { x: '-1.00', y: 0.05990 },
-  { x: '0.00',  y: 0.01400 },
-  { x: '1.00',  y: 0.01000 },
-  { x: '2.00',  y: 0.00341 },
-  { x: '3.00',  y: 0.00642 },
-  { x: '3.90',  y: 0.00258 },
-  { x: '4.00',  y: 0.00193 },
-  { x: '5.00',  y: 0.00000 },
-];
-
-// Calcular media y desviación estándar
-const valoresX = datos.map(d => parseFloat(d.x));
-const media = valoresX.reduce((a, b) => a + b) / valoresX.length;
-const std = Math.sqrt(valoresX.reduce((acc, val) => acc + Math.pow(val - media, 2), 0) / valoresX.length);
-
-// Generar puntos de la curva Gaussiana escalada
-const gaussian = datos.map(d => {
-  const x = parseFloat(d.x);
-  const gaussY = (1 / (std * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - media) / std, 2));
-  return {
-    x: d.x, // usar mismo string que en datos
-    y: gaussY,
-  };
-});
-
-this.chartHistogramaGyP = {
-  series: [
-    {
-      name: 'Distribución de pérdidas/ganancias',
-      type: 'bar',
-      data: datos,
-    },
-    {
-      name: 'Curva de Gauss',
-      type: 'line',
-      data: gaussian,
-    },
-  ],
-  colors: ['#4454c3', '#FF4560'],
-  xaxis: {
-  type: 'category',
-  categories: ['-5.00', '-4.00', '-3.00', '-2.00', '-1.00', '0.00', '1.00', '2.00', '3.00', '4.00', '5.00']
-},
-  chart: {
-    height: 350,
-    type: 'line',
-  },
-  plotOptions: {
-    bar: {
-      columnWidth: '60%',
-    },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  stroke: {
-    width: [0, 4], // línea solo para la curva
-    curve: 'smooth'
-  },
-  legend: {
-    position: 'top',
-    horizontalAlign: 'center',
-    floating: true,
-    show: true,
-    customLegendItems: ['Distribución de pérdidas/ganancias', 'Curva de Gauss'],
-    markers: {
-      fillColors: ['#4454c3', '#FF4560'],
-    },
-  },
-  annotations: {
-        xaxis: [
-          {
-            x: 0.3,
-            borderColor: '#000',
-            label: {
-              borderColor: '#000',
-              style: {
-                color: '#fff',
-                background: '#000',
-              },
-              text: 'VaR n%',
-            },
-          },
-        ],
-      },
-};
-
-
-    //Grafico lineal
-    const data = [10, 41, 35, -51, 49, 62, 69, 91, -148, 100, 10, 41, -35, 51, 49, 62, 69, 91, 148, 100, 10, 41, 35, 51, 49, 62, 69, 91, 148, 100];
-    const maxValue = Math.max(...data);
-    const minValue = Math.min(...data);
-    this.chartLineaVaR = {
-      series: [
-        {
-          name: 'VaR diario',
-          data: data,
-        },
-      ],
-      chart: {
-        height: 320,
-        type: 'line',
-        zoom: {
-          enabled: false,
-        },
-      },
-      colors: ['#4454c3'],
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: 'straight',
-        width: 3,
-      },
-      grid: {
-        borderColor: '#f2f5f7',
-      },
-      xaxis: {
-        categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30'],
-        title: {
-          text: 'Día',
-          fontSize: '13px',
-          fontWeight: 'bold',
-          style: {
-            color: '#8c9097',
-          },
-        },
-        labels: {
-          show: true,
-          style: {
-            colors: '#8c9097',
-            fontSize: '11px',
-            fontWeight: 600,
-            cssClass: 'apexcharts-xaxis-label',
-          },
-        },
-      },
-      yaxis: {
-        title: {
-          text: 'VaR',
-          fontSize: '13px',
-          fontWeight: 'bold',
-          style: {
-            color: '#8c9097',
-          },
-        },
-        labels: {
-          show: true,
-          style: {
-            colors: '#8c9097',
-            fontSize: '11px',
-            fontWeight: 600,
-            cssClass: 'apexcharts-yaxis-label',
-          },
-        },
-      },
-      legend: {
-        position: 'top',
-        horizontalAlign: 'center',
-        floating: true,
-        show: true,
-        showForSingleSeries: true,
-        customLegendItems: ['VaR diario'],
-        markers: {
-          fillColors: ['#4454c3'],
-        },
-      },
-      annotations: {
-        yaxis: [
-          {
-            y: maxValue,
-            borderColor: '#00E396',
-            label: {
-              borderColor: '#00E396',
-              style: {
-                color: '#fff',
-                background: '#00E396',
-              },
-              text: `Máximo: ${maxValue}`,
-            },
-          },
-          {
-            y: minValue,
-            borderColor: '#FF4560',
-            label: {
-              borderColor: '#FF4560',
-              style: {
-                color: '#fff',
-                background: '#FF4560',
-              },
-              text: `Mínimo: ${minValue}`,
-            },
-          },
-          {
-            y: 0,
-            borderColor: '#000',
-            label: {
-              borderColor: '#000',
-              style: {
-                color: '#fff',
-                background: '#000',
-              },
-              text: 'Cero',
-            },
-          },
-        ],
-      },
-    };
+    this.registroService.getListaPortafolio().subscribe(r => this.listaPortafolio = r);
+    this.listar();
   }
 
-  filtrarResultados() {
-
+  get estadoTabla(): EstadoTabla {
+    if (this.cargando) return 'cargando';
+    if (this.mensajeError) return 'error';
+    if (this.lista.length === 0) return 'vacio';
+    if (this.listaFiltrada.length === 0) return 'sin-resultados';
+    return null;
   }
 
-  filtrarGraficoLinealVaR() {
+  listar() {
+    this.cargando = true;
+    this.mensajeError = '';
+    this.seleccionado = null;
+    this.detalle = null;
+    this.registroService.getListaResultadosVar(this.idPortafolioFiltro ?? undefined).subscribe({
+      next: (r) => {
+        this.lista = r;
+        this.cargando = false;
+        this.buscar(this.busqueda);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.cargando = false;
+        this.mensajeError = mensajeDeError(error);
+      },
+    });
+  }
 
+  alCambiarFiltroPortafolio() {
+    this.listar();
+  }
+
+  buscar(texto: string) {
+    this.busqueda = texto;
+    const t = texto.trim().toLowerCase();
+    this.listaFiltrada = !t ? this.lista
+      : this.lista.filter(x => (x.descripcionPortafolio + ' ' + x.fechaProceso).toLowerCase().includes(t));
+  }
+
+  seleccionar(item: VarEjecucionResumen) {
+    if (this.seleccionado?.idResultadoVARDetalle === item.idResultadoVARDetalle) {
+      this.seleccionado = null;
+      this.detalle = null;
+      return;
+    }
+    this.seleccionado = item;
+    this.detalle = null;
+    this.cargandoDetalle = true;
+    this.mensajeErrorDetalle = '';
+    this.registroService.getResultadoVar(item.idResultadoVARDetalle).subscribe({
+      next: (r) => {
+        this.detalle = r;
+        this.cargandoDetalle = false;
+        setTimeout(() => document.getElementById('consulta-detalle')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.cargandoDetalle = false;
+        this.mensajeErrorDetalle = mensajeDeError(error);
+      },
+    });
+  }
+
+  irAEjecutar() {
+    this.router.navigateByUrl('/registro/var/ejecutar');
   }
 }

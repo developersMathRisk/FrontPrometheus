@@ -1,0 +1,312 @@
+import {
+  OverlayScrollbarsComponent,
+  OverlayscrollbarsModule,
+  PageHeaderComponent,
+  SharedModule
+} from "./chunk-RADZCKPS.js";
+import "./chunk-JG564GD5.js";
+import "./chunk-BKD3PXJL.js";
+import "./chunk-EXZMHBSY.js";
+import {
+  ɵsetClassDebugInfo,
+  ɵɵStandaloneFeature,
+  ɵɵdefineComponent,
+  ɵɵelement,
+  ɵɵelementEnd,
+  ɵɵelementStart,
+  ɵɵnamespaceHTML,
+  ɵɵnamespaceSVG,
+  ɵɵtext
+} from "./chunk-CKCEYOHW.js";
+import "./chunk-47S5QMQB.js";
+import "./chunk-AJH3MT3R.js";
+
+// src/app/components/apps/contact/contact-2/contact-2.component.ts
+var Contact2Component = class _Contact2Component {
+  static {
+    this.\u0275fac = function Contact2Component_Factory(__ngFactoryType__) {
+      return new (__ngFactoryType__ || _Contact2Component)();
+    };
+  }
+  static {
+    this.\u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _Contact2Component, selectors: [["app-contact-2"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 257, vars: 0, consts: [["hassub", "apps", "sub", "", "title1", "Contact", "title", "Contact List 2", "activeTitle", "Contact List 2"], [1, "row"], [1, "col-md-12"], [1, "card"], [1, "row", "g-0"], [1, "col-lg-4", "col-xl-3"], [1, "main-content-left", "main-content-left-contacts"], [1, "card-header"], [1, "card-title"], [1, "card-options"], ["aria-label", "anchor", "href", "javascript:void(0);", 1, ""], ["xmlns", "http://www.w3.org/2000/svg", "height", "24", "viewBox", "0 0 24 24", "width", "24", 1, "svg-icon"], ["d", "M0 0h24v24H0V0z", "fill", "none"], ["d", "M15 16c-2.69 0-5.77 1.28-6 2h12c-.2-.71-3.3-2-6-2z", "opacity", ".3"], ["cx", "15", "cy", "8", "opacity", ".3", "r", "2"], ["d", "M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm0 8c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm-6 4c.22-.72 3.31-2 6-2 2.7 0 5.8 1.29 6 2H9zm-3-3v-3h3v-2H6V7H4v3H1v2h3v3z"], ["id", "mainContactList", 1, "main-contacts-list"], [1, "main-contact-label"], [1, "main-contact-item", "selected"], [1, "main-img-user", "online"], ["alt", "", "src", "./assets/images/faces/12.jpg", 1, "avatar", "avatar-md", "avatar-rounded"], [1, "main-contact-body"], [1, "phone"], [1, "main-contact-item"], [1, "main-img-user"], ["alt", "", "src", "./assets/images/faces/1.jpg", 1, "avatar", "avatar-md", "avatar-rounded"], ["alt", "", "src", "./assets/images/faces/3.jpg", 1, "avatar", "avatar-md", "avatar-rounded"], ["alt", "", "src", "./assets/images/faces/4.jpg", 1, "avatar", "avatar-md", "avatar-rounded"], ["alt", "", "src", "./assets/images/faces/5.jpg", 1, "avatar", "avatar-md", "avatar-rounded"], ["alt", "", "src", "./assets/images/faces/6.jpg", 1, "avatar", "avatar-md", "avatar-rounded"], ["alt", "", "src", "./assets/images/faces/7.jpg", 1, "avatar", "avatar-md", "avatar-rounded"], ["alt", "", "src", "./assets/images/faces/8.jpg", 1, "avatar", "avatar-md", "avatar-rounded"], [1, "col-lg-8", "col-xl-9"], [1, "border-start"], [1, "main-content-body", "main-content-body-contacts"], [1, "main-contact-info-header"], [1, "media"], [1, "main-img-user", "rounded-circle"], ["alt", "", "src", "./assets/images/faces/12.jpg", 1, "w-100", "h-100", "rounded-circle"], ["aria-label", "anchor", "href", "javascript:void(0);"], ["d", "M20 6h-4.05l-1.83-2H9.88L8.05 6H4v12h16V6zm-8 11c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z", "opacity", ".3"], ["d", "M4 20h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2zM4 6h4.05l1.83-2h4.24l1.83 2H20v12H4V6zm8 1c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"], [1, "media-body"], [1, "nav"], ["href", "javascript:void(0);", 1, "nav-link"], ["xmlns", "http://www.w3.org/2000/svg", "height", "24", "viewBox", "0 0 24 24", "width", "24", 1, "svg-icon", "me-1"], ["d", "M19 17.47c-.88-.07-1.75-.22-2.6-.45l-1.19 1.19c1.2.41 2.48.67 3.8.75v-1.49zM5.03 5c.09 1.32.35 2.59.75 3.8l1.2-1.2c-.23-.84-.38-1.71-.44-2.6H5.03z", "opacity", ".3"], ["d", "M9.07 7.57C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.49c0-.55-.45-1-1-1-1.24 0-2.45-.2-3.57-.57-.1-.04-.21-.05-.31-.05-.26 0-.51.1-.71.29l-2.2 2.2c-2.83-1.45-5.15-3.76-6.59-6.59l2.2-2.2c.28-.28.36-.67.25-1.02zm7.33 9.45c.85.24 1.72.39 2.6.45v1.49c-1.32-.09-2.59-.35-3.8-.75l1.2-1.19zM5.79 8.8c-.41-1.21-.67-2.48-.76-3.8h1.5c.07.89.22 1.76.46 2.59L5.79 8.8z"], ["d", "M20 8l-8 5-8-5v10h16zm0-2H4l8 4.99z", "opacity", ".3"], ["d", "M4 20h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2zM20 6l-8 4.99L4 6h16zM4 8l8 5 8-5v10H4V8z"], ["d", "M12 16c-2.69 0-5.77 1.28-6 2h12c-.2-.71-3.3-2-6-2z", "opacity", ".3"], ["cx", "12", "cy", "8", "opacity", ".3", "r", "2"], ["d", "M12 14c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm-6 4c.22-.72 3.31-2 6-2 2.7 0 5.8 1.29 6 2H6zm6-6c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"], ["d", "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z"], [1, "main-contact-action"], ["href", "javascript:void(0);", 1, "btn", "btn-outline-light", "btn-svgs"], ["d", "M5 18.08V19h.92l9.06-9.06-.92-.92z", "opacity", ".3"], ["d", "M20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29s-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83zM3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM5.92 19H5v-.92l9.06-9.06.92.92L5.92 19z"], ["href", "javascript:void(0);", 1, "btn", "btn-danger", "btn-svgs"], ["d", "M8 9h8v10H8z", "opacity", ".3"], ["d", "M15.5 4l-1-1h-5l-1 1H5v2h14V4zM6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9z"], [1, "main-contact-info-body"], [1, "media-list", "py-0"], [1, "media", "py-3", "mt-0"], [1, "d-flex", "align-items-center"], [1, "media-icon", "bg-light", "text-primary", "me-3", "mt-1"], [1, "fa", "fa-phone"], [1, "fw-semibold", "fs-14"], [1, "d-flex"], [1, "media", "py-3", "border-top", "mt-0"], [1, "fa", "fa-envelope"], [1, "d-sm-flex", "align-items-center"], [1, "fa", "fa-map-marker"], [1, "media", "mb-0", "py-4", "border-top", "mt-0"], [1, "fa", "fa-clock-o"], ["href", "javascript:void(0);", 1, "fw-semibold", "fs-14"]], template: function Contact2Component_Template(rf, ctx) {
+      if (rf & 1) {
+        \u0275\u0275element(0, "app-page-header", 0);
+        \u0275\u0275elementStart(1, "div", 1)(2, "div", 2)(3, "div", 3)(4, "div", 4)(5, "div", 5)(6, "div", 6)(7, "div", 7)(8, "div", 8);
+        \u0275\u0275text(9, "All Contacts");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(10, "div", 9)(11, "a", 10);
+        \u0275\u0275namespaceSVG();
+        \u0275\u0275elementStart(12, "svg", 11);
+        \u0275\u0275element(13, "path", 12)(14, "path", 13)(15, "circle", 14)(16, "path", 15);
+        \u0275\u0275elementEnd()()()();
+        \u0275\u0275namespaceHTML();
+        \u0275\u0275elementStart(17, "overlay-scrollbars", 16)(18, "div", 17);
+        \u0275\u0275text(19, " A ");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(20, "div", 18)(21, "div", 19);
+        \u0275\u0275element(22, "img", 20);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(23, "div", 21)(24, "h6");
+        \u0275\u0275text(25, "Arlena Soles");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(26, "span", 22);
+        \u0275\u0275text(27, "+1-457-658-856");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(28, "div", 23)(29, "div", 24);
+        \u0275\u0275element(30, "img", 25);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(31, "div", 21)(32, "h6");
+        \u0275\u0275text(33, "Athena Manske");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(34, "span");
+        \u0275\u0275text(35, "+1-457-658-856");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(36, "div", 23)(37, "div", 24);
+        \u0275\u0275element(38, "img", 26);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(39, "div", 21)(40, "h6");
+        \u0275\u0275text(41, "Amalia Peng");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(42, "span");
+        \u0275\u0275text(43, "+1-457-658-856");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(44, "div", 23)(45, "div", 24);
+        \u0275\u0275element(46, "img", 26);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(47, "div", 21)(48, "h6");
+        \u0275\u0275text(49, "Anita Garza");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(50, "span");
+        \u0275\u0275text(51, "+1-457-658-856");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(52, "div", 17);
+        \u0275\u0275text(53, " B ");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(54, "div", 23)(55, "div", 24);
+        \u0275\u0275element(56, "img", 27);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(57, "div", 21)(58, "h6");
+        \u0275\u0275text(59, "Bret Guadalupe");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(60, "span");
+        \u0275\u0275text(61, "+1-457-658-856");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(62, "div", 23)(63, "div", 19);
+        \u0275\u0275element(64, "img", 28);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(65, "div", 21)(66, "h6");
+        \u0275\u0275text(67, "Britney Labares");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(68, "span");
+        \u0275\u0275text(69, "+1-457-658-856");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(70, "div", 23)(71, "div", 19);
+        \u0275\u0275element(72, "img", 28);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(73, "div", 21)(74, "h6");
+        \u0275\u0275text(75, "Basil Ambrose");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(76, "span");
+        \u0275\u0275text(77, "+1-457-658-856");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(78, "div", 17);
+        \u0275\u0275text(79, " C ");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(80, "div", 23)(81, "div", 24);
+        \u0275\u0275element(82, "img", 29);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(83, "div", 21)(84, "h6");
+        \u0275\u0275text(85, "Cinda Hope");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(86, "span");
+        \u0275\u0275text(87, "+1-457-658-856");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(88, "div", 23)(89, "div", 19);
+        \u0275\u0275element(90, "img", 29);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(91, "div", 21)(92, "h6");
+        \u0275\u0275text(93, "Chassidy Kerr");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(94, "span");
+        \u0275\u0275text(95, "+1-457-658-856");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(96, "div", 23)(97, "div", 19);
+        \u0275\u0275element(98, "img", 30);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(99, "div", 21)(100, "h6");
+        \u0275\u0275text(101, "Chau Weldy");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(102, "span");
+        \u0275\u0275text(103, "+1-457-658-856");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(104, "div", 17);
+        \u0275\u0275text(105, " D ");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(106, "div", 23)(107, "div", 19);
+        \u0275\u0275element(108, "img", 30);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(109, "div", 21)(110, "h6");
+        \u0275\u0275text(111, "Daniela Agrawal");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(112, "span");
+        \u0275\u0275text(113, "+1-457-658-856");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(114, "div", 23)(115, "div", 24);
+        \u0275\u0275element(116, "img", 31);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(117, "div", 21)(118, "h6");
+        \u0275\u0275text(119, "Dori Daring");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(120, "span");
+        \u0275\u0275text(121, "+1-457-658-856");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(122, "div", 23)(123, "div", 19);
+        \u0275\u0275element(124, "img", 31);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(125, "div", 21)(126, "h6");
+        \u0275\u0275text(127, "Dalton Gracia");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(128, "span");
+        \u0275\u0275text(129, "+1-457-658-856");
+        \u0275\u0275elementEnd()()()()()();
+        \u0275\u0275elementStart(130, "div", 32)(131, "div", 33)(132, "div", 34)(133, "div", 35)(134, "div", 36)(135, "div", 37);
+        \u0275\u0275element(136, "img", 38);
+        \u0275\u0275elementStart(137, "a", 39);
+        \u0275\u0275namespaceSVG();
+        \u0275\u0275elementStart(138, "svg", 11);
+        \u0275\u0275element(139, "path", 12)(140, "path", 40)(141, "path", 41);
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275namespaceHTML();
+        \u0275\u0275elementStart(142, "div", 42)(143, "h4");
+        \u0275\u0275text(144, "Arlena Soles");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(145, "p");
+        \u0275\u0275text(146, "Product Designer");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(147, "nav", 43)(148, "a", 44);
+        \u0275\u0275namespaceSVG();
+        \u0275\u0275elementStart(149, "svg", 45);
+        \u0275\u0275element(150, "path", 12)(151, "path", 46)(152, "path", 47);
+        \u0275\u0275elementEnd();
+        \u0275\u0275text(153, " Call");
+        \u0275\u0275elementEnd();
+        \u0275\u0275namespaceHTML();
+        \u0275\u0275elementStart(154, "a", 44);
+        \u0275\u0275namespaceSVG();
+        \u0275\u0275elementStart(155, "svg", 45);
+        \u0275\u0275element(156, "path", 12)(157, "path", 48)(158, "path", 49);
+        \u0275\u0275elementEnd();
+        \u0275\u0275text(159, " Message");
+        \u0275\u0275elementEnd();
+        \u0275\u0275namespaceHTML();
+        \u0275\u0275elementStart(160, "a", 44);
+        \u0275\u0275namespaceSVG();
+        \u0275\u0275elementStart(161, "svg", 45);
+        \u0275\u0275element(162, "path", 12)(163, "path", 50)(164, "circle", 51)(165, "path", 52);
+        \u0275\u0275elementEnd();
+        \u0275\u0275text(166, " Add to Group");
+        \u0275\u0275elementEnd();
+        \u0275\u0275namespaceHTML();
+        \u0275\u0275elementStart(167, "a", 44);
+        \u0275\u0275namespaceSVG();
+        \u0275\u0275elementStart(168, "svg", 45);
+        \u0275\u0275element(169, "path", 12)(170, "path", 53);
+        \u0275\u0275elementEnd();
+        \u0275\u0275text(171, " Block");
+        \u0275\u0275elementEnd()()()();
+        \u0275\u0275namespaceHTML();
+        \u0275\u0275elementStart(172, "div", 54)(173, "a", 55);
+        \u0275\u0275namespaceSVG();
+        \u0275\u0275elementStart(174, "svg", 11);
+        \u0275\u0275element(175, "path", 12)(176, "path", 56)(177, "path", 57);
+        \u0275\u0275elementEnd();
+        \u0275\u0275text(178, " Edit ");
+        \u0275\u0275namespaceHTML();
+        \u0275\u0275elementStart(179, "span");
+        \u0275\u0275text(180, " Contact");
+        \u0275\u0275elementEnd()();
+        \u0275\u0275elementStart(181, "a", 58);
+        \u0275\u0275namespaceSVG();
+        \u0275\u0275elementStart(182, "svg", 11);
+        \u0275\u0275element(183, "path", 12)(184, "path", 59)(185, "path", 60);
+        \u0275\u0275elementEnd();
+        \u0275\u0275text(186, "Delete ");
+        \u0275\u0275namespaceHTML();
+        \u0275\u0275elementStart(187, "span");
+        \u0275\u0275text(188, "Contact");
+        \u0275\u0275elementEnd()()()();
+        \u0275\u0275elementStart(189, "div", 61)(190, "div", 62)(191, "div", 63)(192, "div", 42)(193, "div", 64)(194, "div", 65);
+        \u0275\u0275element(195, "i", 66);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(196, "div")(197, "label");
+        \u0275\u0275text(198, "Work");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(199, "span", 67);
+        \u0275\u0275text(200, "+1 (425) 857 5463");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(201, "div", 68)(202, "div", 65);
+        \u0275\u0275element(203, "i", 66);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(204, "div")(205, "label");
+        \u0275\u0275text(206, "Personal");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(207, "span", 67);
+        \u0275\u0275text(208, "+1 (547) 542 3568");
+        \u0275\u0275elementEnd()()()()();
+        \u0275\u0275elementStart(209, "div", 69)(210, "div", 42)(211, "div", 64)(212, "div", 65);
+        \u0275\u0275element(213, "i", 70);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(214, "div")(215, "label");
+        \u0275\u0275text(216, "Gmail Account");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(217, "span", 67);
+        \u0275\u0275text(218, "arlena.soles@gmail.com");
+        \u0275\u0275elementEnd()()();
+        \u0275\u0275elementStart(219, "div", 68)(220, "div", 65);
+        \u0275\u0275element(221, "i", 70);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(222, "div")(223, "label");
+        \u0275\u0275text(224, "Other Account");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(225, "span", 67);
+        \u0275\u0275text(226, "me@spruko.com");
+        \u0275\u0275elementEnd()()()()();
+        \u0275\u0275elementStart(227, "div", 69)(228, "div", 42)(229, "div", 71)(230, "div", 65);
+        \u0275\u0275element(231, "i", 72);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(232, "div")(233, "label");
+        \u0275\u0275text(234, "Current Address");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(235, "span", 67);
+        \u0275\u0275text(236, "012 Dashboard Apartments, San Francisco, California 13245");
+        \u0275\u0275elementEnd()()()()();
+        \u0275\u0275elementStart(237, "div", 69)(238, "div", 42)(239, "div", 71)(240, "div", 65);
+        \u0275\u0275element(241, "i", 72);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(242, "div")(243, "label");
+        \u0275\u0275text(244, "Office Address");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(245, "span", 67);
+        \u0275\u0275text(246, " #302-51/5, Z Apartments, Dacid colony, San Francisco, USA");
+        \u0275\u0275elementEnd()()()()();
+        \u0275\u0275elementStart(247, "div", 73)(248, "div", 42)(249, "div", 64)(250, "div", 65);
+        \u0275\u0275element(251, "i", 74);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(252, "div")(253, "label");
+        \u0275\u0275text(254, "Call History");
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(255, "a", 75);
+        \u0275\u0275text(256, "Duration of last call: 2m 32sec");
+        \u0275\u0275elementEnd()()()()()()()()()()()()()();
+      }
+    }, dependencies: [SharedModule, PageHeaderComponent, OverlayscrollbarsModule, OverlayScrollbarsComponent] });
+  }
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(Contact2Component, { className: "Contact2Component", filePath: "src\\app\\components\\apps\\contact\\contact-2\\contact-2.component.ts", lineNumber: 12 });
+})();
+export {
+  Contact2Component
+};
+//# sourceMappingURL=contact-2.component-2GNJQ77F.js.map

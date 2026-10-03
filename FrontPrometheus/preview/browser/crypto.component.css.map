@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/dashboards/crypto/crypto.component.scss"],
+  "sourcesContent": ["::ng-deep .chart-container {\r\n    /* Make the chart container responsive */\r\n    max-width: 100%;\r\n    width: 100%;\r\n    margin: 0 auto; /* Optional: Center the container */\r\n  }"],
+  "mappings": ";AAAA,UAAA,CAAA;AAEI,aAAA;AACA,SAAA;AACA,UAAA,EAAA;;",
+  "names": []
+}

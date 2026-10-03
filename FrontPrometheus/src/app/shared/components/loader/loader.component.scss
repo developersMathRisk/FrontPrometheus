@@ -1,0 +1,101 @@
+// ---- variante inline: anillo pequeño junto a texto o dentro de botones ------------------
+.ldr--inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    vertical-align: middle;
+}
+
+.ldr-anillo {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid rgba(var(--primary-rgb), 0.22);
+    border-top-color: rgb(var(--primary-rgb));
+    animation: ldr-girar 0.7s linear infinite;
+}
+
+@keyframes ldr-girar {
+    to { transform: rotate(360deg); }
+}
+
+.ldr-etiqueta--inline {
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+// ---- variante ícono: la marca completa, para tarjetas y secciones cargando --------------
+.ldr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
+}
+
+.ldr-icono {
+    width: 56px;
+    height: auto;
+    overflow: visible;
+}
+
+.ldr--grande .ldr-icono {
+    width: 92px;
+}
+
+.ldr-silueta {
+    fill: rgba(var(--dark-rgb), 0.1);
+    stroke: rgba(var(--dark-rgb), 0.22);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+}
+
+.ldr-relleno {
+    fill: url(#ldrGrad);
+    stroke: rgb(var(--primary-rgb));
+    stroke-width: 1;
+    stroke-linejoin: round;
+    transform-box: fill-box;
+    transform-origin: bottom center;
+    animation: ldr-llenado 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.ldr-relleno--determinado {
+    animation: none;
+    transform: scaleY(var(--ldr-escala, 0));
+    transition: transform 0.35s ease;
+}
+
+@keyframes ldr-llenado {
+    0% { transform: scaleY(0.06); opacity: 0.85; }
+    50% { transform: scaleY(1); opacity: 1; }
+    100% { transform: scaleY(0.06); opacity: 0.85; }
+}
+
+.ldr-brillo {
+    animation: ldr-brillar 1.8s ease-in-out infinite;
+}
+
+.ldr-arco {
+    fill: none;
+    stroke: rgba(var(--primary-rgb), 0.35);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    animation: ldr-brillar 1.8s ease-in-out infinite;
+}
+
+@keyframes ldr-brillar {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.9; }
+}
+
+.ldr-etiqueta {
+    font-size: 0.75rem;
+    color: rgba(var(--dark-rgb), 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ldr-anillo, .ldr-relleno, .ldr-brillo, .ldr-arco {
+        animation-duration: 2.6s;
+    }
+}

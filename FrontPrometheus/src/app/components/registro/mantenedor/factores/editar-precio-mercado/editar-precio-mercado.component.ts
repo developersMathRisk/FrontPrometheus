@@ -10,10 +10,11 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { Moneda } from '../../../../../shared/models/atributo-financiero/moneda';
 import { CargaMonedaComponent } from "../../../mantenedor/atributo-financiero/carga-moneda/carga-moneda.component";
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-editar-precio-mercado',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaMonedaComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaMonedaComponent, ModalFormularioComponent],
   templateUrl: './editar-precio-mercado.component.html',
   styleUrl: './editar-precio-mercado.component.scss'
 })
@@ -25,6 +26,17 @@ export class EditarPrecioMercadoComponent {
   listMoneda: Moneda[] = [];
   objRegistroEditado: PrecioMercado = new PrecioMercado;
   
+  get faltantes(): string[] {
+    const r = this.objRegistroEditado;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.fecProceso)) f.push('Fecha Proceso');
+    if (vacio(r.nemonico)) f.push('Nemónico');
+    if (vacio(r.idMoneda)) f.push('Moneda');
+    if (vacio(r.numPrecioLimpio)) f.push('Precio Limpio');
+    return f;
+  }
+
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
@@ -41,6 +53,7 @@ export class EditarPrecioMercadoComponent {
   }
 
   guardarCambios(){
+    if (this.faltantes.length > 0) return;
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
       text: 'Este cambio no puede deshacerse.',

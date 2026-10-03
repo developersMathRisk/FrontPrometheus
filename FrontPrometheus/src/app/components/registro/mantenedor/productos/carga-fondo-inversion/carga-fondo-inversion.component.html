@@ -1,116 +1,90 @@
-<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
-    <div role="document" class="msg_card_body" style="width: 100%;">
-        <div class="modal-header">
-            <table style="width: 100%;">
-                <tr style="width: 100%;">
-                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
-                        <h3 class="modal-title">Cargar Fondo de Inversión</h3>
-                    </td>
-                    <td style="text-align: right; padding-right: 1.3%;">
-                        <button type="button" class="icon-close" (click)="cerrar()">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+<app-modal-formulario titulo="Cargar Fondo de Inversión" subtitulo="Registre un fondo para incluirlo en portafolios y en el cálculo de VaR." accion="Registrar"
+    [faltantes]="faltantes" [datos]="nuevoRegistro" (cerrar)="cerrar()" (guardar)="registrar()">
 
-    <div class="card">
-        <!-- <div class="card-header justify-content-between d-sm-flex d-block">
-            <div class="card-title">
-                Datos Generales
-            </div>
-        </div> -->
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-3">
-                    <label class="form-label">Código ISIN</label>
-                    <input type="text" placeholder="Código ISIN" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codISIN">
+        <fieldset class="hig-seccion">
+            <legend>Identificación</legend>
+            <div class="hig-cuadricula ">
+                <div class="hig-campo">
+                    <label class="form-label" for="fo-c-codTicker">Ticker (BLG o Interno)<span class="hig-requerido" aria-hidden="true">*</span></label>
+                    <input id="fo-c-codTicker" type="text" class="form-control" autocomplete="off" placeholder="Ej. CCRFS1" maxlength="20" [(ngModel)]="this.nuevoRegistro.codTicker" required>
                 </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Ticker (BLG o Interno)</label>
-                    <input type="text" placeholder="Ticker" minlength="3" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codTicker">
+                <div class="hig-campo">
+                    <label class="form-label" for="fo-c-desNemonico">Nemónico</label>
+                    <input id="fo-c-desNemonico" type="text" class="form-control" autocomplete="off" placeholder="Ej. CC RENTA FIJA SOLES" maxlength="60" [(ngModel)]="this.nuevoRegistro.desNemonico">
                 </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Nemónico</label>
-                    <input type="text" placeholder="Nemónico" minlength="3" maxlength="60" class="form-control" [(ngModel)]="this.nuevoRegistro.desNemonico">
+                <div class="hig-campo">
+                    <label class="form-label" for="fo-c-codISIN">Código ISIN</label>
+                    <input id="fo-c-codISIN" type="text" class="form-control" autocomplete="off" maxlength="20" [(ngModel)]="this.nuevoRegistro.codISIN">
                 </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Monto Total</label>
-                    <input type="number" placeholder="Monto Total" class="form-control" [(ngModel)]="this.nuevoRegistro.montoTotal">
+                <div class="hig-campo">
+                    <label class="form-label" for="fo-c-montoTotal">Monto Total</label>
+                    <input id="fo-c-montoTotal" type="number" class="form-control" autocomplete="off" step="any" inputmode="decimal" [(ngModel)]="this.nuevoRegistro.montoTotal">
                 </div>
             </div>
+        </fieldset>
 
-            <br>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Plaza</label>
+        <fieldset class="hig-seccion">
+            <legend>Clasificación</legend>
+            <div class="hig-cuadricula hig-columnas-3">
+                <div class="hig-campo">
+                    <label class="form-label" for="fo-c-idPlaza">Plaza<span class="hig-requerido" aria-hidden="true">*</span></label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listPlaza" bindLabel="desPlaza" bindValue="idPlaza" [(ngModel)]="this.nuevoRegistro.idPlaza"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalPlaza)"><span class="icon">+</span></button>
+                        <ng-select labelForId="fo-c-idPlaza" placeholder="Seleccione una opción…" [items]="listPlaza" bindLabel="desPlaza" bindValue="idPlaza" [(ngModel)]="this.nuevoRegistro.idPlaza" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar plaza" aria-label="Agregar plaza" (click)="abrirModalSecundario(cargaModalPlaza)"><span class="icon" aria-hidden="true">+</span></button>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Emisor</label>
+                <div class="hig-campo">
+                    <label class="form-label" for="fo-c-idEmisor">Emisor<span class="hig-requerido" aria-hidden="true">*</span></label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listEmisor" bindLabel="nomEmisor" bindValue="idEmisor" [(ngModel)]="this.nuevoRegistro.idEmisor"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalEmisor)"><span class="icon">+</span></button>
+                        <ng-select labelForId="fo-c-idEmisor" placeholder="Seleccione una opción…" [items]="listEmisor" bindLabel="nomEmisor" bindValue="idEmisor" [(ngModel)]="this.nuevoRegistro.idEmisor" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar emisor" aria-label="Agregar emisor" (click)="abrirModalSecundario(cargaModalEmisor)"><span class="icon" aria-hidden="true">+</span></button>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Moneda</label>
+                <div class="hig-campo">
+                    <label class="form-label" for="fo-c-idMoneda">Moneda<span class="hig-requerido" aria-hidden="true">*</span></label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.nuevoRegistro.idMoneda"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalMoneda)"><span class="icon">+</span></button>
+                        <ng-select labelForId="fo-c-idMoneda" placeholder="Seleccione una opción…" [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda" [(ngModel)]="this.nuevoRegistro.idMoneda" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar moneda" aria-label="Agregar moneda" (click)="abrirModalSecundario(cargaModalMoneda)"><span class="icon" aria-hidden="true">+</span></button>
                     </div>
                 </div>
-            </div>  
-            
-            <br>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Tipo Fondo</label>
+                <div class="hig-campo">
+                    <label class="form-label" for="fo-c-idTipoFondo">Tipo Fondo<span class="hig-requerido" aria-hidden="true">*</span></label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listTipoFondo" bindLabel="desTipoFondo" bindValue="idTipoFondo" [(ngModel)]="this.nuevoRegistro.idTipoFondo"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalTipoFondo)"><span class="icon">+</span></button>
+                        <ng-select labelForId="fo-c-idTipoFondo" placeholder="Seleccione una opción…" [items]="listTipoFondo" bindLabel="desTipoFondo" bindValue="idTipoFondo" [(ngModel)]="this.nuevoRegistro.idTipoFondo" required></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar tipo fondo" aria-label="Agregar tipo fondo" (click)="abrirModalSecundario(cargaModalTipoFondo)"><span class="icon" aria-hidden="true">+</span></button>
                     </div>
                 </div>
-
-                <div class="col-md-4" *ngIf="this.nuevoRegistro.flgCargaAutom">
-                    <label class="form-label">Fuente Información</label>
+                <div class="hig-campo">
+                    <label class="form-label" for="fo-c-idFuenteInformacion">Fuente Información</label>
                     <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listFuenteInformacion" bindLabel="desFuenteInformacion" bindValue="idFuenteInformacion" [(ngModel)]="this.nuevoRegistro.idFuenteInformacion"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalFuenteInformacion)"><span class="icon">+</span></button>
+                        <ng-select labelForId="fo-c-idFuenteInformacion" placeholder="Seleccione una opción…" [items]="listFuenteInformacion" bindLabel="desFuenteInformacion" bindValue="idFuenteInformacion" [(ngModel)]="this.nuevoRegistro.idFuenteInformacion"></ng-select>
+                        <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar fuente información" aria-label="Agregar fuente información" (click)="abrirModalSecundario(cargaModalFuenteInformacion)"><span class="icon" aria-hidden="true">+</span></button>
                     </div>
                 </div>
             </div>
+        </fieldset>
 
-            <br>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkCargaAutomatica" name="chkCargaAutomatica" [(ngModel)]="this.nuevoRegistro.flgCargaAutom"><label for="chkCargaAutomatica" class="form-check-label"> Carga Automática </label></div>
+        <fieldset class="hig-seccion">
+            <legend>Opciones</legend>
+            <div class="hig-cuadricula hig-columnas-1">
+                <div class="hig-opcion">
+                    <input class="form-check-input" type="checkbox" id="fo-c-flgCargaAutom" [(ngModel)]="this.nuevoRegistro.flgCargaAutom">
+                    <div>
+                        <label class="hig-opcion__titulo" for="fo-c-flgCargaAutom">Carga automática</label>
+                        <span class="hig-opcion__ayuda">El precio se actualiza automáticamente desde la fuente de información.</span>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkCalculoVaR" name="chkCalculoVaR" [(ngModel)]="this.nuevoRegistro.flgVar"><label for="chkCalculoVaR" class="form-check-label"> Cálculo de VaR </label></div>
+                <div class="hig-opcion">
+                    <input class="form-check-input" type="checkbox" id="fo-c-flgVar" [(ngModel)]="this.nuevoRegistro.flgVar">
+                    <div>
+                        <label class="hig-opcion__titulo" for="fo-c-flgVar">Cálculo de VaR</label>
+                        <span class="hig-opcion__ayuda">Incluye este instrumento en el cálculo de Valor en Riesgo.</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </fieldset>
 
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary" (click)="registrar()">Registrar</button>
-            <br>
-        </div>
-    </div>
-</div>
+</app-modal-formulario>
 
 <ng-template #cargaModalPlaza let-modal>
     <app-carga-plaza (close)="cerrarModalSecundario($event)"></app-carga-plaza>

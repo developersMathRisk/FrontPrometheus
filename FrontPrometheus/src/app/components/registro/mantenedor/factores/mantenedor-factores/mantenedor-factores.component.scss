@@ -1,0 +1,70 @@
+// Encabezado de página: título arriba, texto de apoyo debajo
+.factores-subtitulo {
+    margin: 2px 0 0;
+    font-size: 0.875rem;
+    color: rgba(var(--dark-rgb), 0.78); // ≥ 4.5:1, también en modo oscuro
+}
+
+// Control segmentado: un clic cambia de factor y las cuatro opciones están siempre a la vista
+.factores-segmentado {
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr; // segmentos de igual ancho, según la etiqueta más larga
+    max-width: 100%;
+    margin-bottom: 20px;
+    padding: 3px;
+    gap: 2px;
+    overflow-x: auto;
+    background: rgba(var(--dark-rgb), 0.07);
+    border-radius: 11px;
+}
+
+.factores-segmento {
+    min-height: 34px;
+    padding: 0 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--default-text-color);
+    white-space: nowrap;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+    transition: background-color 0.15s, box-shadow 0.15s;
+
+    &:hover:not(.activo) {
+        background: rgba(var(--dark-rgb), 0.08);
+    }
+
+    // El estado seleccionado se distingue por forma y peso, no solo por color
+    &.activo {
+        font-weight: 600;
+        background: var(--custom-white);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(var(--dark-rgb), 0.1);
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgb(var(--primary-rgb));
+        outline-offset: 2px;
+    }
+}
+
+:host-context([data-theme-mode="dark"]) .factores-segmento.activo {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.factores-panel {
+    margin-bottom: 0;
+}
+
+.factores-descripcion {
+    margin: 0 0 16px;
+    font-size: 0.875rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .factores-segmento {
+        transition: none;
+    }
+}

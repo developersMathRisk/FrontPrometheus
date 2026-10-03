@@ -6,7 +6,6 @@ import { ContentLayoutComponent } from './layouts/content-layout/content-layout.
 import { SwitcherComponent } from './components/switcher/switcher.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { TabToTopComponent } from './components/tab-to-top/tab-to-top.component';
-import { LoaderComponent } from './components/loader/loader.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { AppShowCodeDirective } from './directives/appshowcode.directive';
 import { FullscreenDirective } from './directives/fullscreen.directive';
@@ -30,11 +29,10 @@ import { HttpClientModule } from '@angular/common/http';
     SwitcherComponent,
     PageHeaderComponent,
     TabToTopComponent,
-    LoaderComponent,
     FooterComponent,
     FullscreenDirective,
     HoverEffectSidebarDirective,
-    AppShowCodeDirective,  
+    AppShowCodeDirective,
     AuthenticationLayoutComponent,
     PageheaderLayoutComponent,
     DashboardHeaderComponent  
@@ -57,7 +55,6 @@ import { HttpClientModule } from '@angular/common/http';
     SwitcherComponent,
     PageHeaderComponent, 
     TabToTopComponent,
-    LoaderComponent, 
     FooterComponent,
     FullscreenDirective,
     AppShowCodeDirective,

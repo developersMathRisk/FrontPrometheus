@@ -38,6 +38,16 @@ import { PortafolioInstrumento } from '../models/portafolio/portafolio-instrumen
 import { Benchmark } from '../models/portafolio/benchmark';
 import { TipoInstrumento } from '../models/atributo-financiero/tipo-instrumento';
 import { TipoSector } from '../models/atributo-financiero/tipo-sector';
+import { NivelConfianza } from '../models/var/nivel-confianza';
+import { TipoMetodologiaVar } from '../models/var/tipo-metodologia-var';
+import { EjecutarVarRequest } from '../models/var/ejecutar-var-request';
+import { EjecutarVarResponse } from '../models/var/ejecutar-var-response';
+import { VarEjecucionResumen } from '../models/var/var-ejecucion-resumen';
+import { PuntoDistribucionVar, PuntoSerieVar } from '../models/var/punto-var';
+import { InstrumentoElegibilidad } from '../models/var/instrumento-elegibilidad';
+import { AnexoNueve } from '../models/var/anexo-nueve';
+import { EjecutarStressRequest, EjecutarStressResponse } from '../models/var/ejecutar-stress';
+import { EjecutarBacktestingRequest, EjecutarBacktestingResponse } from '../models/var/ejecutar-backtesting';
 
 @Injectable({
   providedIn: 'root',
@@ -659,5 +669,59 @@ export class RegistroService {
   public getListaBenchmark(): Observable<Benchmark[]>{
     return this.http.get<Benchmark[]>(`${this.apiServeURL}/mantenedores/benchmark/list`);
   }
-  
+
+  //VaR
+  public getListaNivelConfianza(): Observable<NivelConfianza[]>{
+    return this.http.get<NivelConfianza[]>(`${this.apiServeURL}/mantenedores/nivelConfianza/list`);
+  }
+
+  public getListaTipoMetodologiaVAR(): Observable<TipoMetodologiaVar[]>{
+    return this.http.get<TipoMetodologiaVar[]>(`${this.apiServeURL}/mantenedores/tipoMetodologiaVAR/list`);
+  }
+
+  public postEjecutarVar(objEjecutarVar: EjecutarVarRequest): Observable<EjecutarVarResponse>{
+    return this.http.post<EjecutarVarResponse>(`${this.apiServeURL}/var/ejecutar`, objEjecutarVar);
+  }
+
+  public getListaResultadosVar(idPortafolio?: number | null): Observable<VarEjecucionResumen[]>{
+    let params = new HttpParams();
+    if (idPortafolio) { params = params.set('idPortafolio', idPortafolio); }
+    return this.http.get<VarEjecucionResumen[]>(`${this.apiServeURL}/var/resultado/list`, { params });
+  }
+
+  public getResultadoVar(id: number): Observable<EjecutarVarResponse>{
+    return this.http.get<EjecutarVarResponse>(`${this.apiServeURL}/var/resultado/${id}`);
+  }
+
+  public getDistribucionVar(id: number): Observable<PuntoDistribucionVar[]>{
+    return this.http.get<PuntoDistribucionVar[]>(`${this.apiServeURL}/var/resultado/${id}/distribucion`);
+  }
+
+  public getSerieVar(idsPortafolio: number[], idTipoMetodologiaVAR: number, nivelConfianza: number, limite = 30): Observable<PuntoSerieVar[]>{
+    const params = new HttpParams({ fromObject: { idsPortafolio: idsPortafolio.map(String) } })
+      .set('idTipoMetodologiaVAR', idTipoMetodologiaVAR).set('nivelConfianza', nivelConfianza).set('limite', limite);
+    return this.http.get<PuntoSerieVar[]>(`${this.apiServeURL}/var/resultado/serie`, { params });
+  }
+
+  public getInstrumentosPortafolio(idsPortafolio: number[]): Observable<InstrumentoElegibilidad[]>{
+    const params = new HttpParams({ fromObject: { idsPortafolio: idsPortafolio.map(String) } });
+    return this.http.get<InstrumentoElegibilidad[]>(`${this.apiServeURL}/var/portafolio/instrumentos`, { params });
+  }
+
+  public getAnexo9(idResultadoVARDetalle: number, idTipoMetodologiaVAR?: number | null): Observable<AnexoNueve>{
+    let params = new HttpParams();
+    if (idTipoMetodologiaVAR) { params = params.set('idTipoMetodologiaVAR', idTipoMetodologiaVAR); }
+    return this.http.get<AnexoNueve>(`${this.apiServeURL}/var/resultado/${idResultadoVARDetalle}/anexo9`, { params });
+  }
+
+  // Stress Testing (motor real: revaluación del portafolio bajo un escenario de shock)
+  public postEjecutarStress(objStress: EjecutarStressRequest): Observable<EjecutarStressResponse>{
+    return this.http.post<EjecutarStressResponse>(`${this.apiServeURL}/stress/ejecutar`, objStress);
+  }
+
+  // Backtesting (motor real: prueba retrospectiva walk-forward fuera de muestra + prueba de Kupiec)
+  public postEjecutarBacktesting(objBacktesting: EjecutarBacktestingRequest): Observable<EjecutarBacktestingResponse>{
+    return this.http.post<EjecutarBacktestingResponse>(`${this.apiServeURL}/backtesting/ejecutar`, objBacktesting);
+  }
+
 }

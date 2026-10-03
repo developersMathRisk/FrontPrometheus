@@ -1,0 +1,25 @@
+<header class="hoja-cabecera">
+    <div class="hoja-cabecera__texto">
+        <h2 class="hoja-titulo" [id]="idTitulo">{{ titulo }}</h2>
+        <p class="hoja-subtitulo" *ngIf="subtitulo">{{ subtitulo }}</p>
+    </div>
+    <button type="button" class="hoja-cerrar" aria-label="Cerrar" (click)="intentarCerrar()">
+        <mat-icon aria-hidden="true">close</mat-icon>
+    </button>
+</header>
+
+<div class="hoja-cuerpo" #cuerpo [attr.aria-labelledby]="idTitulo" (keydown.enter)="alPresionarEnter($event)">
+    <ng-content></ng-content>
+</div>
+
+<footer class="hoja-pie">
+    <p class="hoja-aviso" *ngIf="faltantes.length" role="status" aria-live="polite">
+        <mat-icon aria-hidden="true">info</mat-icon>
+        <span>Faltan campos obligatorios: {{ faltantes.join(', ') }}</span>
+    </p>
+    <button type="button" class="hoja-boton hoja-boton--secundario" (click)="intentarCerrar()">Cancelar</button>
+    <button type="button" class="btn btn-primary hoja-boton" [disabled]="!puedeGuardar" (click)="guardar.emit()">
+        <app-loader tamano="inline" *ngIf="guardando" class="me-1"></app-loader>
+        {{ accion }}
+    </button>
+</footer>

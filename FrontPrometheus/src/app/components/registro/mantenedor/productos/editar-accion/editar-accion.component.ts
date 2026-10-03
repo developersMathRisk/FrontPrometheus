@@ -23,10 +23,11 @@ import { TipoInstrumento } from '../../../../../shared/models/atributo-financier
 import { CargaTipoSectorComponent } from "../../atributo-financiero/carga-tipo-sector/carga-tipo-sector.component";
 import { TipoSector } from '../../../../../shared/models/atributo-financiero/tipo-sector';
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-editar-accion',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaPlazaComponent, CargaTipoAccionComponent, CargaEmisorComponent, CargaMonedaComponent, CargaFuenteInformacionComponent, CargaTipoSectorComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaPlazaComponent, CargaTipoAccionComponent, CargaEmisorComponent, CargaMonedaComponent, CargaFuenteInformacionComponent, CargaTipoSectorComponent, ModalFormularioComponent],
   templateUrl: './editar-accion.component.html',
   styleUrl: './editar-accion.component.scss'
 })
@@ -45,6 +46,19 @@ export class EditarAccionComponent {
   listTipoSector: TipoSector[] = [];
 
   
+  get faltantes(): string[] {
+    const r = this.objRegistroEditado;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codTicker)) f.push('Ticker');
+    if (vacio(r.idPlaza)) f.push('Plaza');
+    if (vacio(r.idTipoSector)) f.push('Tipo Sector');
+    if (vacio(r.idTipoAccion)) f.push('Tipo Acción');
+    if (vacio(r.idEmisor)) f.push('Emisor');
+    if (vacio(r.idMoneda)) f.push('Moneda');
+    return f;
+  }
+
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
@@ -106,6 +120,7 @@ export class EditarAccionComponent {
   }
 
   guardarCambios(){
+    if (this.faltantes.length > 0) return;
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
       text: 'Este cambio no puede deshacerse.',

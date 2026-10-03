@@ -1,42 +1,22 @@
-<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
-    <div role="document" class="msg_card_body" style="width: 100%;">
-        <div class="modal-header">
-            <table style="width: 100%;">
-                <tr style="width: 100%;">
-                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
-                        <h3 class="modal-title">Editar Cálculo de Base de Interes</h3>
-                    </td>
-                    <td style="text-align: right; padding-right: 1.3%;">
-                        <button type="button" class="icon-close" (click)="cerrar()">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+<app-modal-formulario titulo="Editar Cálculo de Base de Interés" subtitulo="Modifique los datos del cálculo de base de interés." accion="Guardar Cambios"
+    [faltantes]="faltantes" [datos]="objRegistroEditado" [guardando]="guardando" (cerrar)="cerrar()" (guardar)="guardarCambios()">
 
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" placeholder="Nombre" minlength="3" maxlength="100" class="form-control" [(ngModel)]="this.objRegistroEditado.nombreCalculo">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Nombre Corto</label>
-                    <input type="text" placeholder="Nombre Corto" minlength="3" maxlength="50" class="form-control" [(ngModel)]="this.objRegistroEditado.nombreCortoCalculo">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Descripción</label>
-                    <input type="text" placeholder="Descripción" minlength="3" maxlength="50" class="form-control" [(ngModel)]="this.objRegistroEditado.descripcionCalculoBase">
-                </div>
+    <fieldset class="hig-seccion">
+        <legend>Identificación</legend>
+        <div class="hig-cuadricula hig-columnas-3">
+            <div class="hig-campo">
+                <label class="form-label" for="cbi-e-nombreCalculo">Nombre<span class="hig-requerido" aria-hidden="true">*</span></label>
+                <input id="cbi-e-nombreCalculo" type="text" class="form-control" autocomplete="off" minlength="3" maxlength="100" [(ngModel)]="objRegistroEditado.nombreCalculo" required>
             </div>
-
+            <div class="hig-campo">
+                <label class="form-label" for="cbi-e-nombreCortoCalculo">Nombre Corto</label>
+                <input id="cbi-e-nombreCortoCalculo" type="text" class="form-control" autocomplete="off" minlength="3" maxlength="50" [(ngModel)]="objRegistroEditado.nombreCortoCalculo">
+            </div>
+            <div class="hig-campo">
+                <label class="form-label" for="cbi-e-descripcionCalculoBase">Descripción</label>
+                <input id="cbi-e-descripcionCalculoBase" type="text" class="form-control" autocomplete="off" minlength="3" maxlength="50" [(ngModel)]="objRegistroEditado.descripcionCalculoBase">
+            </div>
         </div>
+    </fieldset>
 
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary" (click)="guardarCambios()">Guardar Cambios</button>
-            <br>
-        </div>
-</div>
+</app-modal-formulario>

@@ -1,32 +1,46 @@
-<div>
-    <button type="submit" class="btn btn-primary" (click)="registrar(cargaModal)">Agregar Skew Point</button>
-</div>
+<div class="hig-tabla">
 
-<br>
+    <app-tabla-toolbar placeholder="Buscar punto…" accion="Agregar Skew Point"
+        [total]="total" [filtrados]="filtrados" [ocultarResumen]="cargando || !!mensajeError" [texto]="busqueda"
+        (buscar)="buscar($event)" (agregar)="registrar(cargaModal)">
+    </app-tabla-toolbar>
 
-<div id="mat-sorting">
-    <div class="mat-elevation-z8">
-        <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" matSort #sort="matSort">
+    <div class="tabla-contenedor">
+        <table mat-table [dataSource]="dataSource" matSort #sort="matSort" matSortActive="point"
+            matSortDirection="asc" aria-label="Listado de skew points">
 
-                <ng-container matColumnDef="idSwekPoint">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-                    <td mat-cell *matCellDef="let element"> {{element.idSwekPoint}} </td>
-                </ng-container>
+            <ng-container matColumnDef="idSwekPoint">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                <td mat-cell *matCellDef="let element" class="col-id">{{ element.idSwekPoint }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="point">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Punto</th>
-                    <td mat-cell *matCellDef="let element"> {{element.point}} </td>
-                </ng-container>
+            <ng-container matColumnDef="point">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Punto</th>
+                <td mat-cell *matCellDef="let element"><span class="fw-semibold">{{ element.point }}</span></td>
+            </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
-            </table>
-        </div>
-        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-        </mat-paginator>
+            <ng-container matColumnDef="acciones" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef class="col-acciones"><span class="solo-lector">Acciones</span></th>
+                <td mat-cell *matCellDef="let element" class="col-acciones">
+                    <button type="button" class="btn-fila" aria-label="Acciones del registro"
+                        (click)="abrirMenuFila($event, element)">
+                        <mat-icon aria-hidden="true">more_horiz</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
+        </table>
+
+        <app-tabla-estado [estado]="estadoTabla" tituloVacio="No hay skew points registrados"
+            detalleVacio="Agregue el primero con el botón «Agregar Skew Point»." [busqueda]="busqueda"
+            [mensajeError]="mensajeError" (reintentar)="listarRegistros()" (limpiar)="buscar('')"></app-tabla-estado>
     </div>
 
+    <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100]" [pageSize]="20" showFirstLastButtons
+        [style.display]="estadoTabla ? 'none' : null" aria-label="Paginación de skew points">
+    </mat-paginator>
 </div>
 
 <div style="visibility: hidden; position: fixed"

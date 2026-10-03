@@ -8,10 +8,11 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { NgSelectModule } from '@ng-select/ng-select';
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-editar-tasa-interes',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule],
+  imports: [NgSelectModule, FormsModule, MatIconModule, ModalFormularioComponent],
   templateUrl: './editar-tasa-interes.component.html',
   styleUrl: './editar-tasa-interes.component.scss'
 })
@@ -21,6 +22,16 @@ export class EditarTasaInteresComponent {
   
   objRegistroEditado: TasaInteres = new TasaInteres;
   
+  get faltantes(): string[] {
+    const r = this.objRegistroEditado;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codVertice)) f.push('Cod. Vértice');
+    if (vacio(r.codCurvaProveedor)) f.push('Curva Proveedor');
+    if (vacio(r.numPlazo)) f.push('Plazo');
+    return f;
+  }
+
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
@@ -28,6 +39,7 @@ export class EditarTasaInteresComponent {
   }
 
   guardarCambios(){
+    if (this.faltantes.length > 0) return;
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
       text: 'Este cambio no puede deshacerse.',

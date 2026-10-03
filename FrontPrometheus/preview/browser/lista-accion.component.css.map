@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/registro/mantenedor/productos/lista-accion/lista-accion.component.scss"],
+  "sourcesContent": [".icono-accion {\r\n    background: transparent !important;\r\n    border: none !important;\r\n    padding: 0 !important;\r\n    outline: none !important;\r\n}\r\n\r\n.icono-editar {\r\n    color: rgb(68, 84, 195);\r\n}\r\n\r\n.icono-eliminar {\r\n    color: #dc3545;\r\n}\r\n\r\n.acciones {\r\n    display: flex;\r\n    gap: 8px;\r\n    justify-content: flex-start;\r\n}\r\n\r\ntable {\r\n    pointer-events: all; /* Asegúrate de que se pueden recibir eventos de puntero */\r\n  }\r\n  "],
+  "mappings": ";;;AAAA,CAAA;AACI,cAAA;AACA,UAAA;AACA,WAAA;AACA,WAAA;;AAGJ,CAAA;AACI,SAAA,IAAA,EAAA,EAAA,EAAA,EAAA;;AAGJ,CAAA;AACI,SAAA;;AAGJ,CAAA;AACI,WAAA;AACA,OAAA;AACA,mBAAA;;AAGJ;AACI,kBAAA;;",
+  "names": []
+}

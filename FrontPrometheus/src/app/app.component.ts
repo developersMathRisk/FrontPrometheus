@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AppStateService } from './shared/services/app-state.service';
+import { MenuLateralService } from './shared/services/menu-lateral.service';
 
 @Component({
   selector: 'app-root', 
@@ -13,7 +14,8 @@ import { AppStateService } from './shared/services/app-state.service';
 export class AppComponent {
   title = 'Dashtic';
 
-  constructor(private appState : AppStateService){
+  constructor(private appState : AppStateService, menuLateral: MenuLateralService){
     this.appState.updateState();
+    menuLateral.iniciar();
   }
 }

@@ -1,37 +1,51 @@
-<div>
-    <button type="submit" class="btn btn-primary" (click)="registrar(cargaModal)">Agregar Tipo de Instrumento</button>
-</div>
+<div class="hig-tabla">
 
-<br>
+    <app-tabla-toolbar placeholder="Buscar código o descripción…" accion="Agregar Tipo de Instrumento"
+        [total]="total" [filtrados]="filtrados" [ocultarResumen]="cargando || !!mensajeError" [texto]="busqueda"
+        (buscar)="buscar($event)" (agregar)="registrar(cargaModal)">
+    </app-tabla-toolbar>
 
-<div id="mat-sorting">
-    <div class="mat-elevation-z8">
-        <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" matSort #sort="matSort">
+    <div class="tabla-contenedor">
+        <table mat-table [dataSource]="dataSource" matSort #sort="matSort" matSortActive="codTipoInstrumento"
+            matSortDirection="asc" aria-label="Listado de tipos de instrumento">
 
-                <ng-container matColumnDef="idTipoInstrumento">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-                    <td mat-cell *matCellDef="let element"> {{element.idTipoInstrumento}} </td>
-                </ng-container>
+            <ng-container matColumnDef="idTipoInstrumento">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-id">ID</th>
+                <td mat-cell *matCellDef="let element" class="col-id">{{ element.idTipoInstrumento }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="codTipoInstrumento">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codTipoInstrumento}} </td>
-                </ng-container>
+            <ng-container matColumnDef="codTipoInstrumento">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+                <td mat-cell *matCellDef="let element"><span class="fw-semibold">{{ element.codTipoInstrumento }}</span></td>
+            </ng-container>
 
-                <ng-container matColumnDef="descripcionTipoInstrumento">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
-                    <td mat-cell *matCellDef="let element"> {{element.descripcionTipoInstrumento}} </td>
-                </ng-container>
+            <ng-container matColumnDef="descripcionTipoInstrumento">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
+                <td mat-cell *matCellDef="let element">{{ element.descripcionTipoInstrumento }}</td>
+            </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
-            </table>
-        </div>
-        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-        </mat-paginator>
+            <ng-container matColumnDef="acciones" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef class="col-acciones"><span class="solo-lector">Acciones</span></th>
+                <td mat-cell *matCellDef="let element" class="col-acciones">
+                    <button type="button" class="btn-fila" aria-label="Acciones del registro"
+                        (click)="abrirMenuFila($event, element)">
+                        <mat-icon aria-hidden="true">more_horiz</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
+        </table>
+
+        <app-tabla-estado [estado]="estadoTabla" tituloVacio="No hay tipos de instrumento registrados"
+            detalleVacio="Agregue el primero con el botón «Agregar Tipo de Instrumento»." [busqueda]="busqueda"
+            [mensajeError]="mensajeError" (reintentar)="listarRegistros()" (limpiar)="buscar('')"></app-tabla-estado>
     </div>
 
+    <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100]" [pageSize]="20" showFirstLastButtons
+        [style.display]="estadoTabla ? 'none' : null" aria-label="Paginación de tipos de instrumento">
+    </mat-paginator>
 </div>
 
 <div style="visibility: hidden; position: fixed"

@@ -14,10 +14,11 @@ import { SkewPoint } from '../../../../../shared/models/atributo-financiero/skew
 import { TermVolatilidad } from '../../../../../shared/models/atributo-financiero/term-volatilidad';
 import { TipoCambio } from '../../../../../shared/models/atributo-financiero/tipo-cambio';
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-editar-volatilidad',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaTermVolatilidadComponent, CargaSkewPointComponent, CargaTipoCambioComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaTermVolatilidadComponent, CargaSkewPointComponent, CargaTipoCambioComponent, ModalFormularioComponent],
   templateUrl: './editar-volatilidad.component.html',
   styleUrl: './editar-volatilidad.component.scss'
 })
@@ -32,6 +33,18 @@ export class EditarVolatilidadComponent {
   
   objRegistroEditado: Volatilidad = new Volatilidad();
   
+  get faltantes(): string[] {
+    const r = this.objRegistroEditado;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.fecProceso)) f.push('Fecha Proceso');
+    if (vacio(r.valor)) f.push('Valor');
+    if (vacio(r.idTermVolatility)) f.push('Term. Volatilidad');
+    if (vacio(r.idSwekPoint)) f.push('Skew Point');
+    if (vacio(r.idTipoCambio)) f.push('Tipo de Cambio');
+    return f;
+  }
+
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
@@ -66,6 +79,7 @@ export class EditarVolatilidadComponent {
   }
 
   guardarCambios(){
+    if (this.faltantes.length > 0) return;
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
       text: 'Este cambio no puede deshacerse.',

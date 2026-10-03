@@ -1,104 +1,114 @@
-<div>
-    <button type="submit" class="btn btn-primary" (click)="registrar(cargaAccionModal)">Agregar Acción</button>
-</div>
+<div class="hig-tabla">
 
-<br>
+    <app-tabla-toolbar placeholder="Buscar ticker, nemónico o ISIN…" accion="Agregar Acción"
+        [total]="total" [filtrados]="filtrados" [ocultarResumen]="cargando || !!mensajeError" [texto]="busqueda"
+        (buscar)="buscar($event)" (agregar)="registrar(cargaAccionModal)">
 
-<div id="mat-sorting">
-    <div class="mat-elevation-z8">
-        <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" matSort #sort="matSort">
-                <ng-container matColumnDef="acciones">
-                    <th mat-header-cell *matHeaderCellDef>Acción</th>
-                    <td mat-cell *matCellDef="let row">
-                        <div class="acciones">
-                            <button mat-icon-button class="icono-accion icono-editar" (click)="editar(row, editarAccionModal)">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button mat-icon-button class="icono-accion icono-eliminar" (click)="eliminar(row)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </div>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="idAccion">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-                    <td mat-cell *matCellDef="let element"> {{element.idAccion}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="codISIN">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ISIN</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codISIN}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="codTicker">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Ticker</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codTicker}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="desNemonico">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nemónico</th>
-                    <td mat-cell *matCellDef="let element"> {{element.desNemonico}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="flgCargaAutom">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Carga Automática</th>
-                    <td mat-cell *matCellDef="let element">
-                        <mat-checkbox [checked]="element.flgCargaAutom" disabled></mat-checkbox>
-                    </td>
-                </ng-container>
-                
-                <ng-container matColumnDef="codIndAsociado">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Índice Asociado</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codIndAsociado}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="flgVar">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>VaR</th>
-                    <td mat-cell *matCellDef="let element">
-                        <mat-checkbox [checked]="element.flgVar" disabled></mat-checkbox>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="desPlaza">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Plaza</th>
-                    <td mat-cell *matCellDef="let element"> {{element.desPlaza}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="desTipoAccion">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Acción</th>
-                    <td mat-cell *matCellDef="let element"> {{element.desTipoAccion}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="desFuenteInformacion">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fuente Información</th>
-                    <td mat-cell *matCellDef="let element"> {{element.desFuenteInformacion}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="nomEmisor">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Emisor</th>
-                    <td mat-cell *matCellDef="let element"> {{element.nomEmisor}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="desMoneda">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Moneda</th>
-                    <td mat-cell *matCellDef="let element"> {{element.desMoneda}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="descripcionTiposector">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Sector</th>
-                    <td mat-cell *matCellDef="let element"> {{element.descripcionTiposector}} </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
-            </table>
+        <div opciones class="form-check form-switch interruptor-columnas"
+            title="Muestra todos los atributos del instrumento">
+            <input class="form-check-input" type="checkbox" role="switch" id="producto-accion-todas"
+                [checked]="verTodasLasColumnas" (change)="verTodasLasColumnas = $any($event.target).checked">
+            <label class="form-check-label" for="producto-accion-todas">Todas las columnas</label>
         </div>
-        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-        </mat-paginator>
+    </app-tabla-toolbar>
+
+    <div class="tabla-contenedor">
+        <table mat-table [dataSource]="dataSource" matSort #sort="matSort" matSortActive="codTicker"
+            matSortDirection="asc" aria-label="Listado de acciones">
+
+            <ng-container matColumnDef="idAccion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+                <td mat-cell *matCellDef="let element" class="col-id">{{ element.idAccion }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="codTicker">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Ticker</th>
+                <td mat-cell *matCellDef="let element"><span class="fw-semibold">{{ element.codTicker }}</span></td>
+            </ng-container>
+
+            <ng-container matColumnDef="desNemonico">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nemónico</th>
+                <td mat-cell *matCellDef="let element">{{ element.desNemonico }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="codISIN">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ISIN</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.codISIN">{{ element.codISIN || '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="codIndAsociado">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Índice Asociado</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.codIndAsociado">{{ element.codIndAsociado || '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="nomEmisor">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Emisor</th>
+                <td mat-cell *matCellDef="let element">{{ element.nomEmisor }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="desPlaza">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Plaza</th>
+                <td mat-cell *matCellDef="let element">{{ element.desPlaza }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="desTipoAccion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Acción</th>
+                <td mat-cell *matCellDef="let element">{{ element.desTipoAccion }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcionTiposector">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Sector</th>
+                <td mat-cell *matCellDef="let element">{{ element.descripcionTiposector }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="desMoneda">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Moneda</th>
+                <td mat-cell *matCellDef="let element">{{ element.desMoneda }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="desFuenteInformacion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fuente Información</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.desFuenteInformacion">{{ element.desFuenteInformacion || '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="flgCargaAutom">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Carga Automática</th>
+                <td mat-cell *matCellDef="let element" class="col-estado">
+                    <span *ngIf="element.flgCargaAutom; else sinMarca" class="estado-si"><mat-icon aria-hidden="true">check_circle</mat-icon><span class="solo-lector">Sí</span></span>
+                    <ng-template #sinMarca><span class="celda-vacia" aria-hidden="true">—</span><span class="solo-lector">No</span></ng-template>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="flgVar">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>VaR</th>
+                <td mat-cell *matCellDef="let element" class="col-estado">
+                    <span *ngIf="element.flgVar; else sinMarca" class="estado-si"><mat-icon aria-hidden="true">check_circle</mat-icon><span class="solo-lector">Sí</span></span>
+                    <ng-template #sinMarca><span class="celda-vacia" aria-hidden="true">—</span><span class="solo-lector">No</span></ng-template>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef class="col-acciones"><span class="solo-lector">Acciones</span></th>
+                <td mat-cell *matCellDef="let element" class="col-acciones">
+                    <button type="button" class="btn-fila" aria-label="Acciones del registro"
+                        (click)="abrirMenuFila($event, element)">
+                        <mat-icon aria-hidden="true">more_horiz</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
+        </table>
+
+        <app-tabla-estado [estado]="estadoTabla" tituloVacio="No hay acciones registradas"
+            detalleVacio="Agregue la primera con el botón «Agregar Acción»." [busqueda]="busqueda"
+            [mensajeError]="mensajeError" (reintentar)="listarRegistros()" (limpiar)="buscar('')"></app-tabla-estado>
     </div>
 
+    <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100]" [pageSize]="20" showFirstLastButtons
+        [style.display]="estadoTabla ? 'none' : null" aria-label="Paginación de acciones">
+    </mat-paginator>
 </div>
 
 <div style="visibility: hidden; position: fixed"

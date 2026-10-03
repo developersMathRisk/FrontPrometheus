@@ -7,20 +7,30 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
 import { RegistroService } from '../../../../../shared/services/registro.service';
 import { TipoTasa } from '../../../../../shared/models/atributo-financiero/tipo-tasa';
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 
 @Component({
   selector: 'app-editar-tipo-tasa',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule],
+  imports: [NgSelectModule, FormsModule, MatIconModule, ModalFormularioComponent],
   templateUrl: './editar-tipo-tasa.component.html',
   styleUrl: './editar-tipo-tasa.component.scss'
 })
 export class EditarTipoTasaComponent {
   @Input() data!: TipoTasa;
   @Output() close = new EventEmitter<any>();
-  
+
   objRegistroEditado: TipoTasa = new TipoTasa;
-  
+  guardando = false;
+
+  get faltantes(): string[] {
+    const r = this.objRegistroEditado;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.nombreTipoTasa)) f.push('Nombre');
+    return f;
+  }
+
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
@@ -28,6 +38,7 @@ export class EditarTipoTasaComponent {
   }
 
   guardarCambios(){
+    if (this.faltantes.length > 0) return;
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
       text: 'Este cambio no puede deshacerse.',
@@ -38,8 +49,10 @@ export class EditarTipoTasaComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
+        this.guardando = true;
         this.registroService.putModificarTipoTasa(this.objRegistroEditado.idTipoTasaInteres, this.objRegistroEditado).subscribe(
           (response: any) => {
+            this.guardando = false;
             Swal.fire({
               icon: 'success',
               title: 'Modificación exitosa',
@@ -49,6 +62,7 @@ export class EditarTipoTasaComponent {
             this.cerrar();
           },
           (error: HttpErrorResponse) => {
+            this.guardando = false;
             Swal.fire({
               icon: 'error',
               title: 'Error',
@@ -60,7 +74,7 @@ export class EditarTipoTasaComponent {
       }
     });
 
-    
+
   }
 
   cerrar(){

@@ -1,0 +1,88 @@
+<div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center no-print">
+    <div class="d-flex flex-column">
+        <h1 class="page-title my-auto">Anexo N° 9 — Riesgo de Mercado</h1>
+        <p class="var-subtitulo">Resultados de Modelos de Medición del Riesgo de Mercado (Manual de Contabilidad SBS).</p>
+    </div>
+</div>
+
+<div class="alert alert-danger d-flex align-items-center gap-2 mb-3 no-print" role="alert" *ngIf="mensajeError">
+    <mat-icon aria-hidden="true">error</mat-icon>
+    <span>{{ mensajeError }}</span>
+</div>
+
+<div class="card" *ngIf="idResultadoVARDetalle">
+    <div class="card-body an9">
+
+        <div class="an9__cargando" *ngIf="cargando">
+            <app-loader tamano="normal" etiqueta="Generando anexo..."></app-loader>
+        </div>
+
+        <ng-container *ngIf="anexo && !cargando">
+            <!-- Encabezado del anexo: identifica de qué ejecución, período y metodología viene -->
+            <div class="an9__encabezado" [@fadeSlideIn]>
+                <div>
+                    <h2 class="an9__titulo">Anexo N° 9 "Resultados de Modelos de Medición del Riesgo de Mercado"</h2>
+                    <p class="an9__subtitulo">Portafolio(s): <strong>{{ anexo.descripcionPortafolio }}</strong></p>
+                </div>
+                <div class="an9__meta">
+                    <span><strong>Fecha de corte:</strong> {{ anexo.fechaCorte }}</span>
+                    <span><strong>Generado:</strong> {{ anexo.fechaGeneracion }}</span>
+                    <span><strong>Moneda:</strong> {{ anexo.moneda }}</span>
+                </div>
+            </div>
+
+            <div class="an9__filtro no-print" *ngIf="metodologiasDisponibles.length > 1">
+                <label class="form-label mb-0">Metodología base para el anexo:</label>
+                <div class="var-chips">
+                    <button type="button" class="var-chip" *ngFor="let m of metodologiasDisponibles"
+                        [class.var-chip--activo]="anexo.metodologiaBase === m.metodologia && anexo.nivelConfianza === m.nivelConfianza"
+                        (click)="cambiarMetodologia(m.idTipoMetodologiaVAR)">
+                        {{ m.metodologia }} ({{ m.nivelConfianza * 100 | number:'1.1-1' }}%)
+                    </button>
+                </div>
+            </div>
+            <p class="an9__base">
+                Metodología reportada: <strong>{{ anexo.metodologiaBase }}</strong>,
+                nivel de confianza <strong>{{ anexo.nivelConfianza * 100 | number:'1.1-2' }}%</strong>.
+            </p>
+
+            <table class="an9-tabla">
+                <caption>VaR, CVaR, SVaR y SCVaR — agregado y por tipo de riesgo</caption>
+                <thead>
+                    <tr>
+                        <th>Tipo de riesgo</th>
+                        <th class="col-num">VaR</th>
+                        <th class="col-num">CVaR</th>
+                        <th class="col-num">SVaR</th>
+                        <th class="col-num">SCVaR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let f of anexo.filas" [class.an9-fila--total]="f.tipoRiesgo.includes('Total')">
+                        <td>
+                            {{ f.tipoRiesgo }}
+                            <mat-icon class="an9-info" aria-hidden="true" *ngIf="f.nota" [title]="f.nota">info</mat-icon>
+                        </td>
+                        <td class="col-num">{{ f.var | number:'1.2-2' }}</td>
+                        <td class="col-num">{{ f.cvar !== undefined && f.cvar !== null ? (f.cvar | number:'1.2-2') : 'N/D' }}</td>
+                        <td class="col-num">{{ f.svar !== undefined && f.svar !== null ? (f.svar | number:'1.2-2') : 'Pendiente' }}</td>
+                        <td class="col-num">{{ f.scvar !== undefined && f.scvar !== null ? (f.scvar | number:'1.2-2') : 'Pendiente' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="an9-nota">
+                <mat-icon aria-hidden="true">info</mat-icon>{{ anexo.notaMetodologica }}
+            </p>
+
+            <div class="an9__acciones no-print">
+                <button type="button" class="btn btn-outline-primary btn-sm" (click)="exportarCSV()">
+                    <mat-icon aria-hidden="true">download</mat-icon> Exportar CSV
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" (click)="imprimir()">
+                    <mat-icon aria-hidden="true">print</mat-icon> Imprimir / PDF
+                </button>
+            </div>
+        </ng-container>
+    </div>
+</div>

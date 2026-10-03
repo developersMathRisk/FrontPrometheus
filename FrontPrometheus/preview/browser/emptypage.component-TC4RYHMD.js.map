@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/pages/emptypage/emptypage.component.ts", "src/app/components/pages/emptypage/emptypage.component.html"],
+  "sourcesContent": ["import { Component } from '@angular/core';\r\nimport { SharedModule } from '../../../shared/shared.module';\r\n\r\n@Component({\r\n  selector: 'app-emptypage',\r\n  standalone: true,\r\n  imports: [SharedModule],\r\n  templateUrl: './emptypage.component.html',\r\n  styleUrls: ['./emptypage.component.scss']\r\n})\r\nexport class EmptypageComponent {\r\n\r\n}\r\n", " \r\n<app-page-header hassub=\"\" sub=\"Home\" title1=\"Pages\" title=\"Empty\" activeTitle=\"Empty\" ></app-page-header>\r\n    <!-- Start:: row-1 -->\r\n <div class=\"row\">\r\n    <div class=\"col-md-12\">\r\n    </div>\r\n</div>\r\n<!-- End:: row-1 -->"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;AAUM,IAAO,qBAAP,MAAO,oBAAkB;;;uCAAlB,qBAAkB;IAAA;EAAA;;yEAAlB,qBAAkB,WAAA,CAAA,CAAA,eAAA,CAAA,GAAA,YAAA,MAAA,UAAA,CAAA,6BAAA,GAAA,OAAA,GAAA,MAAA,GAAA,QAAA,CAAA,CAAA,UAAA,IAAA,OAAA,QAAA,UAAA,SAAA,SAAA,SAAA,eAAA,OAAA,GAAA,CAAA,GAAA,KAAA,GAAA,CAAA,GAAA,WAAA,CAAA,GAAA,UAAA,SAAA,4BAAA,IAAA,KAAA;AAAA,UAAA,KAAA,GAAA;ACT/B,QAAA,oBAAA,GAAA,mBAAA,CAAA;AAEC,QAAA,yBAAA,GAAA,OAAA,CAAA;AACG,QAAA,oBAAA,GAAA,OAAA,CAAA;AAEJ,QAAA,uBAAA;;sBDAY,cAAY,mBAAA,EAAA,CAAA;EAAA;;;6EAIX,oBAAkB,EAAA,WAAA,sBAAA,UAAA,kEAAA,YAAA,GAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

@@ -1,0 +1,189 @@
+<div class="rvar" [@fadeSlideIn]>
+    <!-- Número principal: lo primero que se lee, sin tener que interpretar una tabla -->
+    <div class="rvar-hero" *ngIf="destacado as d">
+        <div class="rvar-hero__valor">
+            <span class="rvar-hero__cifra">{{ d.varDiversificado | number:'1.2-2' }}</span>
+            <span class="rvar-hero__moneda">{{ resultado.monedaReporte }}</span>
+        </div>
+        <p class="rvar-hero__leyenda">
+            Pérdida potencial máxima esperada (VaR {{ d.nivelConfianza * 100 | number:'1.1-2' }}%, {{ d.metodologia }}) ·
+            <strong>{{ d.ratioVar * 100 | number:'1.2-2' }}%</strong> del portafolio
+        </p>
+    </div>
+
+    <!-- Asistente IA integrado: interpreta el resultado automáticamente y permite simular cambios
+         con el motor real de Stress Testing, sin salir de la pantalla de resultados. -->
+    <div class="rvar-ia" *ngIf="interpretacion">
+        <div class="rvar-ia__interpretacion">
+            <mat-icon aria-hidden="true">smart_toy</mat-icon>
+            <p>{{ interpretacion }}</p>
+        </div>
+
+        <div class="rvar-ia__mensajes" *ngIf="mensajesIA.length">
+            <div class="rvar-ia__mensaje" [class.rvar-ia__mensaje--usuario]="m.autor === 'usuario'" *ngFor="let m of mensajesIA" [@fadeIn]>
+                <mat-icon aria-hidden="true">{{ m.autor === 'usuario' ? 'person' : 'smart_toy' }}</mat-icon>
+                <p>{{ m.texto }}</p>
+            </div>
+            <div class="rvar-ia__mensaje" *ngIf="pensandoIA" [@fadeIn]>
+                <mat-icon aria-hidden="true">smart_toy</mat-icon>
+                <p class="rvar-ia__pensando"><span></span><span></span><span></span></p>
+            </div>
+        </div>
+
+        <div class="rvar-ia__sugerencias" *ngIf="!mensajesIA.length">
+            <button type="button" class="rvar-ia__sugerencia" *ngFor="let s of sugerenciasIA" (click)="usarSugerenciaIA(s)">{{ s }}</button>
+        </div>
+
+        <form class="rvar-ia__entrada" (ngSubmit)="preguntarIA()">
+            <input type="text" class="form-control" placeholder="Simule un cambio, p. ej. '¿qué pasa si el mercado cae 20%?'"
+                [(ngModel)]="preguntaIA" name="preguntaIA" [disabled]="pensandoIA">
+            <button type="submit" class="btn btn-primary btn-sm" [disabled]="!preguntaIA.trim() || pensandoIA">
+                <mat-icon aria-hidden="true">send</mat-icon>
+            </button>
+        </form>
+    </div>
+
+    <div class="rvar-resumen">
+        <div class="rvar-resumen__item">
+            <span class="rvar-resumen__etiqueta">Portafolio</span>
+            <span class="rvar-resumen__valor">{{ resultado.descripcionPortafolio }}</span>
+        </div>
+        <div class="rvar-resumen__item">
+            <span class="rvar-resumen__etiqueta">Valor de mercado</span>
+            <span class="rvar-resumen__valor">{{ resultado.valorPortafolio | number:'1.2-2' }} {{ resultado.monedaReporte }}</span>
+        </div>
+        <div class="rvar-resumen__item">
+            <span class="rvar-resumen__etiqueta">Instrumentos</span>
+            <span class="rvar-resumen__valor">{{ resultado.numInstrumentos }}</span>
+        </div>
+        <div class="rvar-resumen__item" *ngIf="resultado.numEscenarios">
+            <span class="rvar-resumen__etiqueta">Escenarios</span>
+            <span class="rvar-resumen__valor">{{ resultado.numEscenarios }}</span>
+        </div>
+        <div class="rvar-resumen__item">
+            <span class="rvar-resumen__etiqueta">Período histórico</span>
+            <span class="rvar-resumen__valor">{{ resultado.fechaInicio }} → {{ resultado.fechaFin }}</span>
+        </div>
+    </div>
+
+    <p class="rvar-nota" *ngFor="let a of resultado.advertencias">
+        <mat-icon aria-hidden="true">info</mat-icon>{{ a }}
+    </p>
+
+    <table class="rvar-tabla">
+        <caption>VaR por metodología y nivel de confianza</caption>
+        <thead>
+            <tr>
+                <th>Metodología</th>
+                <th>Confianza</th>
+                <th class="col-num">VaR</th>
+                <th class="col-num">% cartera</th>
+                <th class="col-num" *ngIf="!resultado.esHistorico">No diversificado</th>
+                <th class="col-num" *ngIf="!resultado.esHistorico">Beneficio divers.</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let r of resultado.resultados" [class.rvar-fila--destacada]="r === destacado">
+                <td>{{ r.metodologia }}</td>
+                <td>{{ r.nivelConfianza * 100 | number:'1.1-2' }}%</td>
+                <td class="col-num">
+                    <div class="rvar-barra-celda">
+                        <span class="rvar-barra" [style.width.%]="anchoBarra(r.varDiversificado, maxVarDiversificado)"></span>
+                        <span>{{ r.varDiversificado | number:'1.2-2' }}</span>
+                    </div>
+                </td>
+                <td class="col-num">{{ r.ratioVar * 100 | number:'1.2-2' }}%</td>
+                <td class="col-num" *ngIf="!resultado.esHistorico">{{ r.varNoDiversificado | number:'1.2-2' }}</td>
+                <td class="col-num" *ngIf="!resultado.esHistorico">{{ r.beneficioDiversificacion | number:'1.2-2' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="rvar-tabla mt-3">
+        <caption>Desglose por instrumento</caption>
+        <thead>
+            <tr>
+                <th>Ticker</th>
+                <th>ISIN</th>
+                <th>Tipo</th>
+                <th *ngIf="esMultiPortafolio">Portafolio</th>
+                <th class="col-num" *ngIf="mostrarColumnasInstrumento">Exposición</th>
+                <th class="col-num" *ngIf="mostrarColumnasInstrumento">Peso</th>
+                <th class="col-num">VaR individual</th>
+                <th class="col-num" *ngIf="mostrarColumnasInstrumento">Aporte al VaR</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let i of resultado.instrumentos">
+                <td>{{ i.codTicker }}</td>
+                <td class="col-id">{{ i.codISIN }}</td>
+                <td>{{ i.nombreTipoInstrumento }}</td>
+                <td *ngIf="esMultiPortafolio" class="col-id">{{ i.descripcionPortafolio }}</td>
+                <td class="col-num" *ngIf="mostrarColumnasInstrumento">{{ i.mtm | number:'1.2-2' }}</td>
+                <td class="col-num" *ngIf="mostrarColumnasInstrumento">{{ (i.pesoPct ?? 0) * 100 | number:'1.1-1' }}%</td>
+                <td class="col-num">
+                    <div class="rvar-barra-celda">
+                        <span class="rvar-barra rvar-barra--secundaria" [style.width.%]="anchoBarra(i.varIndividual, maxVarIndividual)"></span>
+                        <span>{{ i.varIndividual | number:'1.2-2' }}</span>
+                    </div>
+                </td>
+                <td class="col-num" *ngIf="mostrarColumnasInstrumento">{{ i.varDesagregado | number:'1.2-2' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="rvar-graficos">
+        <div class="rvar-grafico">
+            <div class="rvar-grafico__cabecera">
+                <p class="rvar-grafico__titulo">{{ tituloHistograma }}</p>
+                <div class="rvar-bins" *ngIf="chartHistograma" title="Número de barras del histograma">
+                    <button type="button" class="rvar-bins__boton" (click)="cambiarBins(-1)" aria-label="Menos barras">−</button>
+                    <span class="rvar-bins__valor">{{ numBinsEfectivo }} barras</span>
+                    <button type="button" class="rvar-bins__boton" (click)="cambiarBins(1)" aria-label="Más barras">+</button>
+                    <button type="button" class="rvar-bins__auto" *ngIf="!usaBinsAutomaticos" (click)="restablecerBinsAutomaticos()">
+                        Auto (Sturges)
+                    </button>
+                </div>
+            </div>
+            <p class="rvar-grafico__ayuda" *ngIf="chartHistograma">
+                {{ usaBinsAutomaticos ? 'Calculado con la regla de Sturges según el número de escenarios' : 'Ajustado manualmente' }}
+                ({{ distribucion.length }} escenarios históricos).
+            </p>
+            <div class="rvar-grafico__cargando" *ngIf="cargandoDistribucion">
+                <app-loader tamano="inline" etiqueta="Cargando..."></app-loader>
+            </div>
+            <apx-chart *ngIf="chartHistograma" [series]="chartHistograma.series" [chart]="chartHistograma.chart"
+                [colors]="chartHistograma.colors" [plotOptions]="chartHistograma.plotOptions"
+                [dataLabels]="chartHistograma.dataLabels" [legend]="chartHistograma.legend"
+                [xaxis]="chartHistograma.xaxis" [yaxis]="chartHistograma.yaxis" [grid]="chartHistograma.grid"
+                [tooltip]="chartHistograma.tooltip"></apx-chart>
+            <p class="rvar-grafico__vacio" *ngIf="!cargandoDistribucion && !chartHistograma">
+                Esta ejecución no incluyó la metodología Histórica, así que no hay una distribución real de
+                pérdidas y ganancias para graficar. Vuelva a ejecutar incluyéndola para verla aquí.
+            </p>
+        </div>
+
+        <div class="rvar-grafico">
+            <p class="rvar-grafico__titulo">{{ tituloSerie }}</p>
+            <div class="rvar-grafico__cargando" *ngIf="cargandoSerie">
+                <app-loader tamano="inline" etiqueta="Cargando..."></app-loader>
+            </div>
+            <apx-chart *ngIf="chartSerie" [series]="chartSerie.series" [chart]="chartSerie.chart"
+                [colors]="chartSerie.colors" [stroke]="chartSerie.stroke" [markers]="chartSerie.markers"
+                [dataLabels]="chartSerie.dataLabels" [xaxis]="chartSerie.xaxis" [yaxis]="chartSerie.yaxis"
+                [grid]="chartSerie.grid"></apx-chart>
+            <p class="rvar-grafico__vacio" *ngIf="!cargandoSerie && !chartSerie">
+                Todavía hay muy pocas ejecuciones guardadas de este portafolio con la misma metodología y nivel
+                de confianza. Ejecute el cálculo un par de veces más (por ejemplo, en distintas fechas) para ver
+                cómo evoluciona el VaR.
+            </p>
+        </div>
+    </div>
+
+    <div class="rvar-acciones">
+        <button type="button" class="btn btn-outline-primary btn-sm" *ngIf="resultado.idResultadoVARDetalle"
+            (click)="abrirAnexo9()">
+            <mat-icon aria-hidden="true">description</mat-icon> Generar Anexo N° 9 (SBS)
+        </button>
+    </div>
+</div>

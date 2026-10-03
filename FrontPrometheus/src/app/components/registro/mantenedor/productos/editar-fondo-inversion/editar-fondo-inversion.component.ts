@@ -21,10 +21,11 @@ import { CargaFuenteInformacionComponent } from "../../atributo-financiero/carga
 import { CargaTipoInstrumentoComponent } from "../../atributo-financiero/carga-tipo-instrumento/carga-tipo-instrumento.component";
 import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-editar-fondo-inversion',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaPlazaComponent, CargaEmisorComponent, CargaMonedaComponent, CargaTipoFondoComponent, CargaFuenteInformacionComponent, CargaTipoInstrumentoComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaPlazaComponent, CargaEmisorComponent, CargaMonedaComponent, CargaTipoFondoComponent, CargaFuenteInformacionComponent, CargaTipoInstrumentoComponent, ModalFormularioComponent],
   templateUrl: './editar-fondo-inversion.component.html',
   styleUrl: './editar-fondo-inversion.component.scss'
 })
@@ -42,6 +43,18 @@ export class EditarFondoInversionComponent {
   listMoneda: Moneda[] = [];
   listTipoInstrumento: TipoInstrumento[] = [];
   
+  get faltantes(): string[] {
+    const r = this.objRegistroEditado;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codTicker)) f.push('Ticker');
+    if (vacio(r.idPlaza)) f.push('Plaza');
+    if (vacio(r.idEmisor)) f.push('Emisor');
+    if (vacio(r.idMoneda)) f.push('Moneda');
+    if (vacio(r.idTipoFondo)) f.push('Tipo Fondo');
+    return f;
+  }
+
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
@@ -103,6 +116,7 @@ export class EditarFondoInversionComponent {
   }
 
   guardarCambios(){
+    if (this.faltantes.length > 0) return;
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
       text: 'Este cambio no puede deshacerse.',

@@ -8,10 +8,11 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { NgSelectModule } from '@ng-select/ng-select';
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-editar-indice-mercado',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule],
+  imports: [NgSelectModule, FormsModule, MatIconModule, ModalFormularioComponent],
   templateUrl: './editar-indice-mercado.component.html',
   styleUrl: './editar-indice-mercado.component.scss'
 })
@@ -21,6 +22,14 @@ export class EditarIndiceMercadoComponent {
   
   objRegistroEditado: IndiceMercado = new IndiceMercado;
   
+  get faltantes(): string[] {
+    const r = this.objRegistroEditado;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codigo)) f.push('Código');
+    return f;
+  }
+
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
@@ -28,6 +37,7 @@ export class EditarIndiceMercadoComponent {
   }
 
   guardarCambios(){
+    if (this.faltantes.length > 0) return;
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
       text: 'Este cambio no puede deshacerse.',

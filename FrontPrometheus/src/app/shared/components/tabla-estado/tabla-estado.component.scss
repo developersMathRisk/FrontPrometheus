@@ -1,0 +1,42 @@
+:host {
+    display: block;
+}
+
+.tabla-estado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 40px 16px;
+    text-align: center;
+}
+
+.tabla-estado__icono {
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
+    color: var(--hig-texto-sec, rgba(var(--dark-rgb), 0.78));
+}
+
+// El error no depende solo del color: lleva icono y texto propios
+.tabla-estado__icono--error {
+    color: rgb(var(--danger-rgb));
+}
+
+.tabla-estado__spinner {
+    color: rgb(var(--primary-rgb));
+}
+
+.tabla-estado__titulo {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--default-text-color);
+}
+
+.tabla-estado__detalle {
+    max-width: 44ch;
+    margin: 0 0 6px;
+    font-size: 0.8125rem;
+    color: var(--hig-texto-sec, rgba(var(--dark-rgb), 0.78));
+}

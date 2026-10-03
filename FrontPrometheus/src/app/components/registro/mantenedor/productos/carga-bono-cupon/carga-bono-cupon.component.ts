@@ -14,11 +14,12 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { FilePondModule } from 'ngx-filepond';
 import * as FilePond from 'filepond';
 import { CommonModule } from '@angular/common';
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 
 @Component({
   selector: 'app-carga-bono-cupon',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, MatTableModule, MatSortModule, MatPaginatorModule, FilePondModule, NgbNavModule, CommonModule],
+  imports: [NgSelectModule, FormsModule, MatIconModule, MatTableModule, MatSortModule, MatPaginatorModule, FilePondModule, NgbNavModule, CommonModule, ModalFormularioComponent],
   templateUrl: './carga-bono-cupon.component.html',
   styleUrl: './carga-bono-cupon.component.scss'
 })
@@ -51,6 +52,14 @@ export class CargaBonoCuponComponent {
   };
   pondFiles: FilePond.FilePondOptions["files"] = [];
 
+  get faltantes(): string[] {
+    if (this.nuevoRegistro.length === 0) {
+      return ['Cupones (agregue al menos una fila)'];
+    }
+    const incompleto = this.nuevoRegistro.some(c => !c.numeroCuota || !c.fechaPago);
+    return incompleto ? ['Cuota y fecha de pago de cada fila'] : [];
+  }
+
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
@@ -59,6 +68,7 @@ export class CargaBonoCuponComponent {
   }
 
   registrar(){
+    if (this.faltantes.length > 0) return;
     this.nuevoRegistro.map(i => i.idBono = this.data.idBono);
     this.registroService.postRegistrarCuponerXBono(this.nuevoRegistro).subscribe(
       (response: any) => {
@@ -88,6 +98,11 @@ export class CargaBonoCuponComponent {
 
   addData() {
     let objCupon: BonoCupon = new BonoCupon();
+    // Valores de partida para ahorrar digitación: el ISIN del bono, el siguiente número de cuota y estado pendiente
+    objCupon.codISIN = this.data?.codISIN;
+    objCupon.numeroCuota = this.nuevoRegistro.length + 1;
+    objCupon.estadoPago = 'PENDIENTE';
+    objCupon.interesesMoratorios = 0;
 
     this.nuevoRegistro.push(objCupon);
     this.nuevoRegistro = [...this.nuevoRegistro];

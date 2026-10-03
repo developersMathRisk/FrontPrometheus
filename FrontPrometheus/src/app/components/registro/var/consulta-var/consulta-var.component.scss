@@ -1,0 +1,157 @@
+.cvar-subtitulo {
+    margin: 2px 0 0;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+// ---- maestro-detalle: lista a la izquierda, detalle a la derecha ---------------------------------
+// En vez de "haga clic en una fila y baje por la página": la lista y el detalle conviven, como en
+// cualquier cliente de correo o terminal financiera (seleccionar no te hace perder la lista de vista).
+.cvar-layout {
+    display: grid;
+    grid-template-columns: minmax(420px, 480px) 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.cvar-layout__lista {
+    position: sticky;
+    top: 82px;
+    max-height: calc(100vh - 98px);
+    display: flex;
+    flex-direction: column;
+
+    .cvar-body {
+        overflow-y: auto;
+    }
+}
+
+.cvar-layout__detalle {
+    min-width: 0;
+}
+
+@media (max-width: 1299px) {
+    .cvar-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .cvar-layout__lista {
+        position: static;
+        max-height: none;
+    }
+}
+
+.cvar-placeholder__cuerpo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    padding: 56px 24px;
+
+    .mat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 40px;
+        color: rgba(var(--dark-rgb), 0.3);
+    }
+}
+
+.cvar-placeholder__titulo {
+    margin: 4px 0 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.cvar-placeholder__texto {
+    margin: 0;
+    max-width: 320px;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.68);
+}
+
+.cvar-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 18px;
+}
+
+.cvar-filtro-portafolio {
+    width: 260px;
+    max-width: 100%;
+}
+
+.cvar-tabla-contenedor {
+    overflow-x: auto;
+    border: 1px solid rgba(var(--dark-rgb), 0.16);
+    border-radius: 10px;
+}
+
+.cvar-tabla {
+    width: 100%;
+    font-size: 0.8125rem;
+    border-collapse: collapse;
+
+    th, td {
+        padding: 8px 14px;
+        text-align: left;
+        white-space: nowrap;
+        border-bottom: 1px solid rgba(var(--dark-rgb), 0.1);
+    }
+
+    thead th {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: rgba(var(--dark-rgb), 0.65);
+        background: rgba(var(--dark-rgb), 0.04);
+    }
+
+    tbody tr {
+        cursor: pointer;
+    }
+
+    tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    tbody tr:hover {
+        background: rgba(var(--primary-rgb), 0.06);
+    }
+
+    tbody tr:focus-visible {
+        outline: 2px solid rgb(var(--primary-rgb));
+        outline-offset: -2px;
+    }
+
+    // Fila elegida: se distingue por fondo y borde, no solo por color
+    tr.cvar-fila--activa {
+        background: rgba(var(--primary-rgb), 0.1);
+        box-shadow: inset 3px 0 0 rgb(var(--primary-rgb));
+    }
+
+    .col-num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .cvar-col-secundaria {
+        color: rgba(var(--dark-rgb), 0.7);
+    }
+}
+
+.cvar-detalle-cargando {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+@media (max-width: 640px) {
+    .cvar-tabla .cvar-col-secundaria {
+        display: none;
+    }
+}

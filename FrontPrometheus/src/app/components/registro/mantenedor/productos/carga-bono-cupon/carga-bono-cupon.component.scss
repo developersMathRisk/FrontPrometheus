@@ -1,6 +1,177 @@
-.icon-close{
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-    outline: none !important;
-  }
+// Pestañas: cambian el modo de carga sin salir del formulario
+.cuponera-pestanas {
+    gap: 4px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(var(--dark-rgb), 0.18);
+
+    .nav-link {
+        min-height: 38px;
+        padding: 8px 16px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--default-text-color);
+        border: 0;
+        border-bottom: 2px solid transparent;
+        border-radius: 0;
+
+        &:hover {
+            background: rgba(var(--dark-rgb), 0.06);
+        }
+
+        // Seleccionada: subrayado + peso, no solo color
+        &.active {
+            font-weight: 600;
+            color: rgb(var(--primary-rgb));
+            background: transparent;
+            border-bottom-color: rgb(var(--primary-rgb));
+        }
+
+        &:focus-visible {
+            outline: 2px solid rgb(var(--primary-rgb));
+            outline-offset: -2px;
+        }
+    }
+}
+
+:host-context([data-theme-mode="dark"]) .cuponera-pestanas .nav-link.active {
+    color: var(--default-text-color);
+}
+
+.cuponera-barra {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.cuponera-barra__texto {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+
+    .hig-campo__ayuda {
+        font-weight: 400;
+    }
+}
+
+.cuponera-barra__acciones {
+    display: flex;
+    gap: 8px;
+
+    .hoja-boton {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        min-height: 36px;
+        padding: 0 14px 0 10px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--default-text-color);
+        cursor: pointer;
+        background: transparent;
+        border: 1px solid rgba(var(--dark-rgb), 0.3);
+        border-radius: 8px;
+
+        &:hover:not(:disabled) {
+            background: rgba(var(--dark-rgb), 0.08);
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        &:focus-visible {
+            outline: 2px solid rgb(var(--primary-rgb));
+            outline-offset: 2px;
+        }
+
+        .mat-icon {
+            width: 18px;
+            height: 18px;
+            font-size: 18px;
+        }
+    }
+}
+
+// Tabla editable: se desplaza dentro de su contenedor; la cabecera y los números se alinean con los datos
+.cuponera-tabla {
+    overflow-x: auto;
+    border: 1px solid rgba(var(--dark-rgb), 0.18);
+    border-radius: 10px;
+
+    table {
+        width: 100%;
+        background: transparent;
+    }
+
+    th.mat-mdc-header-cell {
+        padding: 0 8px;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        white-space: nowrap;
+        color: rgba(var(--dark-rgb), 0.85);
+        background: rgba(var(--dark-rgb), 0.05);
+    }
+
+    td.mat-mdc-cell {
+        padding: 6px 8px;
+        border-bottom-color: rgba(var(--dark-rgb), 0.1);
+    }
+
+    tr.mat-mdc-row:last-child td.mat-mdc-cell {
+        border-bottom: 0;
+    }
+
+    .form-control {
+        min-height: 34px;
+        padding: 4px 8px;
+        font-size: 0.875rem;
+    }
+
+    .cuponera-num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
+    // Campos obligatorios vacíos: borde rojo (y el aviso del pie lo explica con texto)
+    .form-control.campo-vacio {
+        border-color: rgb(var(--danger-rgb));
+    }
+}
+
+.cuponera-vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px 16px;
+    text-align: center;
+    border: 1px dashed rgba(var(--dark-rgb), 0.3);
+    border-radius: 10px;
+
+    .mat-icon {
+        width: 36px;
+        height: 36px;
+        margin-bottom: 8px;
+        font-size: 36px;
+        color: rgba(var(--dark-rgb), 0.55);
+    }
+}
+
+.cuponera-vacio__titulo {
+    margin: 0 0 4px;
+    font-weight: 600;
+}
+
+.cuponera-vacio__texto {
+    max-width: 520px;
+    margin: 0;
+    font-size: 0.875rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+

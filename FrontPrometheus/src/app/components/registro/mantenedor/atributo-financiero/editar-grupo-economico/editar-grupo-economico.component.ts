@@ -2,32 +2,42 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
 import { RegistroService } from '../../../../../shared/services/registro.service';
 import { GrupoEconomico } from '../../../../../shared/models/atributo-financiero/grupo-economico';
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 
 @Component({
   selector: 'app-editar-grupo-economico',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule],
+  imports: [FormsModule, MatIconModule, ModalFormularioComponent],
   templateUrl: './editar-grupo-economico.component.html',
   styleUrl: './editar-grupo-economico.component.scss'
 })
 export class EditarGrupoEconomicoComponent {
   @Input() data!: GrupoEconomico;
   @Output() close = new EventEmitter<any>();
-  
+
   objRegistroEditado: GrupoEconomico = new GrupoEconomico;
-  
-  constructor(private registroService: RegistroService, private modalService: NgbModal){}
+  guardando = false;
+
+  get faltantes(): string[] {
+    const r = this.objRegistroEditado;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.nombreGrupo)) f.push('Nombre');
+    if (vacio(r.descripcion)) f.push('Descripción');
+    return f;
+  }
+
+  constructor(private registroService: RegistroService){}
 
   ngOnInit(): void {
     this.objRegistroEditado = {...this.data};
   }
 
   guardarCambios(){
+    if (this.faltantes.length > 0) return;
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
       text: 'Este cambio no puede deshacerse.',
@@ -38,8 +48,10 @@ export class EditarGrupoEconomicoComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
+        this.guardando = true;
         this.registroService.putModificarGrupoEconomico(this.objRegistroEditado.iD_Grupo, this.objRegistroEditado).subscribe(
           (response: any) => {
+            this.guardando = false;
             Swal.fire({
               icon: 'success',
               title: 'Modificación exitosa',
@@ -49,6 +61,7 @@ export class EditarGrupoEconomicoComponent {
             this.cerrar();
           },
           (error: HttpErrorResponse) => {
+            this.guardando = false;
             Swal.fire({
               icon: 'error',
               title: 'Error',
@@ -59,12 +72,9 @@ export class EditarGrupoEconomicoComponent {
         )
       }
     });
-
-    
   }
 
   cerrar(){
     this.close.emit();
-    //this.modalService.dismissAll();
   }
 }

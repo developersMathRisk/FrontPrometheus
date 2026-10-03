@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/data/dashboard_chartData/projectcharts.data.ts"],
+  "sourcesContent": ["import { ChartConfiguration, ChartData, ChartType } from \"chart.js\";\r\n//DoughNut Chart and Pie chart data\r\n\r\nexport let PieChartData: ChartConfiguration['data'] = {datasets: [\r\n    {\r\n      data: [68, 55, 45],\r\n      backgroundColor: [\"rgb(247,45,102)\", \"rgb(68,84,195)\", \"rgb(45,206,137)\"],\r\n      borderColor: [\"rgb(247,45,102)\", \"rgb(68,84,195)\", \"rgb(45,206,137)\"],\r\n      \r\n    },\r\n  ],\r\n  }\r\n  export let PieChartOptions: ChartConfiguration['options'] = {\r\n    maintainAspectRatio: false,\r\n    responsive: true,\r\n    plugins:{legend: {\r\n      display: false,\r\n    },\r\n  }\r\n  }\r\n  export let DoughnutChartType: ChartType = 'doughnut';\r\n\r\n  export let PieChartType: ChartType = 'pie';"],
+  "mappings": ";AAGO,IAAI,eAA2C;EAAC,UAAU;IAC7D;MACE,MAAM,CAAC,IAAI,IAAI,EAAE;MACjB,iBAAiB,CAAC,mBAAmB,kBAAkB,iBAAiB;MACxE,aAAa,CAAC,mBAAmB,kBAAkB,iBAAiB;;;;AAKjE,IAAI,kBAAiD;EAC1D,qBAAqB;EACrB,YAAY;EACZ,SAAQ;IAAC,QAAQ;MACf,SAAS;;;;AAIN,IAAI,oBAA+B;AAEnC,IAAI,eAA0B;",
+  "names": []
+}

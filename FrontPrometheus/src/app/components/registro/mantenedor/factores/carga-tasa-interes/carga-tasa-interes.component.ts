@@ -8,10 +8,11 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { NgSelectModule } from '@ng-select/ng-select';
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-carga-tasa-interes',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule],
+  imports: [NgSelectModule, FormsModule, MatIconModule, ModalFormularioComponent],
   templateUrl: './carga-tasa-interes.component.html',
   styleUrl: './carga-tasa-interes.component.scss'
 })
@@ -20,12 +21,23 @@ export class CargaTasaInteresComponent {
 
   nuevoRegistro: TasaInteres = new TasaInteres();
 
+  get faltantes(): string[] {
+    const r = this.nuevoRegistro;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codVertice)) f.push('Cod. Vértice');
+    if (vacio(r.codCurvaProveedor)) f.push('Curva Proveedor');
+    if (vacio(r.numPlazo)) f.push('Plazo');
+    return f;
+  }
+
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
   }
 
   registrar(){
+    if (this.faltantes.length > 0) return;
     this.registroService.postRegistrarTasaInteres(this.nuevoRegistro).subscribe(
       (response: any) => {
         Swal.fire({

@@ -10,6 +10,7 @@ import { Subscription, fromEvent } from 'rxjs';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 import { checkHoriMenu } from './sidebar';
+import { MenuLateralService } from '../../services/menu-lateral.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -29,6 +30,7 @@ export class SidebarComponent {
     public router: Router,
     public renderer: Renderer2,
     private sanitizer: DomSanitizer,
+    public menu: MenuLateralService,
   ) {
     // if (document.querySelector('html')?.getAttribute('data-nav-style') == 'icon-hover') {
     //   document.querySelector('.slide-menu')?.setAttribute('style','display:none;')
@@ -478,7 +480,7 @@ HoverToggleInnerMenuFn(event:Event, item:Menu) {
 
       if (this.WindowPreSize[this.WindowPreSize.length - 1] >= 992 && this.WindowPreSize[this.WindowPreSize.length - 2] < 992) {
         // greater than 992
-        html.removeAttribute('data-toggled');
+        this.menu.aplicar();
         document.querySelector('#responsive-overlay')?.classList.remove('active');
       }
     }

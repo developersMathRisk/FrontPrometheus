@@ -1,0 +1,156 @@
+<div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-column">
+        <h1 class="page-title my-auto">Ejecución de Stress Testing</h1>
+        <p class="est-subtitulo">Revalúe su portafolio bajo un escenario de shock, con los precios y posiciones reales.</p>
+    </div>
+</div>
+
+<div class="est-layout">
+<div class="est-layout__config card">
+    <div class="card-body est-config">
+        <div class="est-grid">
+            <div class="est-campo">
+                <label class="form-label">Portafolio(s) <span class="hig-requerido">*</span></label>
+                <ng-select placeholder="Seleccione uno o varios..." [items]="listaPortafolio" bindLabel="descripcionPortafolio"
+                    bindValue="idPortafolio" [multiple]="true" [(ngModel)]="idsPortafolioSeleccionados"
+                    (change)="alCambiarPortafolio()"></ng-select>
+            </div>
+            <div class="est-campo">
+                <label class="form-label">Moneda de reporte <span class="hig-requerido">*</span></label>
+                <ng-select placeholder="Seleccione..." [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda"
+                    [(ngModel)]="idMonedaSeleccionada" (change)="alCambiarMoneda()"></ng-select>
+            </div>
+        </div>
+
+        <div class="est-campo">
+            <span class="form-label mb-0">Escenario de estrés <span class="hig-requerido">*</span></span>
+            <div class="var-chips">
+                <button type="button" class="var-chip" *ngFor="let e of escenarios"
+                    [class.var-chip--activo]="e === escenarioSeleccionado" [title]="e.descripcion"
+                    (click)="elegirEscenario(e)">
+                    {{ e.nombre }}
+                </button>
+                <button type="button" class="var-chip" [class.var-chip--activo]="modoPersonalizado"
+                    (click)="elegirPersonalizado()">
+                    Personalizado
+                </button>
+            </div>
+        </div>
+
+        <div class="est-personalizado" *ngIf="modoPersonalizado">
+            <div class="est-campo">
+                <label class="form-label">Shock de precio (%)</label>
+                <input type="number" step="1" class="form-control" [(ngModel)]="shockPrecioPersonalizado">
+            </div>
+            <div class="est-campo">
+                <label class="form-label">Shock cambiario (%)</label>
+                <input type="number" step="1" class="form-control" [(ngModel)]="shockCambiarioPersonalizado">
+            </div>
+        </div>
+
+        <p class="est-resumen-shock" *ngIf="escenarioSeleccionado || modoPersonalizado">
+            Se aplicará <strong>{{ shockPrecioActivoPct * 100 | number:'1.0-1' }}%</strong> al precio de los
+            instrumentos y <strong>{{ shockCambiarioActivoPct * 100 | number:'1.0-1' }}%</strong> al tipo de
+            cambio de los instrumentos en moneda extranjera.
+        </p>
+
+        <div class="est-accion">
+            <button type="button" class="btn btn-primary est-accion__boton" [disabled]="!puedeEjecutar || ejecutando"
+                (click)="ejecutar()">
+                <app-loader tamano="inline" *ngIf="ejecutando" class="me-2"></app-loader>
+                {{ ejecutando ? 'Calculando...' : 'Ejecutar Stress Testing' }}
+            </button>
+        </div>
+
+        <div class="alert alert-danger d-flex align-items-center gap-2 mb-0" role="alert" *ngIf="mensajeError">
+            <mat-icon aria-hidden="true">error</mat-icon>
+            <span>{{ mensajeError }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="est-layout__resultado">
+    <div class="card est-placeholder" *ngIf="!resultado && !ejecutando" [@fadeIn]>
+        <div class="card-body est-placeholder__cuerpo">
+            <app-loader tamano="grande"></app-loader>
+            <h3 class="est-placeholder__titulo">Elija un escenario y ejecute</h3>
+            <p class="est-placeholder__texto">El impacto real sobre el portafolio aparecerá aquí.</p>
+        </div>
+    </div>
+
+    <div class="card est-calculando" *ngIf="ejecutando" [@fadeIn]>
+        <div class="card-body est-placeholder__cuerpo">
+            <app-loader tamano="grande" etiqueta="Revaluando el portafolio bajo el escenario..."></app-loader>
+        </div>
+    </div>
+
+    <div class="card" *ngIf="resultado && !ejecutando" [@fadeSlideIn]>
+    <div class="card-header">
+        <div class="card-title">Resultado</div>
+        <span class="est-resultados__fecha">{{ resultado.fechaProceso }}</span>
+    </div>
+    <div class="card-body est-resultado">
+        <div class="est-hero">
+            <div class="est-hero__valor">
+                <span class="est-hero__cifra">{{ resultado.impactoTotal | number:'1.2-2' }}</span>
+                <span class="est-hero__moneda">{{ resultado.monedaReporte }}</span>
+            </div>
+            <p class="est-hero__leyenda">
+                Impacto sobre el valor de mercado (<strong>{{ resultado.impactoPct * 100 | number:'1.2-2' }}%</strong>)
+                · {{ resultado.descripcionPortafolio }}
+            </p>
+        </div>
+
+        <div class="est-resumen">
+            <div class="est-resumen__item">
+                <span class="est-resumen__etiqueta">Valor actual</span>
+                <span class="est-resumen__valor">{{ resultado.mtmActual | number:'1.2-2' }}</span>
+            </div>
+            <div class="est-resumen__item">
+                <span class="est-resumen__etiqueta">Valor estresado</span>
+                <span class="est-resumen__valor">{{ resultado.mtmEstresado | number:'1.2-2' }}</span>
+            </div>
+            <div class="est-resumen__item">
+                <span class="est-resumen__etiqueta">Shock de precio</span>
+                <span class="est-resumen__valor">{{ resultado.shockPrecioPct * 100 | number:'1.0-1' }}%</span>
+            </div>
+            <div class="est-resumen__item">
+                <span class="est-resumen__etiqueta">Shock cambiario</span>
+                <span class="est-resumen__valor">{{ resultado.shockCambiarioPct * 100 | number:'1.0-1' }}%</span>
+            </div>
+        </div>
+
+        <p class="est-nota" *ngFor="let a of resultado.advertencias">
+            <mat-icon aria-hidden="true">info</mat-icon>{{ a }}
+        </p>
+
+        <table class="est-tabla">
+            <caption>Impacto por instrumento</caption>
+            <thead>
+                <tr>
+                    <th>Ticker</th>
+                    <th>ISIN</th>
+                    <th class="col-num">Valor actual</th>
+                    <th class="col-num">Valor estresado</th>
+                    <th class="col-num">Impacto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let i of resultado.instrumentos">
+                    <td>{{ i.codTicker }}</td>
+                    <td class="col-id">{{ i.codISIN }}</td>
+                    <td class="col-num">{{ i.mtmActual | number:'1.2-2' }}</td>
+                    <td class="col-num">{{ i.mtmEstresado | number:'1.2-2' }}</td>
+                    <td class="col-num">
+                        <div class="est-barra-celda">
+                            <span class="est-barra" [style.width.%]="anchoBarra(i.impacto, maxImpacto)"></span>
+                            <span>{{ i.impacto | number:'1.2-2' }}</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>
+</div>

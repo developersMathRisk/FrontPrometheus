@@ -1,125 +1,133 @@
-<div>
-    <button type="submit" class="btn btn-primary" (click)="registrar(cargaBonoModal)">Agregar Bono</button>
-</div>
+<div class="hig-tabla">
 
-<br>
+    <app-tabla-toolbar placeholder="Buscar ticker, ISIN o emisor…" accion="Agregar Bono"
+        [total]="total" [filtrados]="filtrados" [ocultarResumen]="cargando || !!mensajeError" [texto]="busqueda"
+        (buscar)="buscar($event)" (agregar)="registrar(cargaBonoModal)">
 
-<div id="mat-sorting">
-    <div class="mat-elevation-z8">
-        <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" matSort #sort="matSort">
-                <ng-container matColumnDef="acciones">
-                    <th mat-header-cell *matHeaderCellDef>Bono</th>
-                    <td mat-cell *matCellDef="let row">
-                        <div class="acciones">
-                            <button mat-icon-button class="icono-accion icono-editar" (click)="editar(row, editarBonoModal)">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button mat-icon-button class="icono-accion icono-eliminar" (click)="eliminar(row)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </div>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="idBono">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-                    <td mat-cell *matCellDef="let element"> {{element.idBono}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="codISIN">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ISIN</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codISIN}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="ticker">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Ticker</th>
-                    <td mat-cell *matCellDef="let element"> {{element.ticker}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="fechaEmision">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Emision</th>
-                    <td mat-cell *matCellDef="let element"> {{element.fechaEmision}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="fechaPrimerCupon">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Primer Cupón</th>
-                    <td mat-cell *matCellDef="let element"> {{element.fechaPrimerCupon}} </td>
-                </ng-container>
-                
-                <ng-container matColumnDef="fechaVencimiento">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Vencimiento</th>
-                    <td mat-cell *matCellDef="let element"> {{element.fechaVencimiento}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="montoNominal">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nominal</th>
-                    <td mat-cell *matCellDef="let element"> {{element.montoNominal}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="tasaCupon">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tasa Cupón (%)</th>
-                    <td mat-cell *matCellDef="let element"> {{element.tasaCupon}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="spread">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Spread</th>
-                    <td mat-cell *matCellDef="let element"> {{element.spread}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="nomEmisor">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Emisor</th>
-                    <td mat-cell *matCellDef="let element"> {{element.nomEmisor}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="desMoneda">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Moneda</th>
-                    <td mat-cell *matCellDef="let element"> {{element.desMoneda}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="descripcionTipoBono">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Bono</th>
-                    <td mat-cell *matCellDef="let element"> {{element.descripcionTipoBono}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="descripcionCurva">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Curva Referencia</th>
-                    <td mat-cell *matCellDef="let element"> {{element.descripcionCurva}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="descripcionMetodo">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Método Amortización</th>
-                    <td mat-cell *matCellDef="let element"> {{element.descripcionMetodo}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="descripcionCalculoBase">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cálculo Base</th>
-                    <td mat-cell *matCellDef="let element"> {{element.descripcionCalculoBase}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="descripcionFrecuencia">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Frecuencia Pago</th>
-                    <td mat-cell *matCellDef="let element"> {{element.descripcionFrecuencia}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="descripcionTipoTasa">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Tasa Interés</th>
-                    <td mat-cell *matCellDef="let element"> {{element.descripcionTipoTasa}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="descripcionFormula">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fórmula Tasa</th>
-                    <td mat-cell *matCellDef="let element"> {{element.descripcionFormula}} </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
-            </table>
+        <div opciones class="form-check form-switch interruptor-columnas"
+            title="Muestra todos los atributos del instrumento">
+            <input class="form-check-input" type="checkbox" role="switch" id="producto-bono-todas"
+                [checked]="verTodasLasColumnas" (change)="verTodasLasColumnas = $any($event.target).checked">
+            <label class="form-check-label" for="producto-bono-todas">Todas las columnas</label>
         </div>
-        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-        </mat-paginator>
+    </app-tabla-toolbar>
+
+    <div class="tabla-contenedor">
+        <table mat-table [dataSource]="dataSource" matSort #sort="matSort" matSortActive="fechaVencimiento"
+            matSortDirection="asc" aria-label="Listado de bonos">
+
+            <ng-container matColumnDef="idBono">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+                <td mat-cell *matCellDef="let element" class="col-id">{{ element.idBono }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="ticker">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Ticker</th>
+                <td mat-cell *matCellDef="let element"><span class="fw-semibold">{{ element.ticker }}</span></td>
+            </ng-container>
+
+            <ng-container matColumnDef="codISIN">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ISIN</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.codISIN">{{ element.codISIN || '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="nomEmisor">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Emisor</th>
+                <td mat-cell *matCellDef="let element">{{ element.nomEmisor }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcionTipoBono">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Bono</th>
+                <td mat-cell *matCellDef="let element">{{ element.descripcionTipoBono }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="desMoneda">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Moneda</th>
+                <td mat-cell *matCellDef="let element">{{ element.desMoneda }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="montoNominal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-num">Nominal</th>
+                <td mat-cell *matCellDef="let element" class="col-num" [class.celda-vacia]="element.montoNominal == null">{{ element.montoNominal != null ? (element.montoNominal | number:'1.2-2') : '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="tasaCupon">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-num">Tasa Cupón (%)</th>
+                <td mat-cell *matCellDef="let element" class="col-num" [class.celda-vacia]="element.tasaCupon == null">{{ element.tasaCupon != null ? (element.tasaCupon | number:'1.2-4') : '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="spread">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-num">Spread</th>
+                <td mat-cell *matCellDef="let element" class="col-num" [class.celda-vacia]="element.spread == null">{{ element.spread != null ? (element.spread | number:'1.2-4') : '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaEmision">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Emisión</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.fechaEmision">{{ element.fechaEmision ? (element.fechaEmision | date:'dd/MM/yyyy') : '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaPrimerCupon">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Primer Cupón</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.fechaPrimerCupon">{{ element.fechaPrimerCupon ? (element.fechaPrimerCupon | date:'dd/MM/yyyy') : '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaVencimiento">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Vencimiento</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.fechaVencimiento">{{ element.fechaVencimiento ? (element.fechaVencimiento | date:'dd/MM/yyyy') : '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcionCurva">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Curva Referencia</th>
+                <td mat-cell *matCellDef="let element" class="celda-truncada" [title]="element.descripcionCurva || ''">{{ element.descripcionCurva || '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcionMetodo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Método Amortización</th>
+                <td mat-cell *matCellDef="let element" class="celda-truncada" [title]="element.descripcionMetodo || ''">{{ element.descripcionMetodo || '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcionCalculoBase">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Cálculo Base</th>
+                <td mat-cell *matCellDef="let element" class="celda-truncada" [title]="element.descripcionCalculoBase || ''">{{ element.descripcionCalculoBase || '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcionFrecuencia">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Frecuencia Pago</th>
+                <td mat-cell *matCellDef="let element" class="celda-truncada" [title]="element.descripcionFrecuencia || ''">{{ element.descripcionFrecuencia || '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcionTipoTasa">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Tasa Interés</th>
+                <td mat-cell *matCellDef="let element" class="celda-truncada" [title]="element.descripcionTipoTasa || ''">{{ element.descripcionTipoTasa || '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcionFormula">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fórmula Tasa</th>
+                <td mat-cell *matCellDef="let element" class="celda-truncada" [title]="element.descripcionFormula || ''">{{ element.descripcionFormula || '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef class="col-acciones"><span class="solo-lector">Acciones</span></th>
+                <td mat-cell *matCellDef="let element" class="col-acciones">
+                    <button type="button" class="btn-fila" aria-label="Acciones del registro"
+                        (click)="abrirMenuFila($event, element)">
+                        <mat-icon aria-hidden="true">more_horiz</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
+        </table>
+
+        <app-tabla-estado [estado]="estadoTabla" tituloVacio="No hay bonos registrados"
+            detalleVacio="Agregue el primero con el botón «Agregar Bono»." [busqueda]="busqueda"
+            [mensajeError]="mensajeError" (reintentar)="listarRegistros()" (limpiar)="buscar('')"></app-tabla-estado>
     </div>
 
+    <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100]" [pageSize]="20" showFirstLastButtons
+        [style.display]="estadoTabla ? 'none' : null" aria-label="Paginación de bonos">
+    </mat-paginator>
 </div>
 
 <div style="visibility: hidden; position: fixed"

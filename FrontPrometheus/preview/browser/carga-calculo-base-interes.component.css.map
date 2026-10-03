@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/registro/mantenedor/atributo-financiero/carga-calculo-base-interes/carga-calculo-base-interes.component.scss"],
+  "sourcesContent": [".icon-close{\r\n    background: transparent !important;\r\n    border: none !important;\r\n    padding: 0 !important;\r\n    outline: none !important;\r\n}"],
+  "mappings": ";AAAA,CAAA;AACI,cAAA;AACA,UAAA;AACA,WAAA;AACA,WAAA;;",
+  "names": []
+}

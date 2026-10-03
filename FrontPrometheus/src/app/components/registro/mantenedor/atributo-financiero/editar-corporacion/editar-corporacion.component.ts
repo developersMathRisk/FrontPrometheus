@@ -9,11 +9,12 @@ import { RegistroService } from '../../../../../shared/services/registro.service
 import { Corporacion } from '../../../../../shared/models/atributo-financiero/corporacion';
 import { Pais } from '../../../../../shared/models/atributo-financiero/pais';
 import { CargaPaisComponent } from "../carga-pais/carga-pais.component";
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 
 @Component({
   selector: 'app-editar-corporacion',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaPaisComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaPaisComponent, ModalFormularioComponent],
   templateUrl: './editar-corporacion.component.html',
   styleUrl: './editar-corporacion.component.scss'
 })
@@ -21,10 +22,19 @@ export class EditarCorporacionComponent {
   @Input() data!: Corporacion;
   @Output() close = new EventEmitter<any>();
   modalRef: any;
-  
+
   objRegistroEditado: Corporacion = new Corporacion;
   listPais: Pais[] = [];
-  
+  guardando = false;
+
+  get faltantes(): string[] {
+    const r = this.objRegistroEditado;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.descripcion)) f.push('Descripción');
+    return f;
+  }
+
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
@@ -49,6 +59,7 @@ export class EditarCorporacionComponent {
   }
 
   guardarCambios(){
+    if (this.faltantes.length > 0) return;
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
       text: 'Este cambio no puede deshacerse.',
@@ -59,8 +70,10 @@ export class EditarCorporacionComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
+        this.guardando = true;
         this.registroService.putModificarCorporacion(this.objRegistroEditado.id, this.objRegistroEditado).subscribe(
           (response: any) => {
+            this.guardando = false;
             Swal.fire({
               icon: 'success',
               title: 'Modificación exitosa',
@@ -70,6 +83,7 @@ export class EditarCorporacionComponent {
             this.cerrar();
           },
           (error: HttpErrorResponse) => {
+            this.guardando = false;
             Swal.fire({
               icon: 'error',
               title: 'Error',
@@ -80,8 +94,6 @@ export class EditarCorporacionComponent {
         )
       }
     });
-
-    
   }
 
   cerrar(){

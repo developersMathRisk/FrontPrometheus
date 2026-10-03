@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/apps/gallery/gallery.component.scss"],
+  "sourcesContent": ["@import url('https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lightgallery.css');\r\n@import url('https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-zoom.css');\r\nbody {\r\n  margin: 0;\r\n}\r\n.gallery-item {\r\n  margin: 5px;\r\n}\r\n"],
+  "mappings": ";;;;AAEA;AACE,UAAA;;AAEF,CAAA;AACE,UAAA;;",
+  "names": []
+}

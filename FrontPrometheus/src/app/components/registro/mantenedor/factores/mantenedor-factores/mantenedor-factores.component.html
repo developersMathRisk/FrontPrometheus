@@ -1,15 +1,25 @@
-<form novalidate="" class="row g-3 mt-0 ng-untouched ng-pristine ng-valid">
-    <div class="card">
-        <div class="card-header justify-content-between d-sm-flex d-block">
-            <div class="card-title d-flex align-items-center">
-                <label for="select-producto">Mantenedor de </label>
-                <ng-select style="margin-left: 10px; width: 250px;" placeholder="Seleccione un factor.." name="select-factor" [items]="listaFactores" bindLabel="descripcion" bindValue="id" [(ngModel)]="this.factorSeleccionado"></ng-select>                
-            </div>
-        </div>
-        <div class="card-body">
-            <ng-container *ngIf="componenteSeleccionado">
-                <ng-container *ngComponentOutlet="componenteSeleccionado"></ng-container>
-            </ng-container>
-        </div>
+<div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-column">
+        <h1 class="page-title my-auto">Factores de Riesgo</h1>
+        <p class="factores-subtitulo">Series de mercado que alimentan la valorización y el cálculo de VaR.</p>
     </div>
-</form>
+</div>
+
+<div class="factores-segmentado" role="tablist" aria-label="Tipo de factor">
+    <button *ngFor="let factor of factores; let i = index" #segmento type="button" role="tab"
+        class="factores-segmento" [class.activo]="factor.id === factorSeleccionado"
+        [id]="'factor-tab-' + factor.id" aria-controls="factor-panel"
+        [attr.aria-selected]="factor.id === factorSeleccionado"
+        [attr.tabindex]="factor.id === factorSeleccionado ? 0 : -1"
+        (click)="seleccionar(factor.id)" (keydown)="alTeclear($event, i)">
+        {{ factor.etiqueta }}
+    </button>
+</div>
+
+<section id="factor-panel" class="card factores-panel" role="tabpanel"
+    [attr.aria-labelledby]="'factor-tab-' + factorSeleccionado">
+    <div class="card-body">
+        <p class="factores-descripcion">{{ actual.descripcion }}</p>
+        <ng-container *ngComponentOutlet="actual.componente"></ng-container>
+    </div>
+</section>

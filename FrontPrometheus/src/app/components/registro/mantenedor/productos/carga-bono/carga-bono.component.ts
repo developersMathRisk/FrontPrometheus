@@ -31,10 +31,11 @@ import { TipoInstrumento } from '../../../../../shared/models/atributo-financier
 import { CommonModule } from '@angular/common';
 
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-carga-bono',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaBonoCuponComponent, CargaTipoInstrumentoComponent, CommonModule],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaBonoCuponComponent, CargaTipoInstrumentoComponent, CommonModule, ModalFormularioComponent],
   templateUrl: './carga-bono.component.html',
   styleUrl: './carga-bono.component.scss',
 })
@@ -56,6 +57,29 @@ export class CargaBonoComponent implements OnInit{
 
   nuevoRegistro: Bono = new Bono();
   flgAutomatico: boolean = false;
+
+  get faltantes(): string[] {
+    const r = this.nuevoRegistro;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codISIN)) f.push('ISIN');
+    if (vacio(r.ticker)) f.push('Ticker');
+    if (vacio(r.idTipoBono)) f.push('Tipo Bono');
+    if (vacio(r.idTipoTasaInteres)) f.push('Tipo Tasa Interés');
+    if (vacio(r.idFormulaTasa)) f.push('Fórmula Tasa');
+    if (vacio(r.idCurvaReferencia)) f.push('Curva Referencia');
+    if (vacio(r.idEmisor)) f.push('Emisor');
+    if (vacio(r.idMoneda)) f.push('Moneda');
+    if (vacio(r.idMetodoAmortizacion)) f.push('Método Amortización');
+    if (vacio(r.idCalculobase)) f.push('Cálculo Base');
+    if (vacio(r.idFrecuenciaPago)) f.push('Frecuencia Pago');
+    if (this.flgAutomatico) {
+      if (vacio(r.fechaEmision)) f.push('Fecha Emisión');
+      if (vacio(r.fechaPrimerCupon)) f.push('Fecha Primer Cupón');
+      if (vacio(r.fechaVencimiento)) f.push('Fecha Vencimiento');
+    }
+    return f;
+  }
 
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
@@ -162,6 +186,8 @@ export class CargaBonoComponent implements OnInit{
         // this.cerrar();
         // this.modalRef = this.modalService.open(modal, {windowClass: 'my-classModal', backdrop: 'static', keyboard: false, size:'xl'});//size: sm, lg, xl
 
+    // El botón «Registrar» solo se habilita con los obligatorios completos; esto protege además la tecla Enter
+    if (this.faltantes.length > 0) return;
 
     this.registroService.postRegistrarBono(this.nuevoRegistro, this.flgAutomatico).subscribe(
       (response: Bono) => {
@@ -181,7 +207,7 @@ export class CargaBonoComponent implements OnInit{
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: error.message,
+          text: error.error?.message ?? error.message,
           confirmButtonText: 'Aceptar'
         });
       }

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/dashboards/sales/sales.component.scss"],
+  "sourcesContent": ["::ng-deep .leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive {\r\n    width: 100%;\r\n    height: 100%;\r\n    z-index: 100;\r\n  }\r\n  \r\n  ::ng-deep #leaflet2 {\r\n    -ms-touch-action: none;\r\n        touch-action: none;\r\n  }\r\n  ::ng-deep .chart-container {\r\n    /* Make the chart container responsive */\r\n    max-width: 100%;\r\n    width: 100%;\r\n    margin: 0 auto; /* Optional: Center the container */\r\n  }\r\n  .apexcharts-toolbar{\r\n    display:none !important;\r\n  }"],
+  "mappings": ";AAAA,UAAA,CAAA,mBAAA,CAAA,qBAAA,CAAA;AACI,SAAA;AACA,UAAA;AACA,WAAA;;AAGF,UAAA,CAAA;AACE,oBAAA;AACI,gBAAA;;AAEN,UAAA,CAAA;AAEE,aAAA;AACA,SAAA;AACA,UAAA,EAAA;;AAEF,CAAA;AACE,WAAA;;",
+  "names": []
+}

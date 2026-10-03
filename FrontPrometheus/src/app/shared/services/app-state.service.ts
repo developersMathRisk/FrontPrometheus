@@ -1,5 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { MenuLateralService } from './menu-lateral.service';
 
 interface StateType {
   direction: string;
@@ -41,7 +42,7 @@ export class AppStateService {
   private stateSubject = new BehaviorSubject<StateType>(this.initialState); // Use any for initial null value
   state$ = this.stateSubject.asObservable();
 
-  constructor() {
+  constructor(private menuLateral: MenuLateralService) {
     const initialState: StateType = this.getInitialStateFromLocalStorage();
     this.initializeState();
     this.stateSubject.next(initialState);
@@ -131,17 +132,15 @@ export class AppStateService {
     html?.removeAttribute('data-nav-style');
     switch (layoutStyles) {
       case 'default':
-        html?.setAttribute('data-vertical-style', 'overlay');
-        html?.setAttribute('data-toggled', '');
+      case 'overlay':
+        // El modo del menú (fijo o solo iconos) lo decide el usuario y lo guarda MenuLateralService
+        this.menuLateral.aplicar();
         break;
       case 'closed':
         html?.setAttribute('data-toggled', 'close-menu-close');
         break;
       case 'icontext':
         html?.setAttribute('data-toggled', 'icon-text-close');
-        break;
-      case 'overlay':
-        html?.setAttribute('data-toggled', 'icon-overlay-close');
         break;
       case 'detached':
         html?.setAttribute('data-toggled', 'detached-close');

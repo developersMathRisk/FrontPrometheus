@@ -9,11 +9,12 @@ import { RegistroService } from '../../../../../shared/services/registro.service
 import { Emisor } from '../../../../../shared/models/atributo-financiero/emisor';
 import { Pais } from '../../../../../shared/models/atributo-financiero/pais';
 import { CargaPaisComponent } from "../carga-pais/carga-pais.component";
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 
 @Component({
   selector: 'app-editar-emisor',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaPaisComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaPaisComponent, ModalFormularioComponent],
   templateUrl: './editar-emisor.component.html',
   styleUrl: './editar-emisor.component.scss'
 })
@@ -21,10 +22,20 @@ export class EditarEmisorComponent {
   @Input() data!: Emisor;
   @Output() close = new EventEmitter<any>();
   modalRef: any;
-  
+  guardando = false;
+
   listPais: Pais[] = [];
   objRegistroEditado: Emisor = new Emisor;
-  
+
+  get faltantes(): string[] {
+    const r = this.objRegistroEditado;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codEmisor)) f.push('Código');
+    if (vacio(r.nomEmisor)) f.push('Nombre');
+    return f;
+  }
+
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
@@ -41,6 +52,7 @@ export class EditarEmisorComponent {
   }
 
   guardarCambios(){
+    if (this.faltantes.length > 0) return;
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
       text: 'Este cambio no puede deshacerse.',
@@ -51,8 +63,10 @@ export class EditarEmisorComponent {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
+        this.guardando = true;
         this.registroService.putModificarEmisor(this.objRegistroEditado.idEmisor, this.objRegistroEditado).subscribe(
           (response: any) => {
+            this.guardando = false;
             Swal.fire({
               icon: 'success',
               title: 'Modificación exitosa',
@@ -62,6 +76,7 @@ export class EditarEmisorComponent {
             this.cerrar();
           },
           (error: HttpErrorResponse) => {
+            this.guardando = false;
             Swal.fire({
               icon: 'error',
               title: 'Error',
@@ -72,13 +87,10 @@ export class EditarEmisorComponent {
         )
       }
     });
-
-    
   }
 
   cerrar(){
     this.close.emit();
-    //this.modalService.dismissAll();
   }
 
   abrirModalSecundario(modal: any){

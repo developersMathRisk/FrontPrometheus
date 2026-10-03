@@ -1,0 +1,195 @@
+.var-subtitulo {
+    margin: 2px 0 0;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+.an9 {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.an9__cargando {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 30px 0;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+.an9__encabezado {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(var(--dark-rgb), 0.12);
+}
+
+.an9__titulo {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.an9__subtitulo {
+    margin: 4px 0 0;
+    font-size: 0.8125rem;
+}
+
+.an9__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.75rem;
+    color: rgba(var(--dark-rgb), 0.78);
+    text-align: right;
+}
+
+.an9__filtro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.an9__base {
+    margin: 0;
+    font-size: 0.8125rem;
+}
+
+// ---- chips (reutiliza el mismo lenguaje visual de "Ejecución de VaR") --------------
+.var-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.var-chip {
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--default-text-color);
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid rgba(var(--dark-rgb), 0.28);
+    border-radius: 999px;
+    transition: background-color 0.12s, border-color 0.12s;
+
+    &:hover {
+        background: rgba(var(--dark-rgb), 0.06);
+    }
+
+    &.var-chip--activo {
+        font-weight: 600;
+        color: rgb(var(--primary-rgb));
+        background: rgba(var(--primary-rgb), 0.12);
+        border-color: rgb(var(--primary-rgb));
+    }
+}
+
+// ---- tabla del anexo ----------------------------------------------------------------
+.an9-tabla {
+    width: 100%;
+    font-size: 0.8125rem;
+    border-collapse: collapse;
+
+    caption {
+        padding: 0 0 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-align: left;
+        caption-side: top;
+        color: rgba(var(--dark-rgb), 0.78);
+    }
+
+    th, td {
+        padding: 8px 10px;
+        text-align: left;
+        border-bottom: 1px solid rgba(var(--dark-rgb), 0.1);
+    }
+
+    thead th {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        color: rgba(var(--dark-rgb), 0.65);
+        background: rgba(var(--dark-rgb), 0.04);
+    }
+
+    .col-num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    .an9-fila--total td {
+        font-weight: 700;
+        background: rgba(var(--primary-rgb), 0.06);
+    }
+}
+
+.an9-info {
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+    margin-inline-start: 4px;
+    vertical-align: middle;
+    color: rgba(var(--dark-rgb), 0.5);
+    cursor: help;
+}
+
+.an9-nota {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 0;
+    padding: 8px 10px;
+    font-size: 0.75rem;
+    color: rgba(var(--dark-rgb), 0.78);
+    background: rgba(var(--warning-rgb), 0.1);
+    border-radius: 6px;
+
+    .mat-icon {
+        flex: none;
+        width: 15px;
+        height: 15px;
+        margin-top: 1px;
+        font-size: 15px;
+        color: rgb(var(--warning-rgb));
+    }
+}
+
+.an9__acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+
+    .mat-icon {
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
+        vertical-align: text-bottom;
+    }
+}
+
+@media (max-width: 640px) {
+    .an9-tabla {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .an9__meta {
+        text-align: left;
+    }
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}

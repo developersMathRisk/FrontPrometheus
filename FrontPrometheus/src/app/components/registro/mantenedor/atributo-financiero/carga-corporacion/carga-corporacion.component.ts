@@ -9,11 +9,12 @@ import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Pais } from '../../../../../shared/models/atributo-financiero/pais';
 import { CargaPaisComponent } from "../carga-pais/carga-pais.component";
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 
 @Component({
   selector: 'app-carga-corporacion',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaPaisComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaPaisComponent, ModalFormularioComponent],
   templateUrl: './carga-corporacion.component.html',
   styleUrl: './carga-corporacion.component.scss'
 })
@@ -23,6 +24,15 @@ export class CargaCorporacionComponent {
 
   nuevoRegistro: Corporacion = new Corporacion();
   listPais: Pais[] = [];
+  guardando = false;
+
+  get faltantes(): string[] {
+    const r = this.nuevoRegistro;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.descripcion)) f.push('Descripción');
+    return f;
+  }
 
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
@@ -48,8 +58,11 @@ export class CargaCorporacionComponent {
 
 
   registrar(){
+    if (this.faltantes.length > 0) return;
+    this.guardando = true;
     this.registroService.postRegistrarCorporacion(this.nuevoRegistro).subscribe(
       (response: any) => {
+        this.guardando = false;
         Swal.fire({
           icon: 'success',
           title: 'Registro exitoso',
@@ -59,6 +72,7 @@ export class CargaCorporacionComponent {
         this.cerrar();
       },
       (error: HttpErrorResponse) =>{
+        this.guardando = false;
         Swal.fire({
           icon: 'error',
           title: 'Error',

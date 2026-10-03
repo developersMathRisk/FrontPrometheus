@@ -29,10 +29,11 @@ import { CargaTipoInstrumentoComponent } from "../../atributo-financiero/carga-t
 import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
 import { CommonModule } from '@angular/common';
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-editar-bono',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaTipoInstrumentoComponent, CommonModule],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaTipoInstrumentoComponent, CommonModule, ModalFormularioComponent],
   templateUrl: './editar-bono.component.html',
   styleUrl: './editar-bono.component.scss'
 })
@@ -54,6 +55,24 @@ export class EditarBonoComponent {
   listFormulaTasa: FormulaTasa[] = [];
   listTipoInstrumento: TipoInstrumento[] = [];
   
+  get faltantes(): string[] {
+    const r = this.objRegistroEditado;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codISIN)) f.push('ISIN');
+    if (vacio(r.ticker)) f.push('Ticker');
+    if (vacio(r.idTipoBono)) f.push('Tipo Bono');
+    if (vacio(r.idTipoTasaInteres)) f.push('Tipo Tasa Interés');
+    if (vacio(r.idFormulaTasa)) f.push('Fórmula Tasa');
+    if (vacio(r.idCurvaReferencia)) f.push('Curva Referencia');
+    if (vacio(r.idEmisor)) f.push('Emisor');
+    if (vacio(r.idMoneda)) f.push('Moneda');
+    if (vacio(r.idMetodoAmortizacion)) f.push('Método Amortización');
+    if (vacio(r.idCalculobase)) f.push('Cálculo Base');
+    if (vacio(r.idFrecuenciaPago)) f.push('Frecuencia Pago');
+    return f;
+  }
+
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
   ngOnInit(): void {
@@ -151,6 +170,7 @@ export class EditarBonoComponent {
   }
 
   guardarCambios(){
+    if (this.faltantes.length > 0) return;
     Swal.fire({
       title: '¿Está seguro de realizar el cambio?',
       text: 'Este cambio no puede deshacerse.',

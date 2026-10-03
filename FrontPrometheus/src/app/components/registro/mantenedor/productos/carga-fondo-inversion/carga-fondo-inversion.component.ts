@@ -23,10 +23,11 @@ import { CargaFuenteInformacionComponent } from "../../../mantenedor/atributo-fi
 import { CargaTipoInstrumentoComponent } from "../../atributo-financiero/carga-tipo-instrumento/carga-tipo-instrumento.component";
 import { TipoInstrumento } from '../../../../../shared/models/atributo-financiero/tipo-instrumento';
 
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 @Component({
   selector: 'app-carga-fondo-inversion',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaMonedaComponent, CargaPlazaComponent, CargaEmisorComponent, CargaTipoFondoComponent, CargaFuenteInformacionComponent, CargaTipoInstrumentoComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CommonModule, CargaMonedaComponent, CargaPlazaComponent, CargaEmisorComponent, CargaTipoFondoComponent, CargaFuenteInformacionComponent, CargaTipoInstrumentoComponent, ModalFormularioComponent],
   templateUrl: './carga-fondo-inversion.component.html',
   styleUrl: './carga-fondo-inversion.component.scss'
 })
@@ -42,6 +43,18 @@ export class CargaFondoInversionComponent {
   listTipoInstrumento: TipoInstrumento[] = [];
 
   nuevoRegistro: FondoInversion = new FondoInversion();
+
+  get faltantes(): string[] {
+    const r = this.nuevoRegistro;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codTicker)) f.push('Ticker');
+    if (vacio(r.idPlaza)) f.push('Plaza');
+    if (vacio(r.idEmisor)) f.push('Emisor');
+    if (vacio(r.idMoneda)) f.push('Moneda');
+    if (vacio(r.idTipoFondo)) f.push('Tipo Fondo');
+    return f;
+  }
 
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
@@ -103,6 +116,7 @@ export class CargaFondoInversionComponent {
   }
 
   registrar(){
+    if (this.faltantes.length > 0) return;
     this.registroService.postRegistrarFondoInversion(this.nuevoRegistro).subscribe(
       (response: any) => {
         Swal.fire({

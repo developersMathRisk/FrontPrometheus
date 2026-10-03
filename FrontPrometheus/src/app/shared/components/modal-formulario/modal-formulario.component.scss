@@ -1,0 +1,118 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.hoja-cabecera {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 24px 16px;
+    border-bottom: 1px solid rgba(var(--dark-rgb), 0.14);
+}
+
+.hoja-titulo {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--default-text-color);
+}
+
+// Describe la tarea del modal para no perder el contexto (HIG, Modality)
+.hoja-subtitulo {
+    margin: 4px 0 0;
+    font-size: 0.875rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+.hoja-cerrar {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin: -4px -8px 0 0;
+    padding: 0;
+    color: rgba(var(--dark-rgb), 0.78);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+
+    &:hover {
+        color: var(--default-text-color);
+        background: rgba(var(--dark-rgb), 0.1);
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgb(var(--primary-rgb));
+        outline-offset: 1px;
+    }
+}
+
+.hoja-cuerpo {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 20px 24px 8px;
+    overflow-y: auto;
+}
+
+.hoja-pie {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px 12px;
+    padding: 14px 24px;
+    background: var(--custom-white);
+    border-top: 1px solid rgba(var(--dark-rgb), 0.14);
+}
+
+.hoja-aviso {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 auto 0 0;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.78);
+
+    .mat-icon {
+        width: 18px;
+        height: 18px;
+        font-size: 18px;
+        color: rgb(var(--warning-rgb));
+    }
+}
+
+// Ambos botones con el mismo tamaño; se distingue por estilo, no por tamaño (HIG, Buttons)
+.hoja-boton {
+    min-width: 96px;
+    min-height: 38px;
+    padding: 0 18px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 8px;
+}
+
+.hoja-boton--secundario {
+    color: var(--default-text-color);
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid rgba(var(--dark-rgb), 0.3);
+
+    &:hover {
+        background: rgba(var(--dark-rgb), 0.08);
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgb(var(--primary-rgb));
+        outline-offset: 2px;
+    }
+}

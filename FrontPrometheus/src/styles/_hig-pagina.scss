@@ -1,0 +1,51 @@
+// Elementos de página compartidos entre módulos: subtítulo del encabezado y estado vacío/placeholder.
+// Antes cada componente definía su propia copia (cvar-subtitulo, productos-subtitulo, var-subtitulo...);
+// esta es la versión única de la que todos deberían partir en adelante.
+
+.hig-subtitulo {
+    margin: 2px 0 0;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.78); // ≥ 4.5:1, también en modo oscuro
+}
+
+.hig-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    padding: 48px 24px;
+
+    .mat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 40px;
+        color: rgba(var(--dark-rgb), 0.3);
+    }
+}
+
+.hig-placeholder__titulo {
+    margin: 4px 0 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.hig-placeholder__texto {
+    margin: 0;
+    max-width: 380px;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.68);
+}
+
+// Métrica cuyo cálculo real todavía no está disponible: se muestra "—" en vez de inventar un número.
+.hig-kpi-pendiente {
+    h2 {
+        color: rgba(var(--dark-rgb), 0.35);
+    }
+}
+
+.hig-kpi-pendiente__nota {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: rgba(var(--dark-rgb), 0.55);
+}

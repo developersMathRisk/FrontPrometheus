@@ -9,20 +9,31 @@ import { MatIconModule } from '@angular/material/icon';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Pais } from '../../../../../shared/models/atributo-financiero/pais';
 import { CargaPaisComponent } from "../carga-pais/carga-pais.component";
+import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
 
 @Component({
   selector: 'app-carga-emisor',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaPaisComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaPaisComponent, ModalFormularioComponent],
   templateUrl: './carga-emisor.component.html',
   styleUrl: './carga-emisor.component.scss'
 })
 export class CargaEmisorComponent {
   @Output() close = new EventEmitter<any>();
   modalRef: any;
+  guardando = false;
 
   listPais: Pais[] = [];
   nuevoRegistro: Emisor = new Emisor();
+
+  get faltantes(): string[] {
+    const r = this.nuevoRegistro;
+    const vacio = (valor: unknown) => valor === null || valor === undefined || valor === '';
+    const f: string[] = [];
+    if (vacio(r.codEmisor)) f.push('Código');
+    if (vacio(r.nomEmisor)) f.push('Nombre');
+    return f;
+  }
 
   constructor(private registroService: RegistroService, private modalService: NgbModal){}
 
@@ -39,8 +50,11 @@ export class CargaEmisorComponent {
   }
 
   registrar(){
+    if (this.faltantes.length > 0) return;
+    this.guardando = true;
     this.registroService.postRegistrarEmisor(this.nuevoRegistro).subscribe(
       (response: any) => {
+        this.guardando = false;
         Swal.fire({
           icon: 'success',
           title: 'Registro exitoso',
@@ -50,6 +64,7 @@ export class CargaEmisorComponent {
         this.cerrar();
       },
       (error: HttpErrorResponse) =>{
+        this.guardando = false;
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -62,7 +77,6 @@ export class CargaEmisorComponent {
 
   cerrar(){
     this.close.emit();
-    //this.modalService.dismissAll();
   }
 
   abrirModalSecundario(modal: any){

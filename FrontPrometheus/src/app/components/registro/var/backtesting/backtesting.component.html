@@ -1,0 +1,113 @@
+<div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-column">
+        <h1 class="page-title my-auto">Backtesting del VaR</h1>
+        <p class="bt-subtitulo">Prueba retrospectiva fuera de muestra (walk-forward) con prueba de Kupiec, sobre datos reales.</p>
+    </div>
+</div>
+
+<div class="bt-layout">
+<div class="bt-layout__config card">
+    <div class="card-body bt-config">
+        <div class="bt-grid">
+            <div class="bt-campo">
+                <label class="form-label">Portafolio(s) <span class="hig-requerido">*</span></label>
+                <ng-select placeholder="Seleccione uno o varios..." [items]="listaPortafolio" bindLabel="descripcionPortafolio"
+                    bindValue="idPortafolio" [multiple]="true" [(ngModel)]="idsPortafolioSeleccionados"
+                    (change)="alCambiarPortafolio()"></ng-select>
+            </div>
+            <div class="bt-campo">
+                <label class="form-label">Moneda de reporte <span class="hig-requerido">*</span></label>
+                <ng-select placeholder="Seleccione..." [items]="listMoneda" bindLabel="desMoneda" bindValue="idMoneda"
+                    [(ngModel)]="idMonedaSeleccionada" (change)="alCambiarMoneda()"></ng-select>
+            </div>
+            <div class="bt-campo">
+                <label class="form-label">Ventana (días)</label>
+                <input type="number" min="31" step="1" class="form-control" [(ngModel)]="ventana">
+            </div>
+        </div>
+
+        <div class="bt-campo">
+            <span class="form-label mb-0">Nivel de confianza</span>
+            <div class="var-chips">
+                <button type="button" class="var-chip" *ngFor="let nc of listNivelConfianza"
+                    [class.var-chip--activo]="nc.idNivelConfianza === idNivelConfianzaSeleccionado"
+                    (click)="elegirNivelConfianza(nc)">
+                    {{ nc.valorNivelConfianza * 100 | number:'1.1-2' }}%
+                </button>
+            </div>
+        </div>
+
+        <div class="bt-accion">
+            <button type="button" class="btn btn-primary bt-accion__boton" [disabled]="!puedeEjecutar || ejecutando"
+                (click)="ejecutar()">
+                <app-loader tamano="inline" *ngIf="ejecutando" class="me-2"></app-loader>
+                {{ ejecutando ? 'Calculando...' : 'Ejecutar Backtesting' }}
+            </button>
+        </div>
+
+        <div class="alert alert-danger d-flex align-items-center gap-2 mb-0" role="alert" *ngIf="mensajeError">
+            <mat-icon aria-hidden="true">error</mat-icon>
+            <span>{{ mensajeError }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="bt-layout__resultado">
+    <div class="card bt-placeholder" *ngIf="!resultado && !ejecutando" [@fadeIn]>
+        <div class="card-body bt-placeholder__cuerpo">
+            <app-loader tamano="grande"></app-loader>
+            <h3 class="bt-placeholder__titulo">Configure y ejecute el backtesting</h3>
+            <p class="bt-placeholder__texto">
+                El resultado (días evaluados, excepciones y prueba de Kupiec) aparecerá aquí.
+            </p>
+        </div>
+    </div>
+
+    <div class="card bt-calculando" *ngIf="ejecutando" [@fadeIn]>
+        <div class="card-body bt-placeholder__cuerpo">
+            <app-loader tamano="grande" etiqueta="Calculando el walk-forward con el motor real..."></app-loader>
+        </div>
+    </div>
+
+    <div class="card" *ngIf="resultado && !ejecutando" [@fadeSlideIn]>
+    <div class="card-body bt-resultado">
+        <p class="bt-contexto">
+            {{ resultado.descripcionPortafolio }} · ventana de {{ resultado.ventana }} días ·
+            {{ resultado.nivelConfianza * 100 | number:'1.1-2' }}% de confianza
+        </p>
+
+        <div class="bt-kpis">
+            <div class="bt-kpi">
+                <span class="bt-kpi__valor">{{ resultado.diasEvaluados }}</span>
+                <span class="bt-kpi__etiqueta">Días evaluados (fuera de muestra)</span>
+            </div>
+            <div class="bt-kpi">
+                <span class="bt-kpi__valor">{{ resultado.excepciones }}</span>
+                <span class="bt-kpi__etiqueta">Excepciones</span>
+            </div>
+            <div class="bt-kpi">
+                <span class="bt-kpi__valor">{{ resultado.tasaObservada * 100 | number:'1.2-2' }}%</span>
+                <span class="bt-kpi__etiqueta">Tasa observada (esperada: {{ resultado.tasaEsperada * 100 | number:'1.2-2' }}%)</span>
+            </div>
+            <div class="bt-kpi" [class]="'bt-kpi--' + zona">
+                <span class="bt-kpi__valor">LR = {{ resultado.estadisticoLR | number:'1.2-2' }}</span>
+                <span class="bt-kpi__etiqueta">Prueba de Kupiec (crítico: {{ resultado.valorCriticoChi2 }})</span>
+            </div>
+        </div>
+
+        <p class="bt-nota" [class.bt-nota--ok]="resultado.modeloAdecuado">
+            <mat-icon aria-hidden="true">{{ resultado.modeloAdecuado ? 'check_circle' : 'error' }}</mat-icon>
+            {{ zonaTexto }}
+        </p>
+
+        <apx-chart *ngIf="chart" [series]="chart.series" [chart]="chart.chart" [colors]="chart.colors"
+            [stroke]="chart.stroke" [markers]="chart.markers" [dataLabels]="chart.dataLabels"
+            [xaxis]="chart.xaxis" [yaxis]="chart.yaxis" [legend]="chart.legend" [grid]="chart.grid"></apx-chart>
+
+        <p class="bt-nota" *ngFor="let a of resultado.advertencias">
+            <mat-icon aria-hidden="true">info</mat-icon>{{ a }}
+        </p>
+    </div>
+    </div>
+</div>
+</div>

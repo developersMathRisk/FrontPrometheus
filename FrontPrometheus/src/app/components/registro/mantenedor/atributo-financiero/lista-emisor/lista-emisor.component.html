@@ -1,115 +1,133 @@
-<div>
-    <button type="submit" class="btn btn-primary" (click)="registrar(cargaModal)">Agregar Emisor</button>
-</div>
+<div class="hig-tabla">
 
-<br>
+    <app-tabla-toolbar placeholder="Buscar código o nombre…" accion="Agregar Emisor"
+        [total]="total" [filtrados]="filtrados" [ocultarResumen]="cargando || !!mensajeError" [texto]="busqueda"
+        (buscar)="buscar($event)" (agregar)="registrar(cargaModal)">
+    </app-tabla-toolbar>
 
-<div id="mat-sorting">
-    <div class="mat-elevation-z8">
-        <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" matSort #sort="matSort">
+    <div class="tabla-contenedor">
+        <table mat-table [dataSource]="dataSource" matSort #sort="matSort" matSortActive="nomEmisor"
+            matSortDirection="asc" aria-label="Listado de emisores">
 
-                <ng-container matColumnDef="idEmisor">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-                    <td mat-cell *matCellDef="let element"> {{element.idEmisor}} </td>
-                </ng-container>
-                
-                <ng-container matColumnDef="codEmisor">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codEmisor}} </td>
-                </ng-container>
+            <ng-container matColumnDef="idEmisor">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                <td mat-cell *matCellDef="let element" class="col-id">{{ element.idEmisor }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="codIDCCliente">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. IDC Cliente</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codIDCCliente}} </td>
-                </ng-container>
+            <ng-container matColumnDef="codEmisor">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+                <td mat-cell *matCellDef="let element"><span class="fw-semibold">{{ element.codEmisor }}</span></td>
+            </ng-container>
 
-                <ng-container matColumnDef="nomEmisor">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
-                    <td mat-cell *matCellDef="let element"> {{element.nomEmisor}} </td>
-                </ng-container>
+            <ng-container matColumnDef="codIDCCliente">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Cód. IDC Cliente</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.codIDCCliente">{{ element.codIDCCliente || '—' }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="codTipoEmisor">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codTipoEmisor}} </td>
-                </ng-container>
+            <ng-container matColumnDef="nomEmisor">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+                <td mat-cell *matCellDef="let element">{{ element.nomEmisor }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="detalle">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Detalle</th>
-                    <td mat-cell *matCellDef="let element"> {{element.detalle}} </td>
-                </ng-container>
+            <ng-container matColumnDef="codTipoEmisor">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.codTipoEmisor">{{ element.codTipoEmisor || '—' }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="flgEmiReport">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Emite Reporte</th>
-                    <td mat-cell *matCellDef="let element">
-                        <mat-checkbox [checked]="element.flgEmiReport" disabled></mat-checkbox>
-                    </td>
-                </ng-container>
+            <ng-container matColumnDef="detalle">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Detalle</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.detalle">{{ element.detalle || '—' }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="flgOrgaMulti">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Organismo Multilateral</th>
-                    <td mat-cell *matCellDef="let element">
-                        <mat-checkbox [checked]="element.flgOrgaMulti" disabled></mat-checkbox>
-                    </td>
-                </ng-container>
+            <ng-container matColumnDef="flgEmiReport">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Emite Reporte</th>
+                <td mat-cell *matCellDef="let element" class="col-estado">
+                    <span *ngIf="element.flgEmiReport; else sinMarcaER" class="estado-si"><mat-icon aria-hidden="true">check_circle</mat-icon><span class="solo-lector">Sí</span></span>
+                    <ng-template #sinMarcaER><span class="celda-vacia" aria-hidden="true">—</span><span class="solo-lector">No</span></ng-template>
+                </td>
+            </ng-container>
 
-                <ng-container matColumnDef="ambito">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Ámbito</th>
-                    <td mat-cell *matCellDef="let element"> {{element.ambito}} </td>
-                </ng-container>
+            <ng-container matColumnDef="flgOrgaMulti">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Organismo Multilateral</th>
+                <td mat-cell *matCellDef="let element" class="col-estado">
+                    <span *ngIf="element.flgOrgaMulti; else sinMarcaOM" class="estado-si"><mat-icon aria-hidden="true">check_circle</mat-icon><span class="solo-lector">Sí</span></span>
+                    <ng-template #sinMarcaOM><span class="celda-vacia" aria-hidden="true">—</span><span class="solo-lector">No</span></ng-template>
+                </td>
+            </ng-container>
 
-                <ng-container matColumnDef="codBloomberg">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. Bloomberg</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codBloomberg}} </td>
-                </ng-container>
+            <ng-container matColumnDef="ambito">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Ámbito</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.ambito">{{ element.ambito || '—' }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="flgContratoMarco">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Contrato Marco</th>
-                    <td mat-cell *matCellDef="let element">
-                        <mat-checkbox [checked]="element.flgContratoMarco" disabled></mat-checkbox>
-                    </td>
-                </ng-container>
+            <ng-container matColumnDef="codBloomberg">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Cód. Bloomberg</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.codBloomberg">{{ element.codBloomberg || '—' }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="flgContratoEspecifico">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Contrato Específico</th>
-                    <td mat-cell *matCellDef="let element">
-                        <mat-checkbox [checked]="element.flgContratoEspecifico" disabled></mat-checkbox>
-                    </td>
-                </ng-container>
+            <ng-container matColumnDef="flgContratoMarco">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Contrato Marco</th>
+                <td mat-cell *matCellDef="let element" class="col-estado">
+                    <span *ngIf="element.flgContratoMarco; else sinMarcaCM" class="estado-si"><mat-icon aria-hidden="true">check_circle</mat-icon><span class="solo-lector">Sí</span></span>
+                    <ng-template #sinMarcaCM><span class="celda-vacia" aria-hidden="true">—</span><span class="solo-lector">No</span></ng-template>
+                </td>
+            </ng-container>
 
-                <ng-container matColumnDef="codSBS">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. SBS</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codSBS}} </td>
-                </ng-container>
+            <ng-container matColumnDef="flgContratoEspecifico">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Contrato Específico</th>
+                <td mat-cell *matCellDef="let element" class="col-estado">
+                    <span *ngIf="element.flgContratoEspecifico; else sinMarcaCE" class="estado-si"><mat-icon aria-hidden="true">check_circle</mat-icon><span class="solo-lector">Sí</span></span>
+                    <ng-template #sinMarcaCE><span class="celda-vacia" aria-hidden="true">—</span><span class="solo-lector">No</span></ng-template>
+                </td>
+            </ng-container>
 
-                <ng-container matColumnDef="codRUC">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>RUC</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codRUC}} </td>
-                </ng-container>
+            <ng-container matColumnDef="codSBS">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Cód. SBS</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.codSBS">{{ element.codSBS || '—' }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="codFuente">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fuente</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codFuente}} </td>
-                </ng-container>
+            <ng-container matColumnDef="codRUC">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>RUC</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.codRUC">{{ element.codRUC || '—' }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="codTipoEmisorAnx8">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Emisor Anx8</th>
-                    <td mat-cell *matCellDef="let element"> {{element.codTipoEmisorAnx8}} </td>
-                </ng-container>
+            <ng-container matColumnDef="codFuente">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fuente</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.codFuente">{{ element.codFuente || '—' }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="idPais">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>País</th>
-                    <td mat-cell *matCellDef="let element"> {{element.idPais}} </td>
-                </ng-container>
+            <ng-container matColumnDef="codTipoEmisorAnx8">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Emisor Anx8</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.codTipoEmisorAnx8">{{ element.codTipoEmisorAnx8 || '—' }}</td>
+            </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
-            </table>
-        </div>
-        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-        </mat-paginator>
+            <ng-container matColumnDef="idPais">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>País</th>
+                <td mat-cell *matCellDef="let element" [class.celda-vacia]="!element.idPais">{{ element.idPais || '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef class="col-acciones"><span class="solo-lector">Acciones</span></th>
+                <td mat-cell *matCellDef="let element" class="col-acciones">
+                    <button type="button" class="btn-fila" aria-label="Acciones del registro"
+                        (click)="abrirMenuFila($event, element)">
+                        <mat-icon aria-hidden="true">more_horiz</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (contextmenu)="onContextMenu($event, row)"></tr>
+        </table>
+
+        <app-tabla-estado [estado]="estadoTabla" tituloVacio="No hay emisores registrados"
+            detalleVacio="Agregue el primero con el botón «Agregar Emisor»." [busqueda]="busqueda"
+            [mensajeError]="mensajeError" (reintentar)="listarRegistros()" (limpiar)="buscar('')"></app-tabla-estado>
     </div>
 
+    <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100]" [pageSize]="20" showFirstLastButtons
+        [style.display]="estadoTabla ? 'none' : null" aria-label="Paginación de emisores">
+    </mat-paginator>
 </div>
 
 <div style="visibility: hidden; position: fixed"

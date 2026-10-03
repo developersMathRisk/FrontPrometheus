@@ -1,0 +1,258 @@
+// Menú lateral (fijo / solo iconos con despliegue al pasar el mouse) y encabezado.
+// Los colores salen de las variables del tema, así que respetan el modo oscuro.
+
+// ---- botón para fijar el menú (dentro del menú, visible solo cuando está desplegado) ----
+.app-sidebar .sidebar-pin {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: 12px;
+    z-index: 1;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    color: var(--default-text-color);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+    transform: translateY(-50%);
+
+    &:hover {
+        background: rgba(var(--dark-rgb), 0.08);
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgb(var(--primary-rgb));
+        outline-offset: 1px;
+    }
+
+    // Fijado: el icono se rellena y toma el color de acento (se distingue por forma y color)
+    &.sidebar-pin--activo {
+        color: rgb(var(--primary-rgb));
+    }
+}
+
+@media (min-width: 992px) {
+    // Menú fijo: siempre desplegado
+    html:not([data-toggled="icon-overlay-close"]) .app-sidebar .sidebar-pin,
+    // Menú automático: solo mientras está desplegado por el mouse o el teclado
+    html[data-toggled="icon-overlay-close"][data-icon-overlay="open"] .app-sidebar .sidebar-pin {
+        display: inline-flex;
+    }
+
+    // Al desplegarse sobre el contenido (modo automático) se separa con sombra
+    html[data-vertical-style="overlay"][data-toggled="icon-overlay-close"][data-icon-overlay="open"] .app-sidebar {
+        box-shadow: 8px 0 28px rgba(0, 0, 0, 0.18);
+    }
+
+    // Transición suave entre menú fijo, plegado y desplegado
+    html[data-vertical-style="overlay"] {
+        .app-sidebar,
+        .main-sidebar-header {
+            transition: width 0.18s ease;
+        }
+
+        .app-header,
+        .app-content,
+        .footer {
+            transition: margin-inline-start 0.18s ease, padding-inline-start 0.18s ease;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html[data-vertical-style="overlay"] {
+        .app-sidebar,
+        .main-sidebar-header,
+        .app-header,
+        .app-content,
+        .footer {
+            transition: none !important;
+        }
+    }
+}
+
+// ---- encabezado -------------------------------------------------------------
+// Botones que sustituyen a enlaces sin destino: mismo aspecto que .header-link, con foco visible
+.app-header button.header-link,
+.app-header .header-buscar__boton {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+}
+
+.app-header .header-link:focus-visible,
+.app-header .header-buscar__boton:focus-visible {
+    outline: 2px solid rgb(var(--primary-rgb));
+    outline-offset: 2px;
+}
+
+.app-header .header-menu-toggle {
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--default-text-color);
+
+    &:hover {
+        background: rgba(var(--dark-rgb), 0.08);
+    }
+
+    svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+// Campo de búsqueda: abre la búsqueda de pantallas (Ctrl+K)
+.app-header .header-buscar {
+    align-items: center;
+    margin-inline: 8px;
+}
+
+.app-header .header-buscar__boton {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 300px;
+    height: 38px;
+    padding: 0 10px 0 12px;
+    color: rgba(var(--dark-rgb), 0.78); // ≥ 4.5:1
+    background: rgba(var(--dark-rgb), 0.06);
+    border: 1px solid rgba(var(--dark-rgb), 0.12);
+    border-radius: 10px;
+
+    &:hover {
+        background: rgba(var(--dark-rgb), 0.1);
+    }
+}
+
+.app-header .header-buscar__texto {
+    flex: 1 1 auto;
+    font-size: 0.875rem;
+    text-align: start;
+}
+
+.app-header .header-buscar__atajo {
+    padding: 1px 6px;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    color: rgba(var(--dark-rgb), 0.78);
+    background: var(--custom-white);
+    border: 1px solid rgba(var(--dark-rgb), 0.2);
+    border-radius: 5px;
+}
+
+@media (max-width: 991.98px) {
+    .app-header .header-buscar__boton {
+        justify-content: center;
+        width: 40px;
+        padding: 0;
+        background: transparent;
+        border-color: transparent;
+    }
+
+    .app-header .header-buscar__texto,
+    .app-header .header-buscar__atajo {
+        display: none;
+    }
+}
+
+// ---- ventana de búsqueda de pantallas ------------------------------------------
+.busqueda-ventana {
+    .modal-dialog {
+        max-width: min(640px, calc(100vw - 32px));
+        margin-block-start: 12vh;
+    }
+
+    .modal-content {
+        overflow: hidden;
+        color: var(--default-text-color);
+        background: var(--custom-white);
+        border: 0;
+        border-radius: 14px;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(var(--dark-rgb), 0.1);
+    }
+}
+
+.busqueda__campo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 18px;
+    color: rgba(var(--dark-rgb), 0.78);
+    border-bottom: 1px solid rgba(var(--dark-rgb), 0.14);
+}
+
+.busqueda__entrada {
+    flex: 1 1 auto;
+    height: 56px;
+    font-size: 1rem;
+    color: var(--default-text-color);
+    background: transparent;
+    border: 0;
+    outline: none;
+
+    &::placeholder {
+        color: rgba(var(--dark-rgb), 0.7);
+        opacity: 1;
+    }
+}
+
+.busqueda__lista {
+    margin: 0;
+    padding: 8px;
+    list-style: none;
+}
+
+.busqueda__resultado {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 9px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+// El resultado activo se marca con fondo y con una barra lateral, no solo con color
+.busqueda__resultado--activo {
+    background: rgba(var(--primary-rgb), 0.12);
+    box-shadow: inset 3px 0 0 rgb(var(--primary-rgb));
+}
+
+.busqueda__titulo {
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+.busqueda__ruta {
+    font-size: 0.75rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+.busqueda__vacio,
+.busqueda__ayuda {
+    margin: 0;
+    padding: 18px;
+    font-size: 0.875rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+// ---- items de menú anidados (3er/4to nivel) ------------------------------------
+// El tema pone `white-space: nowrap` en todas las etiquetas; con textos largos en los
+// niveles anidados (ancho fijo del menú) el texto se corta en vez de ajustarse.
+.app-sidebar .slide-menu .side-menu__item {
+    height: auto;
+    min-height: 2.5rem;
+    padding-block: 0.5rem;
+
+    .side-menu__label,
+    span {
+        white-space: normal;
+        line-height: 1.25;
+    }
+}

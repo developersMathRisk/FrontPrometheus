@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/advancedui/swiperjs/swiperjs.component.scss"],
+  "sourcesContent": [":ng-deep{\r\n    .swiper-container {\r\n        width: 50px;\r\n        height: 50px;\r\n      }\r\n      \r\n      .img-fluid {\r\n        max-width: 50%;\r\n        height: 50%;\r\n      }\r\n}"],
+  "mappings": ";AACI,SAAA,CAAA;AACI,SAAA;AACA,UAAA;;AAGF,SAAA,CAAA;AACE,aAAA;AACA,UAAA;;",
+  "names": []
+}

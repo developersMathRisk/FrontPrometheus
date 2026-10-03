@@ -1,117 +1,106 @@
-<div id="myModal" tabindex="-1" data-keyboard="false" role="dialog">
-    <div role="document" class="msg_card_body" style="width: 100%;">
-        <div class="modal-header">
-            <table style="width: 100%;">
-                <tr style="width: 100%;">
-                    <td style="text-align: left; padding: 0% 0% 0.5% 1%;">
-                        <h3 class="modal-title">Cargar Emisor</h3>
-                    </td>
-                    <td style="text-align: right; padding-right: 1.3%;">
-                        <button type="button" class="icon-close" (click)="cerrar()">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-            </table>
+<app-modal-formulario titulo="Cargar Emisor" subtitulo="Registre un emisor para usarlo en instrumentos y reportes." accion="Registrar"
+    [faltantes]="faltantes" [datos]="nuevoRegistro" [guardando]="guardando" (cerrar)="cerrar()" (guardar)="registrar()">
+
+    <fieldset class="hig-seccion">
+        <legend>Identificación</legend>
+        <div class="hig-cuadricula hig-columnas-3">
+            <div class="hig-campo">
+                <label class="form-label" for="em-c-codEmisor">Código<span class="hig-requerido" aria-hidden="true">*</span></label>
+                <input id="em-c-codEmisor" type="text" class="form-control" autocomplete="off" placeholder="Código" minlength="4" maxlength="4" [(ngModel)]="nuevoRegistro.codEmisor" required>
+            </div>
+            <div class="hig-campo">
+                <label class="form-label" for="em-c-codIDCCliente">Cód. IDC Cliente</label>
+                <input id="em-c-codIDCCliente" type="number" class="form-control" autocomplete="off" placeholder="Cód. IDC Cliente" minlength="2" maxlength="9" [(ngModel)]="nuevoRegistro.codIDCCliente">
+            </div>
+            <div class="hig-campo">
+                <label class="form-label" for="em-c-nomEmisor">Nombre<span class="hig-requerido" aria-hidden="true">*</span></label>
+                <input id="em-c-nomEmisor" type="text" class="form-control" autocomplete="off" placeholder="Nombre" minlength="2" maxlength="100" [(ngModel)]="nuevoRegistro.nomEmisor" required>
+            </div>
+            <div class="hig-campo">
+                <label class="form-label" for="em-c-codTipoEmisor">Tipo Emisor</label>
+                <input id="em-c-codTipoEmisor" type="text" class="form-control" autocomplete="off" placeholder="Tipo Emisor" minlength="3" maxlength="3" [(ngModel)]="nuevoRegistro.codTipoEmisor">
+            </div>
+            <div class="hig-campo">
+                <label class="form-label" for="em-c-detalle">Detalle</label>
+                <input id="em-c-detalle" type="text" class="form-control" autocomplete="off" placeholder="Detalle" minlength="4" maxlength="100" [(ngModel)]="nuevoRegistro.detalle">
+            </div>
+            <div class="hig-campo">
+                <label class="form-label" for="em-c-ambito">Ámbito</label>
+                <input id="em-c-ambito" type="text" class="form-control" autocomplete="off" placeholder="Ámbito" minlength="2" maxlength="2" [(ngModel)]="nuevoRegistro.ambito">
+            </div>
+            <div class="hig-campo">
+                <label class="form-label" for="em-c-codBloomberg">Cód. Bloomberg</label>
+                <input id="em-c-codBloomberg" type="text" class="form-control" autocomplete="off" placeholder="Cód. Bloomberg" minlength="4" maxlength="20" [(ngModel)]="nuevoRegistro.codBloomberg">
+            </div>
         </div>
-    </div>
+    </fieldset>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-3">
-                    <label class="form-label">Código</label>
-                    <input type="text" placeholder="Código" minlength="4" maxlength="4" class="form-control" [(ngModel)]="this.nuevoRegistro.codEmisor">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Cod. IDC Cliente</label>
-                    <input type="number" placeholder="Cod. IDC Cliente" minlength="2" maxlength="9" class="form-control" [(ngModel)]="this.nuevoRegistro.codIDCCliente">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" placeholder="Nombre" minlength="2" maxlength="100" class="form-control" [(ngModel)]="this.nuevoRegistro.nomEmisor">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Tipo Emisor</label>
-                    <input type="text" placeholder="Tipo Emisor" minlength="3" maxlength="3" class="form-control" [(ngModel)]="this.nuevoRegistro.codTipoEmisor">
+    <fieldset class="hig-seccion">
+        <legend>Clasificación</legend>
+        <div class="hig-cuadricula hig-columnas-3">
+            <div class="hig-campo">
+                <label class="form-label" for="em-c-idPais">País</label>
+                <div class="combo-contenedor">
+                    <ng-select labelForId="em-c-idPais" placeholder="Seleccione una opción…" [items]="listPais" bindLabel="desPais" bindValue="idPais" [(ngModel)]="nuevoRegistro.idPais"></ng-select>
+                    <button type="button" class="btn btn-outline-primary btn-wave btn-agregar" title="Agregar país" aria-label="Agregar país" (click)="abrirModalSecundario(cargaModalPais)"><span class="icon" aria-hidden="true">+</span></button>
                 </div>
             </div>
-
-            <br>
-
-            <div class="row">
-                <div class="col-md-3">
-                    <label class="form-label">Detalle</label>
-                    <input type="text" placeholder="Detalle" minlength="4" maxlength="100" class="form-control" [(ngModel)]="this.nuevoRegistro.detalle">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Ámbito</label>
-                    <input type="text" placeholder="Ámbito" minlength="2" maxlength="2" class="form-control" [(ngModel)]="this.nuevoRegistro.ambito">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Cod. Bloomberg</label>
-                    <input type="text" placeholder="Cod. Bloomberg" minlength="4" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codBloomberg">
-                </div>
-            </div>
-
-            <br>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">País</label>
-                    <div class="combo-contenedor">
-                        <ng-select placeholder="Seleccione una opción..." [items]="listPais" bindLabel="desPais" bindValue="idPais" [(ngModel)]="this.nuevoRegistro.idPais"></ng-select>
-                        <button class="btn btn-outline-primary btn-wave btn-agregar" (click)="abrirModalSecundario(cargaModalPais)"><span class="icon">+</span></button>
-                    </div>
-                </div>
-            </div>
-
-            <br>
-
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkEmiReport" name="chkEmiReport" [(ngModel)]="this.nuevoRegistro.flgEmiReport"><label for="chkEmiReport" class="form-check-label"> Emite Reporte </label></div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkOrgaMulti" name="chkOrgaMulti" [(ngModel)]="this.nuevoRegistro.flgOrgaMulti"><label for="chkOrgaMulti" class="form-check-label"> Organismo Multilateral </label></div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkContratoMarco" name="chkContratoMarco" [(ngModel)]="this.nuevoRegistro.flgContratoMarco"><label for="chkContratoMarco" class="form-check-label"> Contrato Marco </label></div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-check"><input type="checkbox" class="form-check-input" id="chkContratoEspecifico" name="chkContratoEspecifico" [(ngModel)]="this.nuevoRegistro.flgContratoEspecifico"><label for="chkContratoEspecifico" class="form-check-label"> Contrato Específico </label></div>
-                </div>
-            </div>
-
-            <br>
-
-            <div class="row">
-                <div class="col-md-3">
-                    <label class="form-label">Cod. SBS</label>
-                    <input type="text" placeholder="Cod. SBS" minlength="4" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codSBS">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Cod. RUC</label>
-                    <input type="text" placeholder="Cod. RUC" minlength="4" maxlength="20" class="form-control" [(ngModel)]="this.nuevoRegistro.codRUC">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Fuente</label>
-                    <input type="text" placeholder="Fuente" minlength="3" maxlength="3" class="form-control" [(ngModel)]="this.nuevoRegistro.codFuente">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Tipo Emisor Anx8</label>
-                    <input type="text" placeholder="Tipo Emisor Anx8" minlength="3" maxlength="3" class="form-control" [(ngModel)]="this.nuevoRegistro.codTipoEmisorAnx8">
-                </div>
-            </div>
-
         </div>
+    </fieldset>
 
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary" (click)="registrar()">Registrar</button>
-            <br>
+    <fieldset class="hig-seccion">
+        <legend>Datos Adicionales</legend>
+        <div class="hig-cuadricula hig-columnas-3">
+            <div class="hig-campo">
+                <label class="form-label" for="em-c-codSBS">Cód. SBS</label>
+                <input id="em-c-codSBS" type="text" class="form-control" autocomplete="off" placeholder="Cód. SBS" minlength="4" maxlength="20" [(ngModel)]="nuevoRegistro.codSBS">
+            </div>
+            <div class="hig-campo">
+                <label class="form-label" for="em-c-codRUC">Cód. RUC</label>
+                <input id="em-c-codRUC" type="text" class="form-control" autocomplete="off" placeholder="Cód. RUC" minlength="4" maxlength="20" [(ngModel)]="nuevoRegistro.codRUC">
+            </div>
+            <div class="hig-campo">
+                <label class="form-label" for="em-c-codFuente">Fuente</label>
+                <input id="em-c-codFuente" type="text" class="form-control" autocomplete="off" placeholder="Fuente" minlength="3" maxlength="3" [(ngModel)]="nuevoRegistro.codFuente">
+            </div>
+            <div class="hig-campo">
+                <label class="form-label" for="em-c-codTipoEmisorAnx8">Tipo Emisor Anx8</label>
+                <input id="em-c-codTipoEmisorAnx8" type="text" class="form-control" autocomplete="off" placeholder="Tipo Emisor Anx8" minlength="3" maxlength="3" [(ngModel)]="nuevoRegistro.codTipoEmisorAnx8">
+            </div>
         </div>
-    </div>
-</div>
+    </fieldset>
+
+    <fieldset class="hig-seccion">
+        <legend>Opciones</legend>
+        <div class="hig-cuadricula hig-columnas-1">
+            <div class="hig-opcion">
+                <input class="form-check-input" type="checkbox" id="em-c-flgEmiReport" [(ngModel)]="nuevoRegistro.flgEmiReport">
+                <div>
+                    <label class="hig-opcion__titulo" for="em-c-flgEmiReport">Emite Reporte</label>
+                </div>
+            </div>
+            <div class="hig-opcion">
+                <input class="form-check-input" type="checkbox" id="em-c-flgOrgaMulti" [(ngModel)]="nuevoRegistro.flgOrgaMulti">
+                <div>
+                    <label class="hig-opcion__titulo" for="em-c-flgOrgaMulti">Organismo Multilateral</label>
+                </div>
+            </div>
+            <div class="hig-opcion">
+                <input class="form-check-input" type="checkbox" id="em-c-flgContratoMarco" [(ngModel)]="nuevoRegistro.flgContratoMarco">
+                <div>
+                    <label class="hig-opcion__titulo" for="em-c-flgContratoMarco">Contrato Marco</label>
+                </div>
+            </div>
+            <div class="hig-opcion">
+                <input class="form-check-input" type="checkbox" id="em-c-flgContratoEspecifico" [(ngModel)]="nuevoRegistro.flgContratoEspecifico">
+                <div>
+                    <label class="hig-opcion__titulo" for="em-c-flgContratoEspecifico">Contrato Específico</label>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+</app-modal-formulario>
 
 <ng-template #cargaModalPais let-modal>
     <app-carga-pais (close)="cerrarModalSecundario($event)"></app-carga-pais>

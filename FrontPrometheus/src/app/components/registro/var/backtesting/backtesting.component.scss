@@ -1,0 +1,212 @@
+.bt-subtitulo {
+    margin: 2px 0 0;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+.hig-requerido {
+    margin-inline-start: 2px;
+    color: rgb(var(--danger-rgb));
+}
+
+// ---- layout: configuración persistente a la izquierda, resultado a la derecha --------------------
+.bt-layout {
+    display: grid;
+    grid-template-columns: minmax(340px, 400px) 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.bt-layout__config {
+    position: sticky;
+    top: 82px;
+    max-height: calc(100vh - 98px);
+    overflow-y: auto;
+}
+
+.bt-layout__resultado {
+    min-width: 0;
+}
+
+@media (max-width: 1199px) {
+    .bt-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .bt-layout__config {
+        position: static;
+        max-height: none;
+    }
+}
+
+.bt-placeholder__cuerpo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    padding: 56px 24px;
+}
+
+.bt-placeholder__titulo {
+    margin: 4px 0 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.bt-placeholder__texto {
+    margin: 0;
+    max-width: 360px;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.68);
+}
+
+.bt-config {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px 18px;
+}
+
+.bt-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.bt-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.var-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.var-chip {
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--default-text-color);
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid rgba(var(--dark-rgb), 0.28);
+    border-radius: 999px;
+
+    &.var-chip--activo {
+        font-weight: 600;
+        color: rgb(var(--primary-rgb));
+        background: rgba(var(--primary-rgb), 0.12);
+        border-color: rgb(var(--primary-rgb));
+    }
+}
+
+.bt-accion {
+    display: flex;
+    padding-top: 4px;
+}
+
+.bt-accion__boton {
+    min-height: 36px;
+    padding: 0 20px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.bt-resultado {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.bt-contexto {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: rgba(var(--dark-rgb), 0.78);
+}
+
+.bt-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.bt-kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 14px;
+    background: rgba(var(--dark-rgb), 0.03);
+    border: 1px solid rgba(var(--dark-rgb), 0.12);
+    border-radius: 10px;
+}
+
+.bt-kpi__valor {
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.bt-kpi__etiqueta {
+    font-size: 0.6875rem;
+    color: rgba(var(--dark-rgb), 0.65);
+}
+
+.bt-kpi--verde {
+    background: rgba(var(--success-rgb, 40, 167, 69), 0.1);
+    border-color: rgba(var(--success-rgb, 40, 167, 69), 0.3);
+
+    .bt-kpi__valor { color: rgb(var(--success-rgb, 40, 167, 69)); }
+}
+
+.bt-kpi--rojo {
+    background: rgba(var(--danger-rgb), 0.1);
+    border-color: rgba(var(--danger-rgb), 0.32);
+
+    .bt-kpi__valor { color: rgb(var(--danger-rgb)); }
+}
+
+.bt-nota {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 0;
+    padding: 8px 10px;
+    font-size: 0.75rem;
+    color: rgba(var(--dark-rgb), 0.78);
+    background: rgba(var(--danger-rgb), 0.08);
+    border-radius: 6px;
+
+    .mat-icon {
+        flex: none;
+        width: 15px;
+        height: 15px;
+        margin-top: 1px;
+        font-size: 15px;
+        color: rgb(var(--danger-rgb));
+    }
+}
+
+.bt-nota--ok {
+    background: rgba(var(--success-rgb, 40, 167, 69), 0.1);
+
+    .mat-icon {
+        color: rgb(var(--success-rgb, 40, 167, 69));
+    }
+}
+
+@media (max-width: 900px) {
+    .bt-kpis {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .bt-kpis {
+        grid-template-columns: 1fr;
+    }
+}

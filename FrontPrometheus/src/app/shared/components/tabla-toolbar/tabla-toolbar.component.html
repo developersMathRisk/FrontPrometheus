@@ -1,0 +1,22 @@
+<div class="tabla-toolbar" role="toolbar" aria-label="Búsqueda y acciones de la tabla">
+    <div class="tabla-toolbar__grupo">
+        <div class="tabla-buscador">
+            <mat-icon class="tabla-buscador__icono" aria-hidden="true">search</mat-icon>
+            <input type="search" class="tabla-buscador__campo" autocomplete="off" [placeholder]="placeholder"
+                [attr.aria-label]="placeholder" [value]="texto" (input)="alEscribir($any($event.target).value)"
+                (keydown.escape)="limpiar()">
+            <button type="button" class="tabla-buscador__limpiar" *ngIf="texto" (click)="limpiar()"
+                aria-label="Borrar búsqueda">
+                <mat-icon aria-hidden="true">close</mat-icon>
+            </button>
+        </div>
+        <ng-content select="[filtros]"></ng-content>
+    </div>
+
+    <button type="button" class="btn btn-primary tabla-toolbar__accion" (click)="agregar.emit()">{{ accion }}</button>
+</div>
+
+<div class="tabla-meta">
+    <span class="tabla-toolbar__resumen" aria-live="polite">{{ resumen }}</span>
+    <ng-content select="[opciones]"></ng-content>
+</div>

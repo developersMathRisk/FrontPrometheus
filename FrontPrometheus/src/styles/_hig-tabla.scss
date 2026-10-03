@@ -1,0 +1,228 @@
+// Tablas de datos de los mantenedores: jerarquía, alineación y estados legibles.
+// Se activa envolviendo la tabla en un contenedor con la clase `hig-tabla`.
+// Los colores salen de las variables del tema, por lo que respetan también el modo oscuro.
+
+.hig-tabla {
+    --hig-borde: var(--default-border, #eff0f6);
+    --hig-texto-sec: rgba(var(--dark-rgb), 0.78); // ≥ 4.5:1 sobre el fondo, en claro y oscuro
+    --hig-fila-alterna: color-mix(in srgb, rgb(var(--primary-rgb)) 7%, var(--custom-white));
+    --hig-fila-hover: color-mix(in srgb, rgb(var(--primary-rgb)) 11%, var(--custom-white));
+
+    .tabla-contenedor {
+        border: 1px solid rgba(var(--dark-rgb), 0.16);
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+
+    table.mat-mdc-table {
+        width: 100%;
+        background: transparent;
+    }
+
+    .mat-mdc-header-row {
+        height: 44px;
+    }
+
+    .mat-mdc-header-cell {
+        padding: 0 16px;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--default-text-color);
+        white-space: nowrap;
+        background: color-mix(in srgb, rgb(var(--dark-rgb)) 6%, var(--custom-white));
+        border-bottom: 1px solid rgba(var(--dark-rgb), 0.16);
+    }
+
+    .mat-mdc-row {
+        height: 44px;
+        transition: background-color 0.12s;
+
+        &:nth-child(even) {
+            background: var(--hig-fila-alterna);
+        }
+
+        &:hover {
+            background: var(--hig-fila-hover);
+        }
+    }
+
+    .mat-mdc-cell {
+        padding: 0 16px;
+        font-size: 0.875rem;
+        color: var(--default-text-color);
+        white-space: nowrap;
+        border-bottom: 1px solid var(--hig-borde);
+    }
+
+    // Columna fija a la derecha con las acciones de la fila; hereda el fondo de su fila
+    .mat-mdc-cell.mat-mdc-table-sticky,
+    .mat-mdc-header-cell.mat-mdc-table-sticky {
+        background: var(--custom-white);
+    }
+
+    .mat-mdc-header-cell.mat-mdc-table-sticky {
+        background: color-mix(in srgb, rgb(var(--dark-rgb)) 6%, var(--custom-white));
+    }
+
+    .mat-mdc-row:nth-child(even) .mat-mdc-cell.mat-mdc-table-sticky {
+        background: var(--hig-fila-alterna);
+    }
+
+    .mat-mdc-row:hover .mat-mdc-cell.mat-mdc-table-sticky {
+        background: var(--hig-fila-hover);
+    }
+
+    // Cifras alineadas a la derecha y con dígitos de ancho fijo para compararlas de un vistazo
+    .col-num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
+    th.col-num .mat-sort-header-container {
+        justify-content: flex-end;
+    }
+
+    .celda-vacia {
+        color: var(--hig-texto-sec);
+    }
+
+    .col-id {
+        color: var(--hig-texto-sec);
+        font-variant-numeric: tabular-nums;
+    }
+
+    // Descripciones largas: se recortan con elipsis y el texto completo queda en el tooltip
+    .celda-truncada {
+        max-width: 240px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    // Campos sí/no: icono con texto para lectores de pantalla (no depende solo del color)
+    .col-estado {
+        text-align: center;
+    }
+
+    .estado-si {
+        display: inline-flex;
+        align-items: center;
+        color: var(--default-text-color);
+    }
+
+    .estado-si .mat-icon {
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
+    }
+
+    .solo-lector {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+
+    .col-acciones {
+        width: 56px;
+        padding: 0 8px;
+        text-align: right;
+    }
+
+    .btn-fila {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        color: var(--hig-texto-sec);
+        background: transparent;
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+            color: var(--default-text-color);
+            background: rgba(var(--dark-rgb), 0.12);
+        }
+
+        &:focus-visible {
+            outline: 2px solid rgb(var(--primary-rgb));
+            outline-offset: 1px;
+        }
+    }
+
+    .mat-mdc-paginator {
+        margin-top: 8px;
+        color: var(--hig-texto-sec);
+        background: transparent;
+    }
+
+    .mat-mdc-paginator .mat-mdc-paginator-page-size-label,
+    .mat-mdc-paginator .mat-mdc-paginator-range-label {
+        color: var(--hig-texto-sec);
+        font-size: 0.8125rem;
+    }
+
+    .interruptor-columnas {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        font-size: 0.8125rem;
+        color: var(--default-text-color);
+        cursor: pointer;
+        white-space: nowrap;
+
+        // El interruptor apagado debe verse también sobre fondo oscuro
+        .form-check-input:not(:checked) {
+            background-color: rgba(var(--dark-rgb), 0.18);
+            border-color: rgba(var(--dark-rgb), 0.55);
+        }
+
+        .form-check-input:focus-visible {
+            outline: 2px solid rgb(var(--primary-rgb));
+            outline-offset: 2px;
+        }
+    }
+
+    .rango-fechas {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.8125rem;
+        color: var(--default-text-color);
+
+        label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        input[type="date"] {
+            height: 38px;
+            padding: 0 10px;
+            font-size: 0.875rem;
+            color: var(--default-text-color);
+            background: var(--form-control-bg, #fff);
+            border: 1px solid rgba(var(--dark-rgb), 0.28);
+            border-radius: 8px;
+
+            &:focus {
+                outline: none;
+                border-color: rgb(var(--primary-rgb));
+                box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.25);
+            }
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hig-tabla .mat-mdc-row {
+        transition: none;
+    }
+}
