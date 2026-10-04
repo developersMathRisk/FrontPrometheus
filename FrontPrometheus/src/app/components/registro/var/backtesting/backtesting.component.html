@@ -24,13 +24,8 @@
 
         <div class="bt-campo">
             <span class="form-label mb-0">Nivel de confianza</span>
-            <div class="var-chips">
-                <button type="button" class="var-chip" *ngFor="let nc of listNivelConfianza"
-                    [class.var-chip--activo]="nc.idNivelConfianza === idNivelConfianzaSeleccionado"
-                    (click)="elegirNivelConfianza(nc)">
-                    {{ nc.valorNivelConfianza * 100 | number:'1.1-2' }}%
-                </button>
-            </div>
+            <app-chip-group [opciones]="opcionesConfianza" [ngModel]="idNivelConfianzaSeleccionado"
+                (ngModelChange)="alElegirConfianza($event)"></app-chip-group>
         </div>
 
         <div class="bt-accion">

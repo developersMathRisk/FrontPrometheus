@@ -14,6 +14,7 @@ import { NivelConfianza } from '../../../../shared/models/var/nivel-confianza';
 import { EjecutarBacktestingRequest, EjecutarBacktestingResponse } from '../../../../shared/models/var/ejecutar-backtesting';
 import { mensajeDeError } from '../../../../shared/components/tabla-estado/tabla-estado.component';
 import { EncabezadoComponent } from '../../../../shared/components/encabezado/encabezado.component';
+import { ChipGroupComponent, ChipOpcion } from '../../../../shared/components/chip-group/chip-group.component';
 
 /**
  * Backtesting del VaR: prueba retrospectiva walk-forward y FUERA de muestra (Art. 27° Resolución SBS
@@ -25,7 +26,7 @@ import { EncabezadoComponent } from '../../../../shared/components/encabezado/en
 @Component({
   selector: 'app-backtesting',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, NgApexchartsModule, LoaderComponent, EncabezadoComponent],
+  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, NgApexchartsModule, LoaderComponent, EncabezadoComponent, ChipGroupComponent],
   templateUrl: './backtesting.component.html',
   styleUrl: './backtesting.component.scss',
   animations: [fadeSlideIn, fadeIn],
@@ -70,9 +71,17 @@ export class BacktestingComponent implements OnInit {
     this.monedaTocadaManualmente = true;
   }
 
-  elegirNivelConfianza(nc: NivelConfianza) {
-    this.idNivelConfianzaSeleccionado = nc.idNivelConfianza;
-    this.nivelConfianzaSeleccionado = nc.valorNivelConfianza;
+  get opcionesConfianza(): ChipOpcion[] {
+    return this.listNivelConfianza.map(nc => ({
+      valor: nc.idNivelConfianza,
+      etiqueta: `${(nc.valorNivelConfianza * 100).toFixed(1)}%`,
+    }));
+  }
+
+  alElegirConfianza(id: number | null) {
+    this.idNivelConfianzaSeleccionado = id;
+    const nc = this.listNivelConfianza.find(n => n.idNivelConfianza === id);
+    if (nc) this.nivelConfianzaSeleccionado = nc.valorNivelConfianza;
   }
 
   get puedeEjecutar(): boolean {

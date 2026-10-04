@@ -93,24 +93,12 @@
 
         <div class="var-config__fila">
             <span class="var-config__etiqueta">Metodología <span class="hig-requerido" aria-hidden="true">*</span></span>
-            <div class="var-chips">
-                <button type="button" *ngFor="let m of listTipoMetodologiaVAR" class="var-chip"
-                    [class.var-chip--activo]="idsTipoMetodologiaSeleccionados.includes(m.idTipoMetodologiaVAR)"
-                    (click)="toggleMetodologia(m.idTipoMetodologiaVAR)">
-                    {{ m.nombreTipoMetodologiaVAR }}
-                </button>
-            </div>
+            <app-chip-group [opciones]="opcionesMetodologia" [multiple]="true" [(ngModel)]="idsTipoMetodologiaSeleccionados"></app-chip-group>
         </div>
 
         <div class="var-config__fila">
             <span class="var-config__etiqueta">Confianza <span class="hig-requerido" aria-hidden="true">*</span></span>
-            <div class="var-chips">
-                <button type="button" *ngFor="let nc of listNivelConfianza" class="var-chip var-chip--num"
-                    [class.var-chip--activo]="idsNivelConfianzaSeleccionados.includes(nc.idNivelConfianza)"
-                    (click)="toggleNivelConfianza(nc.idNivelConfianza)">
-                    {{ nc.valorNivelConfianza * 100 | number:'1.1-2' }}%
-                </button>
-            </div>
+            <app-chip-group [opciones]="opcionesConfianza" [multiple]="true" [(ngModel)]="idsNivelConfianzaSeleccionados"></app-chip-group>
         </div>
 
         <div class="var-accion">

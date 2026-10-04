@@ -21,11 +21,12 @@ import { EjecucionDuplicada } from '../../../../shared/models/var/ejecucion-dupl
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { fadeIn, fadeSlideIn } from '../../../../shared/animations/transiciones';
 import { EncabezadoComponent } from '../../../../shared/components/encabezado/encabezado.component';
+import { ChipGroupComponent, ChipOpcion } from '../../../../shared/components/chip-group/chip-group.component';
 
 @Component({
   selector: 'app-ejecutar-var',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaMonedaComponent, CargaPortafolioComponent, CommonModule, ResultadoVarComponent, LoaderComponent, EncabezadoComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaMonedaComponent, CargaPortafolioComponent, CommonModule, ResultadoVarComponent, LoaderComponent, EncabezadoComponent, ChipGroupComponent],
   templateUrl: './ejecutar-var.component.html',
   styleUrl: './ejecutar-var.component.scss',
   animations: [fadeIn, fadeSlideIn],
@@ -128,6 +129,17 @@ export class EjecutarVarComponent {
     return this.instrumentos.filter(i => !i.elegible);
   }
 
+  get opcionesMetodologia(): ChipOpcion[] {
+    return this.listTipoMetodologiaVAR.map(m => ({ valor: m.idTipoMetodologiaVAR, etiqueta: m.nombreTipoMetodologiaVAR }));
+  }
+
+  get opcionesConfianza(): ChipOpcion[] {
+    return this.listNivelConfianza.map(nc => ({
+      valor: nc.idNivelConfianza,
+      etiqueta: `${(nc.valorNivelConfianza * 100).toFixed(1)}%`,
+    }));
+  }
+
   // Elegir portafolio(s): si es el primero, sugiere su propia moneda (si el usuario no tocó ya el
   // combo) y muestra de inmediato qué posiciones tienen (combinadas) y cuáles puede calcular el motor.
   alCambiarPortafolio() {
@@ -161,19 +173,6 @@ export class EjecutarVarComponent {
 
   elegirVentanaPersonalizada() {
     this.ventanaPersonalizada = true;
-  }
-
-  toggleMetodologia(id: number) {
-    this.alternar(this.idsTipoMetodologiaSeleccionados, id);
-  }
-
-  toggleNivelConfianza(id: number) {
-    this.alternar(this.idsNivelConfianzaSeleccionados, id);
-  }
-
-  private alternar(lista: number[], id: number) {
-    const i = lista.indexOf(id);
-    i >= 0 ? lista.splice(i, 1) : lista.push(id);
   }
 
   // ---- ejecución -----------------------------------------------------------------
