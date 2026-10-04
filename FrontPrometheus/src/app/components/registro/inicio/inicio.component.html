@@ -1,0 +1,55 @@
+<app-encabezado kicker="Datos de mercado al {{ hoy }}" titulo="¿Qué necesitas hacer hoy?"></app-encabezado>
+
+<div class="inicio-acciones" @fadeSlideIn>
+    <button type="button" class="inicio-tarjeta" *ngFor="let t of tarjetas" (click)="ir(t.ruta)">
+        <span class="inicio-tarjeta__icono">
+            <lucide-icon [img]="t.icono" [size]="22" [strokeWidth]="1.5" aria-hidden="true"></lucide-icon>
+        </span>
+        <span class="inicio-tarjeta__titulo">{{ t.titulo }}</span>
+        <lucide-icon class="inicio-tarjeta__flecha" [img]="ArrowRightIcon" [size]="18" [strokeWidth]="1.5" aria-hidden="true"></lucide-icon>
+    </button>
+</div>
+
+<div class="inicio-grid">
+    <div class="p-card">
+        <h2 class="p-card__title">Últimos cálculos de VaR</h2>
+
+        <div class="inicio-calculos" *ngIf="!cargandoCalculos && ultimosCalculos.length; else estadoCalculos">
+            <button type="button" class="inicio-calculo" *ngFor="let c of ultimosCalculos" (click)="irAConsulta()">
+                <span class="inicio-calculo__fecha">{{ c.fechaProceso | date:'dd/MM/yyyy' }}</span>
+                <span class="inicio-calculo__portafolio">{{ c.descripcionPortafolio }}</span>
+                <span class="inicio-calculo__var p-num">{{ c.maxVar | number:'1.2-2' }}</span>
+                <span class="inicio-calculo__ratio p-num">{{ c.ratioVar | percent:'1.1-1' }}</span>
+            </button>
+        </div>
+
+        <ng-template #estadoCalculos>
+            <app-estado-vacio *ngIf="!cargandoCalculos" [icono]="DatabaseIcon" titulo="Aún no hay cálculos"
+                texto="Ejecuta tu primer cálculo de VaR para verlo aquí." textoAccion="Ejecutar VaR"
+                (accion)="ir('/registro/var/ejecutar')"></app-estado-vacio>
+        </ng-template>
+    </div>
+
+    <div class="p-card">
+        <h2 class="p-card__title">Estado de los datos</h2>
+
+        <div class="inicio-estado">
+            <div class="inicio-estado__item">
+                <span class="inicio-estado__valor p-num">{{ cargandoEstado ? '—' : numPortafolios }}</span>
+                <span class="inicio-estado__etiqueta">Portafolios registrados</span>
+            </div>
+            <div class="inicio-estado__item">
+                <span class="inicio-estado__valor p-num">{{ numPosiciones === null ? '—' : numPosiciones }}</span>
+                <span class="inicio-estado__etiqueta">Posiciones cargadas</span>
+            </div>
+            <div class="inicio-estado__item inicio-estado__item--pendiente">
+                <span class="inicio-estado__valor p-num">—</span>
+                <span class="inicio-estado__etiqueta">Instrumentos con datos insuficientes <small>(pendiente)</small></span>
+            </div>
+            <div class="inicio-estado__item inicio-estado__item--pendiente">
+                <span class="inicio-estado__valor p-num">—</span>
+                <span class="inicio-estado__etiqueta">Cargas automáticas <small>(en desarrollo)</small></span>
+            </div>
+        </div>
+    </div>
+</div>

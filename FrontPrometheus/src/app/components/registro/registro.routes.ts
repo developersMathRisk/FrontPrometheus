@@ -5,6 +5,12 @@ export const admin: Routes = [
     {
         path: 'registro', children: [
             {
+                path: 'inicio',
+                loadComponent: () =>
+                    import('./inicio/inicio.component').then((m) => m.InicioComponent),
+                title: 'Inicio'
+            },
+            {
                 path: 'mantenedor/producto',
                 loadComponent: () =>
                     import('./mantenedor/productos/mantenedor-productos/mantenedor-productos.component').then((m) => m.MantenedorProductosComponent),

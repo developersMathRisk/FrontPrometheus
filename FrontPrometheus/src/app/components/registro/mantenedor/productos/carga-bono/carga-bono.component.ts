@@ -32,10 +32,11 @@ import { CommonModule } from '@angular/common';
 
 
 import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
+import { DatePickerComponent } from '../../../../../shared/components/date-picker/date-picker.component';
 @Component({
   selector: 'app-carga-bono',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaBonoCuponComponent, CargaTipoInstrumentoComponent, CommonModule, ModalFormularioComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaBonoCuponComponent, CargaTipoInstrumentoComponent, CommonModule, ModalFormularioComponent, DatePickerComponent],
   templateUrl: './carga-bono.component.html',
   styleUrl: './carga-bono.component.scss',
 })

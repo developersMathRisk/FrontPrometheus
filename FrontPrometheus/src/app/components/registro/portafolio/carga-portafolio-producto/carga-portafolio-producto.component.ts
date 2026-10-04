@@ -20,11 +20,12 @@ import { CargaAccionComponent } from "../../mantenedor/productos/carga-accion/ca
 import { CargaFondoInversionComponent } from "../../mantenedor/productos/carga-fondo-inversion/carga-fondo-inversion.component";
 import { Benchmark } from '../../../../shared/models/portafolio/benchmark';
 import { TipoInstrumento } from '../../../../shared/models/atributo-financiero/tipo-instrumento';
+import { DatePickerComponent } from '../../../../shared/components/date-picker/date-picker.component';
 
 @Component({
   selector: 'app-carga-portafolio-producto',
   standalone: true,
-  imports: [MatIconModule, NgSelectModule, FormsModule, FilePondModule, NgbNavModule, CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, CargaPortafolioComponent, CargaBonoComponent, CargaAccionComponent, CargaFondoInversionComponent],
+  imports: [MatIconModule, NgSelectModule, FormsModule, FilePondModule, NgbNavModule, CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, CargaPortafolioComponent, CargaBonoComponent, CargaAccionComponent, CargaFondoInversionComponent, DatePickerComponent],
   templateUrl: './carga-portafolio-producto.component.html',
   styleUrl: './carga-portafolio-producto.component.scss'
 })

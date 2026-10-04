@@ -1,0 +1,112 @@
+.inicio-acciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.inicio-tarjeta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 20px;
+    text-align: start;
+    background: var(--color-card);
+    border: 1px solid var(--color-divider);
+    border-radius: var(--r);
+    cursor: pointer;
+    transition: transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease);
+
+    &:hover {
+        transform: translateY(-3px);
+        border-color: var(--color-accent);
+        box-shadow: var(--shadow-md);
+
+        .inicio-tarjeta__flecha { transform: translateX(3px); color: var(--color-accent-700); }
+    }
+}
+
+.inicio-tarjeta__icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    color: var(--color-accent-800);
+    background: var(--color-accent-100);
+    border-radius: var(--rs);
+}
+
+.inicio-tarjeta__titulo {
+    font: 600 21px var(--font-heading);
+    color: var(--color-text);
+}
+
+.inicio-tarjeta__flecha {
+    align-self: flex-end;
+    margin-top: -28px;
+    color: var(--color-neutral-500);
+    transition: transform .2s var(--ease), color .2s var(--ease);
+}
+
+.inicio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+    gap: 16px;
+    align-items: start;
+}
+
+.inicio-calculos {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.inicio-calculo {
+    display: grid;
+    grid-template-columns: 76px 1fr auto auto;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 8px;
+    text-align: start;
+    background: none;
+    border: 0;
+    border-radius: var(--rs);
+    cursor: pointer;
+
+    &:hover { background: var(--color-accent-100); }
+}
+
+.inicio-calculo__fecha { font-size: 11.5px; color: var(--color-neutral-600); }
+.inicio-calculo__portafolio { font-size: 13px; font-weight: 500; color: var(--color-text); }
+.inicio-calculo__var { font-size: 13px; font-weight: 600; color: var(--color-text); }
+.inicio-calculo__ratio { font-size: 12px; color: var(--color-neutral-700); }
+
+.inicio-estado {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+}
+
+.inicio-estado__item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.inicio-estado__valor {
+    font: 700 24px var(--font-heading);
+    color: var(--color-text);
+}
+
+.inicio-estado__item--pendiente .inicio-estado__valor {
+    color: var(--color-neutral-400);
+}
+
+.inicio-estado__etiqueta {
+    font-size: 12px;
+    color: var(--color-neutral-700);
+
+    small { color: var(--color-neutral-500); }
+}

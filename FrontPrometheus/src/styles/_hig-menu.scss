@@ -75,6 +75,62 @@
     }
 }
 
+// ---- breadcrumb (grupo › pantalla) y chip de fecha ---------------------------
+.app-header .header-migas {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+    margin-inline-start: 4px;
+    font-size: 12.5px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.app-header .header-migas__grupo {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--color-neutral-600, rgba(var(--dark-rgb), 0.6));
+}
+
+.app-header .header-migas__separador {
+    color: var(--color-neutral-400, rgba(var(--dark-rgb), 0.35));
+}
+
+.app-header .header-migas__actual {
+    font-weight: 600;
+    color: var(--default-text-color);
+}
+
+@media (max-width: 767.98px) {
+    .app-header .header-migas { display: none; }
+}
+
+.app-header .header-fecha {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-inline-end: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-neutral-700, rgba(var(--dark-rgb), 0.78));
+    background: var(--color-accent-100, rgba(var(--primary-rgb), 0.08));
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.app-header .header-fecha__punto {
+    width: 7px;
+    height: 7px;
+    background: var(--color-accent, rgb(var(--primary-rgb)));
+    border-radius: 50%;
+}
+
+@media (max-width: 575.98px) {
+    .app-header .header-fecha { display: none; }
+}
+
 // ---- encabezado -------------------------------------------------------------
 // Botones que sustituyen a enlaces sin destino: mismo aspecto que .header-link, con foco visible
 .app-header button.header-link,
@@ -191,8 +247,91 @@
     color: var(--color-neutral-600);
 }
 
-.app-sidebar .main-sidebar-header .header-logo {
-    font-family: var(--font-heading);
+// ---- marca (reemplaza el logo-imagen del template por el icono/texto del diseño) ----
+.marca-prometheus {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.marca-prometheus__icono {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    font: 700 19px var(--font-heading);
+    color: var(--color-bg);
+    background: var(--color-accent);
+    border-radius: var(--rs);
+}
+
+.marca-prometheus__texto {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.15;
+    white-space: nowrap;
+}
+
+.marca-prometheus__nombre {
+    font: 600 20px var(--font-heading);
+    color: var(--color-text, var(--default-text-color));
+}
+
+.marca-prometheus__kicker {
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--color-neutral-700);
+}
+
+// Colapsado a solo-iconos (único layout/estilo que usa la app: vertical + overlay + menu-styles=light):
+// se oculta el texto y queda solo el cuadro con la "P". Al abrirse con el mouse (icon-overlay + open) se ve completo.
+[data-nav-layout="vertical"][data-vertical-style="overlay"][data-toggled="icon-overlay-close"]:not([data-icon-overlay="open"])
+.app-sidebar .marca-prometheus__texto {
+    display: none;
+}
+
+// ---- pie del sidebar (avatar + nombre + rol), compacto según el diseño ----
+// Nota: no se fuerza con flex/margin-top:auto porque overlay-scrollbars reempaqueta su contenido
+// en su propio wrapper interno; con la cantidad de grupos actual el pie ya queda al final visible.
+.app-sidebar .app-sidebar__user {
+    padding: 12px 11px;
+    border-top: 1px solid var(--color-divider);
+
+    .dropdown.user-pro-body {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: start;
+    }
+
+    .user-pic .avatar {
+        width: 30px;
+        height: 30px;
+    }
+
+    .user-info {
+        text-align: start;
+    }
+
+    .user-info h5 {
+        margin: 0;
+        font-size: 12.5px;
+    }
+
+    .app-sidebar__user-name {
+        font-size: 11px;
+    }
+}
+
+[data-nav-layout="vertical"][data-vertical-style="overlay"][data-toggled="icon-overlay-close"]:not([data-icon-overlay="open"])
+.app-sidebar .app-sidebar__user .user-info {
+    display: none;
 }
 
 .app-sidebar .side-menu__item {

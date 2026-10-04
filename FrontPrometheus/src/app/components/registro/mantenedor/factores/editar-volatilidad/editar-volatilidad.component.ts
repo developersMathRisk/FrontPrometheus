@@ -15,10 +15,11 @@ import { TermVolatilidad } from '../../../../../shared/models/atributo-financier
 import { TipoCambio } from '../../../../../shared/models/atributo-financiero/tipo-cambio';
 
 import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
+import { DatePickerComponent } from '../../../../../shared/components/date-picker/date-picker.component';
 @Component({
   selector: 'app-editar-volatilidad',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaTermVolatilidadComponent, CargaSkewPointComponent, CargaTipoCambioComponent, ModalFormularioComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaTermVolatilidadComponent, CargaSkewPointComponent, CargaTipoCambioComponent, ModalFormularioComponent, DatePickerComponent],
   templateUrl: './editar-volatilidad.component.html',
   styleUrl: './editar-volatilidad.component.scss'
 })

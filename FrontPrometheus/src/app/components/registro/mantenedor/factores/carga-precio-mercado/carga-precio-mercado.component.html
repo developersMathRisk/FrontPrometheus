@@ -6,7 +6,7 @@
             <div class="hig-cuadricula ">
                 <div class="hig-campo">
                     <label class="form-label" for="pm-c-fecProceso">Fecha Proceso<span class="hig-requerido" aria-hidden="true">*</span></label>
-                    <input id="pm-c-fecProceso" type="date" class="form-control" autocomplete="off" [(ngModel)]="this.nuevoRegistro.fecProceso" required>
+                    <app-date-picker id="pm-c-fecProceso" [(ngModel)]="this.nuevoRegistro.fecProceso"></app-date-picker>
                 </div>
                 <div class="hig-campo">
                     <label class="form-label" for="pm-c-idMoneda">Moneda<span class="hig-requerido" aria-hidden="true">*</span></label>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="hig-campo">
                     <label class="form-label" for="pm-c-maturity">Fecha Vencimiento</label>
-                    <input id="pm-c-maturity" type="date" class="form-control" autocomplete="off" [(ngModel)]="this.nuevoRegistro.maturity">
+                    <app-date-picker id="pm-c-maturity" [(ngModel)]="this.nuevoRegistro.maturity"></app-date-picker>
                 </div>
             </div>
         </details>

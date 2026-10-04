@@ -6,11 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { TipoCambio } from '../../../../../shared/models/atributo-financiero/tipo-cambio';
 import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
+import { DatePickerComponent } from '../../../../../shared/components/date-picker/date-picker.component';
 
 @Component({
   selector: 'app-editar-tipo-cambio',
   standalone: true,
-  imports: [FormsModule, MatIconModule, ModalFormularioComponent],
+  imports: [FormsModule, MatIconModule, ModalFormularioComponent, DatePickerComponent],
   templateUrl: './editar-tipo-cambio.component.html',
   styleUrl: './editar-tipo-cambio.component.scss'
 })

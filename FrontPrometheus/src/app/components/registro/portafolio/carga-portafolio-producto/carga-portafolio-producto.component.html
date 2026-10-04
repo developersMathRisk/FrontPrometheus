@@ -141,7 +141,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Fecha</label>
-                                        <input type="date" class="form-control" [(ngModel)]="this.objPortafolioInstrumento.fechaValor">
+                                        <app-date-picker [(ngModel)]="this.objPortafolioInstrumento.fechaValor"></app-date-picker>
                                     </div>
                                 </div>
                             </div>
@@ -219,7 +219,7 @@
                                 <ng-container matColumnDef="fechaValor">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
                                     <td mat-cell *matCellDef="let element">
-                                        <input type="date" class="form-control" [(ngModel)]="element.fechaValor">
+                                        <app-date-picker [(ngModel)]="element.fechaValor"></app-date-picker>
                                     </td>
                                 </ng-container>
 

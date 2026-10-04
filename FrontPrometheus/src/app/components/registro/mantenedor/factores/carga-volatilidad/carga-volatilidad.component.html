@@ -6,7 +6,7 @@
             <div class="hig-cuadricula ">
                 <div class="hig-campo">
                     <label class="form-label" for="vo-c-fecProceso">Fecha Proceso<span class="hig-requerido" aria-hidden="true">*</span></label>
-                    <input id="vo-c-fecProceso" type="date" class="form-control" autocomplete="off" [(ngModel)]="this.nuevoRegistro.fecProceso" required>
+                    <app-date-picker id="vo-c-fecProceso" [(ngModel)]="this.nuevoRegistro.fecProceso"></app-date-picker>
                 </div>
                 <div class="hig-campo">
                     <label class="form-label" for="vo-c-valor">Valor<span class="hig-requerido" aria-hidden="true">*</span></label>

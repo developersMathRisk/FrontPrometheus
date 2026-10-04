@@ -15,11 +15,12 @@ import { FilePondModule } from 'ngx-filepond';
 import * as FilePond from 'filepond';
 import { CommonModule } from '@angular/common';
 import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
+import { DatePickerComponent } from '../../../../../shared/components/date-picker/date-picker.component';
 
 @Component({
   selector: 'app-carga-bono-cupon',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, MatTableModule, MatSortModule, MatPaginatorModule, FilePondModule, NgbNavModule, CommonModule, ModalFormularioComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, MatTableModule, MatSortModule, MatPaginatorModule, FilePondModule, NgbNavModule, CommonModule, ModalFormularioComponent, DatePickerComponent],
   templateUrl: './carga-bono-cupon.component.html',
   styleUrl: './carga-bono-cupon.component.scss'
 })

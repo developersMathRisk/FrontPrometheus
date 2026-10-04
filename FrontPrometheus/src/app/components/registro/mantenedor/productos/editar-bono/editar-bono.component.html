@@ -68,15 +68,15 @@
             <div class="hig-cuadricula hig-columnas-3">
                 <div class="hig-campo">
                     <label class="form-label" for="bo-e-fechaEmision">Fecha Emisión</label>
-                    <input id="bo-e-fechaEmision" type="date" class="form-control" autocomplete="off" [(ngModel)]="this.objRegistroEditado.fechaEmision">
+                    <app-date-picker id="bo-e-fechaEmision" [(ngModel)]="this.objRegistroEditado.fechaEmision"></app-date-picker>
                 </div>
                 <div class="hig-campo">
                     <label class="form-label" for="bo-e-fechaPrimerCupon">Fecha Primer Cupón</label>
-                    <input id="bo-e-fechaPrimerCupon" type="date" class="form-control" autocomplete="off" [(ngModel)]="this.objRegistroEditado.fechaPrimerCupon">
+                    <app-date-picker id="bo-e-fechaPrimerCupon" [(ngModel)]="this.objRegistroEditado.fechaPrimerCupon"></app-date-picker>
                 </div>
                 <div class="hig-campo">
                     <label class="form-label" for="bo-e-fechaVencimiento">Fecha Vencimiento</label>
-                    <input id="bo-e-fechaVencimiento" type="date" class="form-control" autocomplete="off" [(ngModel)]="this.objRegistroEditado.fechaVencimiento">
+                    <app-date-picker id="bo-e-fechaVencimiento" [(ngModel)]="this.objRegistroEditado.fechaVencimiento"></app-date-picker>
                 </div>
             </div>
         </fieldset>

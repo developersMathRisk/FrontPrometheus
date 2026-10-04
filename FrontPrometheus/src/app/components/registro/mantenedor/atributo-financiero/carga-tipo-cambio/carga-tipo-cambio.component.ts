@@ -6,11 +6,12 @@ import Swal from 'sweetalert2';
 import { RegistroService } from '../../../../../shared/services/registro.service';
 import { TipoCambio } from '../../../../../shared/models/atributo-financiero/tipo-cambio';
 import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
+import { DatePickerComponent } from '../../../../../shared/components/date-picker/date-picker.component';
 
 @Component({
   selector: 'app-carga-tipo-cambio',
   standalone: true,
-  imports: [FormsModule, MatIconModule, ModalFormularioComponent],
+  imports: [FormsModule, MatIconModule, ModalFormularioComponent, DatePickerComponent],
   templateUrl: './carga-tipo-cambio.component.html',
   styleUrl: './carga-tipo-cambio.component.scss'
 })

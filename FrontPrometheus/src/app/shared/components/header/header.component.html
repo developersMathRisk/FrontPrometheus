@@ -66,14 +66,24 @@
       </div>
       <!-- End::header-element -->
 
-      
-
-      
+      <!-- Start::header-element (migas) -->
+      <div class="header-element header-migas" *ngIf="migaActual">
+        <span class="header-migas__grupo" *ngIf="migaActual.grupo">{{ migaActual.grupo }}</span>
+        <span class="header-migas__separador" *ngIf="migaActual.grupo" aria-hidden="true">›</span>
+        <span class="header-migas__actual">{{ migaActual.titulo }}</span>
+      </div>
+      <!-- End::header-element -->
     </div>
     <!-- End::header-content-left -->
 
     <!-- Start::header-content-right -->
     <div class="header-content-right">
+      <!-- Start::header-element (fecha) -->
+      <div class="header-element header-fecha" title="Fecha de hoy">
+        <span class="header-fecha__punto" aria-hidden="true"></span>
+        {{ hoy }}
+      </div>
+      <!-- End::header-element -->
       <!-- Start::header-element -->
       <div class="header-element header-buscar">
         <button

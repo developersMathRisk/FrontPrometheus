@@ -11,10 +11,11 @@ import { Moneda } from '../../../../../shared/models/atributo-financiero/moneda'
 import { CargaMonedaComponent } from "../../../mantenedor/atributo-financiero/carga-moneda/carga-moneda.component";
 
 import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
+import { DatePickerComponent } from '../../../../../shared/components/date-picker/date-picker.component';
 @Component({
   selector: 'app-carga-precio-mercado',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaMonedaComponent, ModalFormularioComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaMonedaComponent, ModalFormularioComponent, DatePickerComponent],
   templateUrl: './carga-precio-mercado.component.html',
   styleUrl: './carga-precio-mercado.component.scss'
 })

@@ -15,10 +15,11 @@ import { CargaSkewPointComponent } from "../../atributo-financiero/carga-skew-po
 import { CargaTipoCambioComponent } from "../../atributo-financiero/carga-tipo-cambio/carga-tipo-cambio.component";
 
 import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
+import { DatePickerComponent } from '../../../../../shared/components/date-picker/date-picker.component';
 @Component({
   selector: 'app-carga-volatilidad',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaTermVolatilidadComponent, CargaSkewPointComponent, CargaTipoCambioComponent, ModalFormularioComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaTermVolatilidadComponent, CargaSkewPointComponent, CargaTipoCambioComponent, ModalFormularioComponent, DatePickerComponent],
   templateUrl: './carga-volatilidad.component.html',
   styleUrl: './carga-volatilidad.component.scss'
 })

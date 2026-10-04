@@ -20,7 +20,7 @@
         <div class="hig-cuadricula">
             <div class="hig-campo">
                 <label class="form-label" for="tc-e-fecProceso">Fecha de Proceso<span class="hig-requerido" aria-hidden="true">*</span></label>
-                <input id="tc-e-fecProceso" type="date" class="form-control" [(ngModel)]="objRegistroEditado.fecProceso" required>
+                <app-date-picker id="tc-e-fecProceso" [(ngModel)]="objRegistroEditado.fecProceso"></app-date-picker>
             </div>
             <div class="hig-campo">
                 <label class="form-label" for="tc-e-valor">Valor<span class="hig-requerido" aria-hidden="true">*</span></label>

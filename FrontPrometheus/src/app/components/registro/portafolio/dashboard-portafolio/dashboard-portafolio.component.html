@@ -6,7 +6,7 @@
             (change)="filtrarPortafolioInstrumentoResumen()"
             [(ngModel)]="this.idPortafolioSeleccionado"></ng-select>
         <h1 class="page-title my-auto">al</h1>
-        <input type="date" class="form-control" style="width: 200px;" [(ngModel)]="this.fechaConsulta" (ngModelChange)="filtrarPortafolioInstrumentoResumen()">
+        <app-date-picker [(ngModel)]="this.fechaConsulta" (ngModelChange)="filtrarPortafolioInstrumentoResumen()"></app-date-picker>
     </div>
 
     <div>

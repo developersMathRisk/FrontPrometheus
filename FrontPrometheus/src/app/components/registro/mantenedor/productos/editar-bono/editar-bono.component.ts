@@ -30,10 +30,11 @@ import { TipoInstrumento } from '../../../../../shared/models/atributo-financier
 import { CommonModule } from '@angular/common';
 
 import { ModalFormularioComponent } from '../../../../../shared/components/modal-formulario/modal-formulario.component';
+import { DatePickerComponent } from '../../../../../shared/components/date-picker/date-picker.component';
 @Component({
   selector: 'app-editar-bono',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaTipoInstrumentoComponent, CommonModule, ModalFormularioComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaEmisorComponent, CargaMonedaComponent, CargaTipoBonoSbsComponent, CargaCurvaReferenciaComponent, CargaMetodoAmortizacionComponent, CargaCalculoBaseInteresComponent, CargaFrecuenciaPagoComponent, CargaTipoTasaComponent, CargaFormulaTasaComponent, CargaTipoInstrumentoComponent, CommonModule, ModalFormularioComponent, DatePickerComponent],
   templateUrl: './editar-bono.component.html',
   styleUrl: './editar-bono.component.scss'
 })

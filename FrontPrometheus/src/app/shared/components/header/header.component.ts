@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, TemplateRef, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 import { ModalDismissReasons, NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { SwitcherComponent } from '../switcher/switcher.component';
 import { Menu, NavService } from '../../services/nav.service';
@@ -15,10 +16,39 @@ export class HeaderComponent {
 
   public localdata:any;
 
+  readonly hoy = new Date().toLocaleDateString('es-PE', { day: '2-digit', month: 'short', year: 'numeric' });
+  migaActual: { grupo: string; titulo: string } | null = null;
+  private pantallasMigas: { titulo: string; ruta: string; path: string }[] = [];
+
   constructor(private cdr: ChangeDetectorRef, public elementRef: ElementRef,private appStateService: AppStateService, public menu: MenuLateralService, private navService: NavService, private router: Router, public paletteService: CommandPaletteService){
     this.appStateService.state$.subscribe(state => {
       this.localdata = state;
     });
+    this.navService.items.subscribe(items => {
+      this.pantallasMigas = this.aplanarMigas(items);
+      this.actualizarMiga();
+    });
+    this.router.events.pipe(filter(evento => evento instanceof NavigationEnd)).subscribe(() => this.actualizarMiga());
+  }
+
+  private aplanarMigas(items: Menu[], migas: string[] = []): { titulo: string; ruta: string; path: string }[] {
+    const salida: { titulo: string; ruta: string; path: string }[] = [];
+    for (const item of items ?? []) {
+      if (!item.title) continue;
+      if (item.path && item.type === 'link') {
+        salida.push({ titulo: item.title, ruta: migas.join(' › '), path: item.path });
+      }
+      if (item.children?.length) {
+        salida.push(...this.aplanarMigas(item.children, [...migas, item.title]));
+      }
+    }
+    return salida;
+  }
+
+  private actualizarMiga(): void {
+    const url = this.router.url.replace(/^\//, '').split('?')[0];
+    const actual = this.pantallasMigas.find(p => url === p.path || url.startsWith(p.path + '/'));
+    this.migaActual = actual ? { grupo: actual.ruta, titulo: actual.titulo } : null;
   }
 
   SwitcherClick() {

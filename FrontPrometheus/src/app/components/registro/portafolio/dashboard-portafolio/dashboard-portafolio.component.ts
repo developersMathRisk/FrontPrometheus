@@ -14,13 +14,14 @@ import { RegistroService } from '../../../../shared/services/registro.service';
 import { CargaPortafolioProductoComponent } from "../carga-portafolio-producto/carga-portafolio-producto.component";
 import { PortafolioInstrumento } from '../../../../shared/models/portafolio/portafolio-instrumento';
 import { CommonModule } from '@angular/common';
+import { DatePickerComponent } from '../../../../shared/components/date-picker/date-picker.component';
 
 const COLORES_DISTRIBUCION = ['rgb(68,84,195)', 'rgb(247,45,102)', 'rgb(45,206,137)', 'rgb(240,165,30)', 'rgb(90,90,90)'];
 
 @Component({
   selector: 'app-dashboard-portafolio',
   standalone: true,
-  imports: [SharedModule, NgApexchartsModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, FormsModule, NgSelectModule, CommonModule, CargaPortafolioProductoComponent],
+  imports: [SharedModule, NgApexchartsModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, FormsModule, NgSelectModule, CommonModule, CargaPortafolioProductoComponent, DatePickerComponent],
   templateUrl: './dashboard-portafolio.component.html',
   styleUrl: './dashboard-portafolio.component.scss'
 })
