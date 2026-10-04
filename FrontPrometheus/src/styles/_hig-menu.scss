@@ -78,7 +78,7 @@
 // ---- breadcrumb (grupo › pantalla) y chip de fecha ---------------------------
 .app-header .header-migas {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 6px;
     min-width: 0;
     margin-inline-start: 4px;
@@ -355,4 +355,22 @@
 .app-header {
     background: var(--color-surface);
     border-bottom: 1px solid var(--color-divider);
+    // El tema trae 0.75rem de relleno arriba/abajo; se reduce para un header más compacto.
+    padding: 0.5rem 0;
+}
+
+// El tema solo separa el contenido del header fijo desde 992px (`margin-block-start: 4.7rem` en
+// @media min-width:992px) -- por debajo de eso el contenido queda pegado al header. Se fija un
+// margen constante en todos los anchos, ajustado al header ya más compacto de arriba.
+.app-content {
+    margin-block-start: 4.25rem !important;
+}
+
+// ---- icono del menú colapsado (solo iconos): el tema lo pone fill:var(--primary-color) en
+// activo/hover, pero nuestros iconos Lucide son de trazo (fill="none"); con esa regla el icono
+// queda invisible en vez de solo cambiar de color. Se restaura fill:none y se deja el color por stroke.
+[data-vertical-style="overlay"][data-toggled="icon-overlay-close"]:not([data-icon-overlay="open"]) .side-menu__item.active .side-menu__icon,
+[data-vertical-style="overlay"][data-toggled="icon-overlay-close"]:not([data-icon-overlay="open"]) .side-menu__item:hover .side-menu__icon {
+    fill: none;
+    color: var(--color-accent-800);
 }
