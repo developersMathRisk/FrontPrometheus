@@ -45,6 +45,12 @@
 @import "swiper/scss/navigation";
 @import "swiper/scss/pagination";
 
+// Necesario para que la paleta de comandos (CDK Overlay) posicione y atenúe el fondo correctamente
+@import "@angular/cdk/overlay-prebuilt.css";
+
+// tokens del rediseño "Industry" (Prometheus v2) — van antes para que hig-* puedan usarlos
+@import "./styles/tokens";
+
 // elementos de página compartidos (subtítulos, estados vacíos)
 @import "./styles/hig-pagina";
 
@@ -55,3 +61,5 @@
 @import "./styles/hig-modal";
 
 @import "./styles/hig-menu";
+
+@import "./styles/hig-command-palette";

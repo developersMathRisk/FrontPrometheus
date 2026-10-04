@@ -54,6 +54,7 @@
     "inputmask": "^5.0.10",
     "leaflet": "^1.9.4",
     "lightgallery": "^2.7.2",
+    "lucide-angular": "^1.0.0",
     "material-icons": "^1.13.12",
     "moment": "^2.30.1",
     "ng-apexcharts": "^1.11.0",

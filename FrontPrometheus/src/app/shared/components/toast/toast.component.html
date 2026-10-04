@@ -1,0 +1,10 @@
+<div class="toast-host" aria-live="polite" role="status">
+    <div class="toast-item" [class.toast-item--error]="toast.tipo === 'error'" [class.toast-item--exito]="toast.tipo === 'exito'"
+        *ngFor="let toast of servicio.toasts()" @fadeSlideIn>
+        <span class="toast-mensaje">{{ toast.mensaje }}</span>
+        <button type="button" class="toast-accion" *ngIf="toast.accionLabel" (click)="toast.accion && toast.accion()">
+            {{ toast.accionLabel }}
+        </button>
+        <button type="button" class="toast-cerrar" aria-label="Cerrar" (click)="servicio.cerrar(toast.id)">×</button>
+    </div>
+</div>

@@ -5,6 +5,7 @@ import { SwitcherComponent } from '../switcher/switcher.component';
 import { Menu, NavService } from '../../services/nav.service';
 import { AppStateService } from '../../services/app-state.service';
 import { MenuLateralService } from '../../services/menu-lateral.service';
+import { CommandPaletteService } from '../../services/command-palette.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -14,11 +15,10 @@ export class HeaderComponent {
 
   public localdata:any;
 
-  constructor(private cdr: ChangeDetectorRef, public elementRef: ElementRef,private appStateService: AppStateService, public menu: MenuLateralService, private navService: NavService, private router: Router){
+  constructor(private cdr: ChangeDetectorRef, public elementRef: ElementRef,private appStateService: AppStateService, public menu: MenuLateralService, private navService: NavService, private router: Router, public paletteService: CommandPaletteService){
     this.appStateService.state$.subscribe(state => {
       this.localdata = state;
     });
-    this.navService.items.subscribe(items => this.pantallas = this.aplanar(items));
   }
 
   SwitcherClick() {
@@ -285,73 +285,4 @@ export class HeaderComponent {
     });
   }
 
-  // Búsqueda de pantallas: filtra las opciones del menú y navega a la elegida
-  pantallas: { titulo: string; ruta: string; path: string }[] = [];
-  resultados: { titulo: string; ruta: string; path: string }[] = [];
-  consulta = '';
-  indiceActivo = 0;
-
-  private aplanar(items: Menu[], migas: string[] = []): { titulo: string; ruta: string; path: string }[] {
-    const salida: { titulo: string; ruta: string; path: string }[] = [];
-    for (const item of items ?? []) {
-      if (!item.title) continue;
-      if (item.path && item.type === 'link') {
-        salida.push({ titulo: item.title, ruta: migas.join(' › '), path: item.path });
-      }
-      if (item.children?.length) {
-        salida.push(...this.aplanar(item.children, [...migas, item.title]));
-      }
-    }
-    return salida;
-  }
-
-  private normalizar(texto: string): string {
-    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-  }
-
-  abrirBusqueda(plantilla: TemplateRef<any>) {
-    this.consulta = '';
-    this.resultados = [];
-    this.indiceActivo = 0;
-    this.modalService.open(plantilla, { windowClass: 'busqueda-ventana', size: 'lg', scrollable: false });
-    // El campo recibe el foco al abrir, para escribir de inmediato
-    setTimeout(() => document.querySelector<HTMLInputElement>('.busqueda__entrada')?.focus(), 50);
-  }
-
-  buscarPantalla(texto: string) {
-    this.consulta = texto ?? '';
-    const q = this.normalizar(this.consulta);
-    this.indiceActivo = 0;
-    this.resultados = !q ? [] : this.pantallas
-      .filter(p => this.normalizar(`${p.titulo} ${p.ruta}`).includes(q))
-      .slice(0, 8);
-  }
-
-  teclaBusqueda(evento: KeyboardEvent, modal: any) {
-    if (evento.key === 'ArrowDown' && this.resultados.length) {
-      evento.preventDefault();
-      this.indiceActivo = (this.indiceActivo + 1) % this.resultados.length;
-    } else if (evento.key === 'ArrowUp' && this.resultados.length) {
-      evento.preventDefault();
-      this.indiceActivo = (this.indiceActivo - 1 + this.resultados.length) % this.resultados.length;
-    } else if (evento.key === 'Enter' && this.resultados[this.indiceActivo]) {
-      evento.preventDefault();
-      this.irA(this.resultados[this.indiceActivo], modal);
-    }
-  }
-
-  irA(resultado: { path: string }, modal: any) {
-    modal?.close?.();
-    this.router.navigateByUrl(resultado.path.startsWith('/') ? resultado.path : '/' + resultado.path);
-  }
-
-  @HostListener('document:keydown', ['$event'])
-  atajoBusqueda(evento: KeyboardEvent) {
-    if ((evento.ctrlKey || evento.metaKey) && evento.key.toLowerCase() === 'k') {
-      evento.preventDefault();
-      if (document.querySelector('.busqueda')) return;
-      const boton = this.elementRef.nativeElement.querySelector('.header-buscar__boton') as HTMLElement | null;
-      boton?.click();
-    }
-  }
 }

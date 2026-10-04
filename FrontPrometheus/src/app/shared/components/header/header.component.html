@@ -81,7 +81,7 @@
           class="header-buscar__boton"
           aria-label="Buscar pantalla (Ctrl+K)"
           aria-haspopup="dialog"
-          (click)="abrirBusqueda(searchModal)"
+          (click)="paletteService.abrir()"
         >
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
             <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2" />
@@ -635,44 +635,4 @@
   <!-- End::main-header-container -->
 </header>
 <!-- /app-header -->
-<ng-template #searchModal let-modal>
-  <div class="busqueda" role="dialog" aria-label="Buscar pantalla">
-    <div class="busqueda__campo">
-      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-        <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2" />
-        <line x1="15.5" y1="15.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-      </svg>
-      <input
-        #campoBusqueda
-        type="search"
-        class="busqueda__entrada"
-        placeholder="Buscar pantalla (por ejemplo, «factores» o «bono»)"
-        aria-label="Buscar pantalla"
-        autocomplete="off"
-        [ngModel]="consulta"
-        (ngModelChange)="buscarPantalla($event)"
-        (keydown)="teclaBusqueda($event, modal)"
-      />
-    </div>
-    <ul class="busqueda__lista" role="listbox" aria-label="Resultados" *ngIf="resultados.length">
-      <li
-        *ngFor="let r of resultados; let i = index"
-        role="option"
-        class="busqueda__resultado"
-        [class.busqueda__resultado--activo]="i === indiceActivo"
-        [attr.aria-selected]="i === indiceActivo"
-        (mouseenter)="indiceActivo = i"
-        (click)="irA(r, modal)"
-      >
-        <span class="busqueda__titulo">{{ r.titulo }}</span>
-        <span class="busqueda__ruta">{{ r.ruta }}</span>
-      </li>
-    </ul>
-    <p class="busqueda__vacio" role="status" *ngIf="consulta && !resultados.length">
-      No hay pantallas que coincidan con «{{ consulta }}».
-    </p>
-    <p class="busqueda__ayuda" *ngIf="!consulta">
-      Escriba para encontrar una pantalla. Use ↑ ↓ para moverse y Enter para abrir.
-    </p>
-  </div>
-</ng-template>
+<!-- La búsqueda de pantallas ahora es <app-command-palette> (montada en content-layout), sobre CDK Overlay -->

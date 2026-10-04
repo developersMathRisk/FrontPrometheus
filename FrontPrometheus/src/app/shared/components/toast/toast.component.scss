@@ -1,0 +1,64 @@
+:host {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 24px;
+    z-index: 1200;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.toast-host {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.toast-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px 12px 18px;
+    background: var(--color-neutral-900);
+    color: var(--color-neutral-100);
+    border-radius: var(--rs);
+    box-shadow: var(--shadow-lg);
+    font-size: 13.5px;
+    pointer-events: auto;
+
+    &--exito { background: var(--color-accent-900); }
+    &--error { background: color-mix(in srgb, var(--color-risk-text) 85%, black); }
+}
+
+.toast-mensaje {
+    white-space: nowrap;
+}
+
+.toast-accion {
+    flex: none;
+    padding: 0;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--color-accent-300);
+    background: none;
+    border: 0;
+    cursor: pointer;
+
+    &:hover { text-decoration: underline; }
+}
+
+.toast-cerrar {
+    flex: none;
+    padding: 0;
+    width: 18px;
+    height: 18px;
+    line-height: 1;
+    font-size: 16px;
+    color: var(--color-neutral-400);
+    background: none;
+    border: 0;
+    cursor: pointer;
+
+    &:hover { color: var(--color-neutral-100); }
+}

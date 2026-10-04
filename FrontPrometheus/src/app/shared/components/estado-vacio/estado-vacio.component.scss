@@ -1,0 +1,20 @@
+.p-empty {
+    color: var(--color-neutral-700);
+
+    lucide-icon {
+        color: var(--color-neutral-400);
+    }
+}
+
+.ev-titulo {
+    margin: 4px 0 0;
+    font: 600 17px var(--font-heading);
+    color: var(--color-text);
+}
+
+.ev-texto {
+    margin: 0;
+    max-width: 380px;
+    font-size: 13.5px;
+    color: var(--color-neutral-700);
+}

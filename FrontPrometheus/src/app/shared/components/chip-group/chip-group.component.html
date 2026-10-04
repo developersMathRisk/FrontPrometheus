@@ -1,0 +1,8 @@
+<div class="chip-group" role="group">
+    <button type="button" class="p-chip" [class.p-chip--pill]="pill" [class.is-on]="estaActivo(opcion)"
+        [disabled]="disabled" [attr.aria-pressed]="estaActivo(opcion)" (click)="elegir(opcion)"
+        *ngFor="let opcion of opciones">
+        {{ opcion.etiqueta }}
+        <small *ngIf="opcion.nota">{{ opcion.nota }}</small>
+    </button>
+</div>

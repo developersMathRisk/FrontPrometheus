@@ -1,0 +1,16 @@
+.chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.p-chip {
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.3;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: .5;
+    }
+}

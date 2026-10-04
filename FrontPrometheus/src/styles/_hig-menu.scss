@@ -162,85 +162,7 @@
     }
 }
 
-// ---- ventana de búsqueda de pantallas ------------------------------------------
-.busqueda-ventana {
-    .modal-dialog {
-        max-width: min(640px, calc(100vw - 32px));
-        margin-block-start: 12vh;
-    }
-
-    .modal-content {
-        overflow: hidden;
-        color: var(--default-text-color);
-        background: var(--custom-white);
-        border: 0;
-        border-radius: 14px;
-        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(var(--dark-rgb), 0.1);
-    }
-}
-
-.busqueda__campo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 0 18px;
-    color: rgba(var(--dark-rgb), 0.78);
-    border-bottom: 1px solid rgba(var(--dark-rgb), 0.14);
-}
-
-.busqueda__entrada {
-    flex: 1 1 auto;
-    height: 56px;
-    font-size: 1rem;
-    color: var(--default-text-color);
-    background: transparent;
-    border: 0;
-    outline: none;
-
-    &::placeholder {
-        color: rgba(var(--dark-rgb), 0.7);
-        opacity: 1;
-    }
-}
-
-.busqueda__lista {
-    margin: 0;
-    padding: 8px;
-    list-style: none;
-}
-
-.busqueda__resultado {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 9px 12px;
-    cursor: pointer;
-    border-radius: 8px;
-}
-
-// El resultado activo se marca con fondo y con una barra lateral, no solo con color
-.busqueda__resultado--activo {
-    background: rgba(var(--primary-rgb), 0.12);
-    box-shadow: inset 3px 0 0 rgb(var(--primary-rgb));
-}
-
-.busqueda__titulo {
-    font-size: 0.9375rem;
-    font-weight: 600;
-}
-
-.busqueda__ruta {
-    font-size: 0.75rem;
-    color: rgba(var(--dark-rgb), 0.78);
-}
-
-.busqueda__vacio,
-.busqueda__ayuda {
-    margin: 0;
-    padding: 18px;
-    font-size: 0.875rem;
-    color: rgba(var(--dark-rgb), 0.78);
-}
+// (La búsqueda de pantallas ahora es <app-command-palette>, ver src/styles/_hig-command-palette.scss)
 
 // ---- items de menú anidados (3er/4to nivel) ------------------------------------
 // El tema pone `white-space: nowrap` en todas las etiquetas; con textos largos en los
@@ -255,4 +177,43 @@
         white-space: normal;
         line-height: 1.25;
     }
+}
+
+// ---- restyle "Industry" del rediseño (solo tipografía/color, no toca el mecanismo de colapso) ----
+.app-sidebar,
+.app-header {
+    font-family: var(--font-body);
+}
+
+.app-sidebar .category-name {
+    font: 600 10.5px var(--font-body);
+    letter-spacing: .12em;
+    color: var(--color-neutral-600);
+}
+
+.app-sidebar .main-sidebar-header .header-logo {
+    font-family: var(--font-heading);
+}
+
+.app-sidebar .side-menu__item {
+    border-radius: var(--rs);
+
+    .side-menu__label {
+        font-size: 13.5px;
+    }
+}
+
+.app-sidebar .slide.active > .side-menu__item,
+.app-sidebar .side-menu__item.active {
+    color: var(--color-accent-800);
+    background: var(--color-accent-100);
+}
+
+.app-sidebar .side-menu__item:hover {
+    background: var(--color-accent-100);
+}
+
+.app-header {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-divider);
 }

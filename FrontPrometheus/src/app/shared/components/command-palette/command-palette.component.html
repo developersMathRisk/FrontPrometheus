@@ -1,0 +1,21 @@
+<ng-template #plantilla>
+    <div class="cmdk">
+        <div class="cmdk__campo">
+            <lucide-icon [img]="SearchIcon" [size]="18" [strokeWidth]="1.5" aria-hidden="true"></lucide-icon>
+            <input #entrada type="text" class="cmdk__entrada" placeholder="Buscar pantalla…" autocomplete="off"
+                [ngModel]="consulta" (ngModelChange)="buscar($event)" (keydown)="alTeclear($event)" />
+            <kbd class="cmdk__esc">Esc</kbd>
+        </div>
+
+        <ul class="cmdk__lista" *ngIf="resultados.length">
+            <li *ngFor="let resultado of resultados; let i = index" class="cmdk__item" [class.cmdk__item--activo]="i === indiceActivo"
+                (mouseenter)="indiceActivo = i" (click)="ir(resultado)">
+                <span class="cmdk__item-titulo">{{ resultado.titulo }}</span>
+                <span class="cmdk__item-ruta" *ngIf="resultado.ruta">{{ resultado.ruta }}</span>
+            </li>
+        </ul>
+
+        <p class="cmdk__vacio" *ngIf="consulta && !resultados.length">Sin resultados para «{{ consulta }}».</p>
+        <p class="cmdk__ayuda" *ngIf="!consulta">Escribe para buscar una pantalla. ↑↓ para navegar, Enter para abrir.</p>
+    </div>
+</ng-template>

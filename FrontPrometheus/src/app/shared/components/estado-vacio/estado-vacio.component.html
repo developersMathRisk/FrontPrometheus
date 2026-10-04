@@ -1,0 +1,8 @@
+<div class="p-empty">
+    <lucide-icon [img]="icono" [size]="40" [strokeWidth]="1.5" aria-hidden="true"></lucide-icon>
+    <h3 class="ev-titulo">{{ titulo }}</h3>
+    <p class="ev-texto" *ngIf="texto">{{ texto }}</p>
+    <button type="button" class="btn btn-primary" *ngIf="textoAccion" (click)="accion.emit()">
+        {{ textoAccion }}
+    </button>
+</div>
