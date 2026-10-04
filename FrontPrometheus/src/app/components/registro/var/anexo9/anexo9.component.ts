@@ -10,6 +10,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { mensajeDeError } from '../../../../shared/components/tabla-estado/tabla-estado.component';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { fadeSlideIn } from '../../../../shared/animations/transiciones';
+import { VarEjecucionResumen } from '../../../../shared/models/var/var-ejecucion-resumen';
+import { EncabezadoComponent } from '../../../../shared/components/encabezado/encabezado.component';
 
 /**
  * Anexo N° 9 "Resultados de Modelos de Medición del Riesgo de Mercado" (Manual de Contabilidad SBS,
@@ -19,7 +21,7 @@ import { fadeSlideIn } from '../../../../shared/animations/transiciones';
 @Component({
   selector: 'app-anexo9',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, LoaderComponent],
+  imports: [CommonModule, FormsModule, MatIconModule, LoaderComponent, EncabezadoComponent],
   templateUrl: './anexo9.component.html',
   styleUrl: './anexo9.component.scss',
   animations: [fadeSlideIn],
@@ -33,16 +35,41 @@ export class Anexo9Component implements OnInit {
   cargando = false;
   mensajeError = '';
 
+  // Si no llega un id por query param, se ofrece elegir entre los últimos cálculos de VaR en vez
+  // de simplemente mostrar un error y mandar al usuario de vuelta a otra pantalla.
+  cargandoRecientes = false;
+  calculosRecientes: VarEjecucionResumen[] = [];
+
   constructor(private route: ActivatedRoute, private registroService: RegistroService) {}
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.queryParamMap.get('idResultadoVARDetalle');
     if (!idParam) {
-      this.mensajeError = 'Falta indicar de qué ejecución de VaR generar el anexo. Vuelva a "Ejecución de VaR" o ' +
-        '"Consulta de VaR" y use el botón "Generar Anexo N° 9 (SBS)" sobre un resultado.';
+      this.cargarCalculosRecientes();
       return;
     }
-    this.idResultadoVARDetalle = Number(idParam);
+    this.cargarDesdeId(Number(idParam));
+  }
+
+  private cargarCalculosRecientes(): void {
+    this.cargandoRecientes = true;
+    this.registroService.getListaResultadosVar().subscribe({
+      next: lista => {
+        this.calculosRecientes = [...lista]
+          .sort((a, b) => (a.fechaProceso < b.fechaProceso ? 1 : -1))
+          .slice(0, 6);
+        this.cargandoRecientes = false;
+      },
+      error: () => this.cargandoRecientes = false,
+    });
+  }
+
+  elegirCalculoReciente(c: VarEjecucionResumen): void {
+    this.cargarDesdeId(c.idResultadoVARDetalle);
+  }
+
+  private cargarDesdeId(id: number): void {
+    this.idResultadoVARDetalle = id;
 
     this.registroService.getResultadoVar(this.idResultadoVARDetalle).subscribe({
       next: (r) => {

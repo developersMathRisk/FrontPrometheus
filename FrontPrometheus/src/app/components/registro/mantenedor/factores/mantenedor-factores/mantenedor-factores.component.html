@@ -1,9 +1,5 @@
-<div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center">
-    <div class="d-flex flex-column">
-        <h1 class="page-title my-auto">Factores de Riesgo</h1>
-        <p class="factores-subtitulo">Series de mercado que alimentan la valorización y el cálculo de VaR.</p>
-    </div>
-</div>
+<app-encabezado kicker="Mantenedores" titulo="Factores de Riesgo"
+    subtitulo="Series de mercado que alimentan la valorización y el cálculo de VaR."></app-encabezado>
 
 <div class="factores-segmentado" role="tablist" aria-label="Tipo de factor">
     <button *ngFor="let factor of factores; let i = index" #segmento type="button" role="tab"

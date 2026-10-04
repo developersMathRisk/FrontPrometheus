@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ListaAccionComponent } from '../lista-accion/lista-accion.component';
 import { ListaBonoComponent } from '../lista-bono/lista-bono.component';
 import { ListaFondoInversionComponent } from '../lista-fondo-inversion/lista-fondo-inversion.component';
+import { EncabezadoComponent } from '../../../../../shared/components/encabezado/encabezado.component';
 
 interface Producto {
   id: number;
@@ -15,7 +16,7 @@ interface Producto {
 @Component({
   selector: 'app-mantenedor-productos',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EncabezadoComponent],
   templateUrl: './mantenedor-productos.component.html',
   styleUrl: './mantenedor-productos.component.scss'
 })

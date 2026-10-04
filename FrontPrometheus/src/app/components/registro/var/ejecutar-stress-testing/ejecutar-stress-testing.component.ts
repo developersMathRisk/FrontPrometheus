@@ -11,6 +11,7 @@ import { Portafolio } from '../../../../shared/models/portafolio/portafolio';
 import { Moneda } from '../../../../shared/models/atributo-financiero/moneda';
 import { EjecutarStressRequest, EjecutarStressResponse } from '../../../../shared/models/var/ejecutar-stress';
 import { mensajeDeError } from '../../../../shared/components/tabla-estado/tabla-estado.component';
+import { EncabezadoComponent } from '../../../../shared/components/encabezado/encabezado.component';
 
 interface EscenarioPreset {
   nombre: string;
@@ -29,7 +30,7 @@ interface EscenarioPreset {
 @Component({
   selector: 'app-ejecutar-stress-testing',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, LoaderComponent],
+  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, LoaderComponent, EncabezadoComponent],
   templateUrl: './ejecutar-stress-testing.component.html',
   styleUrl: './ejecutar-stress-testing.component.scss',
   animations: [fadeSlideIn, fadeIn],

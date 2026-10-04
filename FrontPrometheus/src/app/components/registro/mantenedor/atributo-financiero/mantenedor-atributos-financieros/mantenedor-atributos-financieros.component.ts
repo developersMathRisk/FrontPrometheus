@@ -27,11 +27,12 @@ import { ListaSkewPointComponent } from '../lista-skew-point/lista-skew-point.co
 import { ListaTipoCambioComponent } from '../lista-tipo-cambio/lista-tipo-cambio.component';
 import { ListaTipoInstrumentoComponent } from '../lista-tipo-instrumento/lista-tipo-instrumento.component';
 import { ListaTipoSectorComponent } from '../lista-tipo-sector/lista-tipo-sector.component';
+import { EncabezadoComponent } from '../../../../../shared/components/encabezado/encabezado.component';
 
 @Component({
   selector: 'app-mantenedor-atributos-financieros',
   standalone: true,
-  imports: [NgSelectModule, CommonModule, FormsModule],
+  imports: [NgSelectModule, CommonModule, FormsModule, EncabezadoComponent],
   templateUrl: './mantenedor-atributos-financieros.component.html',
   styleUrl: './mantenedor-atributos-financieros.component.scss'
 })

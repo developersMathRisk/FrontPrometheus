@@ -193,3 +193,10 @@
         display: none !important;
     }
 }
+
+.an9__recientes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}

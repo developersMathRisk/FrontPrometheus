@@ -5,6 +5,7 @@ import { ListaTasaInteresComponent } from '../lista-tasa-interes/lista-tasa-inte
 import { ListaIndiceMercadoComponent } from '../lista-indice-mercado/lista-indice-mercado.component';
 import { ListaPrecioMercadoComponent } from '../lista-precio-mercado/lista-precio-mercado.component';
 import { ListaVolatilidadComponent } from '../lista-volatilidad/lista-volatilidad.component';
+import { EncabezadoComponent } from '../../../../../shared/components/encabezado/encabezado.component';
 
 interface Factor {
   id: number;
@@ -16,7 +17,7 @@ interface Factor {
 @Component({
   selector: 'app-mantenedor-factores',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EncabezadoComponent],
   templateUrl: './mantenedor-factores.component.html',
   styleUrl: './mantenedor-factores.component.scss'
 })

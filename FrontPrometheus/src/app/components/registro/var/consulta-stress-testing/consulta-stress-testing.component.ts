@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { Construction } from 'lucide-angular';
+import { EncabezadoComponent } from '../../../../shared/components/encabezado/encabezado.component';
+import { EstadoVacioComponent } from '../../../../shared/components/estado-vacio/estado-vacio.component';
 
 /**
  * Consulta de Stress Testing: todavía no hay resultados que consultar porque el motor de Stress
@@ -12,8 +14,15 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-consulta-stress-testing',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatIconModule],
+  imports: [CommonModule, EncabezadoComponent, EstadoVacioComponent],
   templateUrl: './consulta-stress-testing.component.html',
   styleUrl: './consulta-stress-testing.component.scss'
 })
-export class ConsultaStressTestingComponent {}
+export class ConsultaStressTestingComponent {
+  private readonly router = inject(Router);
+  readonly ConstructionIcon = Construction;
+
+  irAEjecutar(): void {
+    this.router.navigateByUrl('/registro/stress-testing/ejecutar');
+  }
+}

@@ -14,11 +14,12 @@ import { CargaPortafolioComponent } from "../carga-portafolio/carga-portafolio.c
 import { EditarPortafolioComponent } from "../editar-portafolio/editar-portafolio.component";
 import { TablaToolbarComponent } from '../../../../../shared/components/tabla-toolbar/tabla-toolbar.component';
 import { EstadoTabla, TablaEstadoComponent, mensajeDeError } from '../../../../../shared/components/tabla-estado/tabla-estado.component';
+import { EncabezadoComponent } from '../../../../../shared/components/encabezado/encabezado.component';
 
 @Component({
   selector: 'app-lista-portafolio',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, MatMenuModule, CargaPortafolioComponent, EditarPortafolioComponent, TablaToolbarComponent, TablaEstadoComponent],
+  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, MatMenuModule, CargaPortafolioComponent, EditarPortafolioComponent, TablaToolbarComponent, TablaEstadoComponent, EncabezadoComponent],
   templateUrl: './lista-portafolio.component.html',
   styleUrl: './lista-portafolio.component.scss'
 })

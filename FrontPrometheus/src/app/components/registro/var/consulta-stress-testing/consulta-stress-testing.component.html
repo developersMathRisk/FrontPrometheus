@@ -1,22 +1,8 @@
-<div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center">
-    <div class="d-flex flex-column">
-        <h1 class="page-title my-auto">Consulta de Stress Testing</h1>
-        <p class="cst-subtitulo">Historial de escenarios de estrés ejecutados sobre sus portafolios.</p>
-    </div>
-</div>
+<app-encabezado kicker="Stress Testing" titulo="Consulta de Stress Testing"
+    subtitulo="Historial de escenarios de estrés ejecutados sobre sus portafolios."></app-encabezado>
 
-<div class="card">
-    <div class="card-body cst-vacio">
-        <mat-icon aria-hidden="true" class="cst-vacio__icono">construction</mat-icon>
-        <h2 class="cst-vacio__titulo">Todavía no hay resultados de Stress Testing guardados</h2>
-        <p class="cst-vacio__texto">
-            El motor de Stress Testing está en desarrollo, sobre la misma arquitectura del motor de VaR:
-            se agrega como un módulo independiente que no afecta los cálculos de VaR ya validados.
-            Cuando esté disponible, cada ejecución quedará guardada aquí con su propio historial,
-            igual que "Consulta de VaR".
-        </p>
-        <a routerLink="/registro/stress-testing/ejecutar" class="btn btn-primary btn-sm">
-            Ver vista previa de Ejecución de Stress Testing
-        </a>
-    </div>
+<div class="p-card">
+    <app-estado-vacio [icono]="ConstructionIcon" titulo="Todavía no hay resultados de Stress Testing guardados"
+        texto="El motor de Stress Testing está en desarrollo, sobre la misma arquitectura del motor de VaR: se agrega como un módulo independiente que no afecta los cálculos de VaR ya validados. Cuando esté disponible, cada ejecución quedará guardada aquí con su propio historial, igual que &quot;Consulta de VaR&quot;."
+        textoAccion="Ver vista previa de Ejecución de Stress Testing" (accion)="irAEjecutar()"></app-estado-vacio>
 </div>

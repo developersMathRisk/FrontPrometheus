@@ -13,6 +13,7 @@ import { Moneda } from '../../../../shared/models/atributo-financiero/moneda';
 import { NivelConfianza } from '../../../../shared/models/var/nivel-confianza';
 import { EjecutarBacktestingRequest, EjecutarBacktestingResponse } from '../../../../shared/models/var/ejecutar-backtesting';
 import { mensajeDeError } from '../../../../shared/components/tabla-estado/tabla-estado.component';
+import { EncabezadoComponent } from '../../../../shared/components/encabezado/encabezado.component';
 
 /**
  * Backtesting del VaR: prueba retrospectiva walk-forward y FUERA de muestra (Art. 27° Resolución SBS
@@ -24,7 +25,7 @@ import { mensajeDeError } from '../../../../shared/components/tabla-estado/tabla
 @Component({
   selector: 'app-backtesting',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, NgApexchartsModule, LoaderComponent],
+  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, NgApexchartsModule, LoaderComponent, EncabezadoComponent],
   templateUrl: './backtesting.component.html',
   styleUrl: './backtesting.component.scss',
   animations: [fadeSlideIn, fadeIn],

@@ -1,9 +1,5 @@
-<div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center">
-    <div class="d-flex flex-column">
-        <h1 class="page-title my-auto">Instrumentos Financieros</h1>
-        <p class="productos-subtitulo">Acciones, bonos y fondos que se valorizan y forman parte de los portafolios.</p>
-    </div>
-</div>
+<app-encabezado kicker="Mantenedores" titulo="Instrumentos Financieros"
+    subtitulo="Acciones, bonos y fondos que se valorizan y forman parte de los portafolios."></app-encabezado>
 
 <div class="productos-segmentado" role="tablist" aria-label="Tipo de instrumento">
     <button *ngFor="let producto of productos; let i = index" #segmento type="button" role="tab"

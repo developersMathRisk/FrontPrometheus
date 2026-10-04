@@ -1,8 +1,21 @@
-<div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center no-print">
-    <div class="d-flex flex-column">
-        <h1 class="page-title my-auto">Anexo N° 9 — Riesgo de Mercado</h1>
-        <p class="var-subtitulo">Resultados de Modelos de Medición del Riesgo de Mercado (Manual de Contabilidad SBS).</p>
+<app-encabezado class="no-print" kicker="Riesgo de Mercado" titulo="Anexo N° 9 — Riesgo de Mercado"
+    subtitulo="Resultados de Modelos de Medición del Riesgo de Mercado (Manual de Contabilidad SBS)."></app-encabezado>
+
+<div class="p-card no-print" *ngIf="!idResultadoVARDetalle">
+    <h2 class="p-card__title">Elija un cálculo de origen</h2>
+    <p class="p-sub">No llegó indicado desde qué ejecución de VaR generar el anexo. Elija uno de los últimos cálculos:</p>
+
+    <app-loader *ngIf="cargandoRecientes" tamano="inline" etiqueta="Buscando cálculos recientes..."></app-loader>
+
+    <div class="an9__recientes" *ngIf="!cargandoRecientes && calculosRecientes.length">
+        <button type="button" class="p-chip p-chip--pill" *ngFor="let c of calculosRecientes" (click)="elegirCalculoReciente(c)">
+            {{ c.fechaProceso | date:'dd/MM/yyyy' }} <small>{{ c.descripcionPortafolio }}</small>
+        </button>
     </div>
+
+    <p class="p-sub" *ngIf="!cargandoRecientes && !calculosRecientes.length">
+        Todavía no hay cálculos de VaR ejecutados. Vaya a "Ejecución de VaR" para generar el primero.
+    </p>
 </div>
 
 <div class="alert alert-danger d-flex align-items-center gap-2 mb-3 no-print" role="alert" *ngIf="mensajeError">

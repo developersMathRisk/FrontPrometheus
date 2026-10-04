@@ -14,11 +14,12 @@ import { EstadoTabla, TablaEstadoComponent, mensajeDeError } from '../../../../s
 import { ResultadoVarComponent } from '../../../../shared/components/resultado-var/resultado-var.component';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { fadeIn, fadeSlideIn } from '../../../../shared/animations/transiciones';
+import { EncabezadoComponent } from '../../../../shared/components/encabezado/encabezado.component';
 
 @Component({
   selector: 'app-consulta-var',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, TablaToolbarComponent, TablaEstadoComponent, ResultadoVarComponent, LoaderComponent],
+  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, TablaToolbarComponent, TablaEstadoComponent, ResultadoVarComponent, LoaderComponent, EncabezadoComponent],
   templateUrl: './consulta-var.component.html',
   styleUrl: './consulta-var.component.scss',
   animations: [fadeIn, fadeSlideIn],

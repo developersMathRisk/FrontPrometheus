@@ -20,11 +20,12 @@ import { ResultadoVarComponent } from '../../../../shared/components/resultado-v
 import { EjecucionDuplicada } from '../../../../shared/models/var/ejecucion-duplicada';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { fadeIn, fadeSlideIn } from '../../../../shared/animations/transiciones';
+import { EncabezadoComponent } from '../../../../shared/components/encabezado/encabezado.component';
 
 @Component({
   selector: 'app-ejecutar-var',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaMonedaComponent, CargaPortafolioComponent, CommonModule, ResultadoVarComponent, LoaderComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaMonedaComponent, CargaPortafolioComponent, CommonModule, ResultadoVarComponent, LoaderComponent, EncabezadoComponent],
   templateUrl: './ejecutar-var.component.html',
   styleUrl: './ejecutar-var.component.scss',
   animations: [fadeIn, fadeSlideIn],

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
+import { Construction } from 'lucide-angular';
+import { EncabezadoComponent } from '../../../shared/components/encabezado/encabezado.component';
+import { EstadoVacioComponent } from '../../../shared/components/estado-vacio/estado-vacio.component';
 
 /**
  * Estado "en desarrollo" compartido por los módulos aún no conectados a un motor de cálculo. Mismo
@@ -10,22 +12,16 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-en-desarrollo',
   standalone: true,
-  imports: [MatIconModule],
+  imports: [EncabezadoComponent, EstadoVacioComponent],
   template: `
-    <div class="page-header dashboard-pageheader d-flex justify-content-between align-items-center">
-      <div class="d-flex align-items-center gap-3">
-        <h1 class="page-title my-auto" style="white-space: nowrap;">{{ titulo }}</h1>
-      </div>
-    </div>
-
-    <div class="card hig-placeholder">
-      <mat-icon aria-hidden="true">construction</mat-icon>
-      <h2 class="hig-placeholder__titulo">Módulo en desarrollo</h2>
-      <p class="hig-placeholder__texto">{{ detalle }}</p>
+    <app-encabezado [titulo]="titulo"></app-encabezado>
+    <div class="p-card">
+      <app-estado-vacio [icono]="ConstructionIcon" titulo="Módulo en desarrollo" [texto]="detalle"></app-estado-vacio>
     </div>
   `
 })
 export class EnDesarrolloComponent {
+  readonly ConstructionIcon = Construction;
   titulo: string;
   detalle: string;
 
