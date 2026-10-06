@@ -45,6 +45,38 @@
     font: 600 14px var(--font-heading, inherit);
     text-transform: capitalize;
     color: var(--color-text, #1d1f20);
+    background: none;
+    border: 0;
+    border-radius: var(--rs, 7px);
+    padding: 2px 8px;
+    cursor: pointer;
+
+    &:hover { background: var(--color-accent-100, #eef6ff); }
+}
+
+.dtp-meses {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+}
+
+.dtp-mes-opcion {
+    padding: 10px 4px;
+    font-size: 12.5px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: var(--color-text, #1d1f20);
+    background: none;
+    border: 0;
+    border-radius: var(--rs, 7px);
+    cursor: pointer;
+
+    &:hover { background: var(--color-accent-100, #eef6ff); }
+
+    &--activo {
+        color: var(--color-bg, #fff);
+        background: var(--color-accent, #5980a6);
+    }
 }
 
 .dtp-nav {

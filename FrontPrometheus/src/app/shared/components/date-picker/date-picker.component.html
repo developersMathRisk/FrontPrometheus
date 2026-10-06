@@ -6,27 +6,48 @@
 
 <ng-template #plantilla>
     <div class="dtp-popover">
-        <div class="dtp-cabecera">
-            <button type="button" class="dtp-nav" aria-label="Mes anterior" (click)="mesAnterior()">
-                <lucide-icon [img]="ChevronLeftIcon" [size]="16" [strokeWidth]="1.5"></lucide-icon>
-            </button>
-            <span class="dtp-mes">{{ mesEtiqueta }}</span>
-            <button type="button" class="dtp-nav" aria-label="Mes siguiente" (click)="mesSiguiente()">
-                <lucide-icon [img]="ChevronRightIcon" [size]="16" [strokeWidth]="1.5"></lucide-icon>
-            </button>
-        </div>
+        <ng-container *ngIf="vista === 'dias'; else vistaMeses">
+            <div class="dtp-cabecera">
+                <button type="button" class="dtp-nav" aria-label="Mes anterior" (click)="mesAnterior()">
+                    <lucide-icon [img]="ChevronLeftIcon" [size]="16" [strokeWidth]="1.5"></lucide-icon>
+                </button>
+                <button type="button" class="dtp-mes" (click)="abrirVistaMeses()" title="Elegir mes y año">{{ mesEtiqueta }}</button>
+                <button type="button" class="dtp-nav" aria-label="Mes siguiente" (click)="mesSiguiente()">
+                    <lucide-icon [img]="ChevronRightIcon" [size]="16" [strokeWidth]="1.5"></lucide-icon>
+                </button>
+            </div>
 
-        <div class="dtp-semana">
-            <span *ngFor="let d of diasSemana">{{ d }}</span>
-        </div>
+            <div class="dtp-semana">
+                <span *ngFor="let d of diasSemana">{{ d }}</span>
+            </div>
 
-        <div class="dtp-grilla">
-            <button type="button" *ngFor="let dia of diasDelMes" class="dtp-dia" [class.dtp-dia--fuera]="!dia.enMes"
-                [class.dtp-dia--hoy]="dia.esHoy" [class.dtp-dia--activo]="dia.seleccionado" (click)="elegirDia(dia)">
-                {{ dia.fecha.getDate() }}
-            </button>
-        </div>
+            <div class="dtp-grilla">
+                <button type="button" *ngFor="let dia of diasDelMes" class="dtp-dia" [class.dtp-dia--fuera]="!dia.enMes"
+                    [class.dtp-dia--hoy]="dia.esHoy" [class.dtp-dia--activo]="dia.seleccionado" (click)="elegirDia(dia)">
+                    {{ dia.fecha.getDate() }}
+                </button>
+            </div>
 
-        <button type="button" class="dtp-hoy" (click)="irAHoy()">Hoy</button>
+            <button type="button" class="dtp-hoy" (click)="irAHoy()">Hoy</button>
+        </ng-container>
+
+        <ng-template #vistaMeses>
+            <div class="dtp-cabecera">
+                <button type="button" class="dtp-nav" aria-label="Año anterior" (click)="anioAnterior()">
+                    <lucide-icon [img]="ChevronLeftIcon" [size]="16" [strokeWidth]="1.5"></lucide-icon>
+                </button>
+                <span class="dtp-mes">{{ mesVisible.getFullYear() }}</span>
+                <button type="button" class="dtp-nav" aria-label="Año siguiente" (click)="anioSiguiente()">
+                    <lucide-icon [img]="ChevronRightIcon" [size]="16" [strokeWidth]="1.5"></lucide-icon>
+                </button>
+            </div>
+
+            <div class="dtp-meses">
+                <button type="button" *ngFor="let mes of nombresMeses; let i = index" class="dtp-mes-opcion"
+                    [class.dtp-mes-opcion--activo]="i === mesVisible.getMonth()" (click)="elegirMes(i)">
+                    {{ mes.slice(0, 3) }}
+                </button>
+            </div>
+        </ng-template>
     </div>
 </ng-template>

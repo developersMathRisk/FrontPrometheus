@@ -52,6 +52,9 @@ export class DatePickerComponent implements ControlValueAccessor {
   valorIso: string | null = null;
   disabled = false;
   mesVisible = new Date();
+  /** 'dias': calendario normal. 'meses': "zoom out" para saltar de año y elegir mes directamente. */
+  vista: 'dias' | 'meses' = 'dias';
+  readonly nombresMeses = MESES;
 
   private onChange: (valor: string | null) => void = () => {};
   private onTouched: () => void = () => {};
@@ -107,6 +110,7 @@ export class DatePickerComponent implements ControlValueAccessor {
   abrir(): void {
     if (this.overlayRef || this.disabled) return;
     this.mesVisible = this.valorIso ? this.parseIso(this.valorIso) : new Date();
+    this.vista = 'dias';
 
     this.overlayRef = this.overlay.create({
       hasBackdrop: true,
@@ -151,6 +155,23 @@ export class DatePickerComponent implements ControlValueAccessor {
 
   mesSiguiente(): void {
     this.mesVisible = new Date(this.mesVisible.getFullYear(), this.mesVisible.getMonth() + 1, 1);
+  }
+
+  abrirVistaMeses(): void {
+    this.vista = 'meses';
+  }
+
+  anioAnterior(): void {
+    this.mesVisible = new Date(this.mesVisible.getFullYear() - 1, this.mesVisible.getMonth(), 1);
+  }
+
+  anioSiguiente(): void {
+    this.mesVisible = new Date(this.mesVisible.getFullYear() + 1, this.mesVisible.getMonth(), 1);
+  }
+
+  elegirMes(mesIndex: number): void {
+    this.mesVisible = new Date(this.mesVisible.getFullYear(), mesIndex, 1);
+    this.vista = 'dias';
   }
 
   private toIso(fecha: Date): string {
