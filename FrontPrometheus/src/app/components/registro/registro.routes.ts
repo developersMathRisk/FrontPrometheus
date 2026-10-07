@@ -103,6 +103,12 @@ export const admin: Routes = [
                 title: 'Ejecutar Stress Testing'
             },
             {
+                path: 'var/renta-fija',
+                loadComponent: () =>
+                    import('./var/renta-fija/renta-fija.component').then((m) => m.RentaFijaComponent),
+                title: 'Renta fija'
+            },
+            {
                 path: 'var/backtesting',
                 loadComponent: () =>
                     import('./var/backtesting/backtesting.component').then((m) => m.BacktestingComponent),

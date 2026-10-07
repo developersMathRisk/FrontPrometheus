@@ -1,0 +1,78 @@
+<app-encabezado kicker="Riesgo de Mercado" titulo="Renta fija"
+    subtitulo="Valorización con curva SBS y VaR por simulación histórica de curvas y tipo de cambio."></app-encabezado>
+
+<div class="p-card rf-config">
+    <div class="rf-campo">
+        <label class="p-label" for="rf-portafolio">Portafolio de renta fija</label>
+        <select id="rf-portafolio" class="form-select" [(ngModel)]="idPortafolio">
+            <option *ngFor="let p of portafolios" [ngValue]="$any(p).idPortafolio">{{ $any(p).descripcionPortafolio }}</option>
+        </select>
+    </div>
+    <div class="rf-campo">
+        <span class="p-label">Historia de escenarios</span>
+        <app-chip-group [opciones]="ventanas" [(ngModel)]="ventanaDias"></app-chip-group>
+    </div>
+    <button type="button" class="btn btn-primary rf-ejecutar" [disabled]="cargando || idPortafolio == null"
+        (click)="ejecutar()">{{ cargando ? 'Calculando…' : 'Calcular' }}</button>
+</div>
+
+<div class="alert alert-danger rf-mensaje" *ngIf="error">{{ error }}</div>
+<div class="p-empty rf-mensaje" *ngIf="!resultado && !error && !cargando && !portafolios.length">
+    No hay portafolios de tipo Renta Fija. Cree uno en Mantenedores &gt; Portafolios.
+</div>
+
+<ng-container *ngIf="resultado as r">
+    <div class="alert alert-warning rf-mensaje" *ngFor="let a of r.advertencias">{{ a }}</div>
+
+    <div class="rf-kpis">
+        <div class="p-card rf-kpi">
+            <span class="p-label">Valor de mercado al {{ r.fechaPortafolio }}</span>
+            <span class="rf-kpi__valor p-num">{{ r.mtmTotal | number:'1.0-0' }} <small>{{ r.monedaReporte }}</small></span>
+        </div>
+        <div class="p-card rf-kpi" *ngFor="let n of r.resultados">
+            <span class="p-label">VaR {{ n.nivelConfianza | percent }} · CVaR</span>
+            <span class="rf-kpi__valor p-num">{{ n.var | number:'1.0-0' }}
+                <small>({{ pct(n.var) | percent:'1.2-2' }})</small></span>
+            <span class="rf-kpi__sub p-num">CVaR {{ n.cvar | number:'1.0-0' }} · beneficio de diversificación
+                {{ n.beneficioDiversificacion | number:'1.0-0' }}</span>
+        </div>
+        <div class="p-card rf-kpi">
+            <span class="p-label">Duración modificada · convexidad</span>
+            <span class="rf-kpi__valor p-num">{{ r.riesgoCartera.duracionModificada | number:'1.2-2' }} años</span>
+            <span class="rf-kpi__sub p-num">Macaulay {{ r.riesgoCartera.duracionMacaulay | number:'1.2-2' }} ·
+                convexidad {{ r.riesgoCartera.convexidad | number:'1.1-1' }}</span>
+        </div>
+    </div>
+
+    <div class="p-card">
+        <h3 class="p-card__title">Detalle por bono</h3>
+        <div class="table-responsive">
+            <table class="table rf-tabla">
+                <thead>
+                    <tr>
+                        <th>ISIN</th><th>Curva</th><th class="num">Valor de mercado</th><th class="num">Peso</th>
+                        <th class="num">TIR</th><th class="num">Dur. mod.</th><th class="num">Convexidad</th>
+                        <th class="num">Int. corrido</th><th class="num">Precio limpio</th>
+                        <th class="num">VaR {{ r.resultados[r.resultados.length - 1].nivelConfianza | percent }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let i of r.instrumentos">
+                        <td>{{ i.isin }}</td>
+                        <td>{{ i.curva }}</td>
+                        <td class="num p-num">{{ i.mtm | number:'1.0-0' }}</td>
+                        <td class="num p-num">{{ i.peso | percent:'1.1-1' }}</td>
+                        <td class="num p-num">{{ i.tir != null ? (i.tir | percent:'1.2-2') : '—' }}</td>
+                        <td class="num p-num">{{ i.duracionModificada != null ? (i.duracionModificada | number:'1.2-2') : '—' }}</td>
+                        <td class="num p-num">{{ i.convexidad != null ? (i.convexidad | number:'1.1-1') : '—' }}</td>
+                        <td class="num p-num">{{ i.interesCorrido | number:'1.0-0' }}</td>
+                        <td class="num p-num">{{ i.precioLimpio | percent:'1.2-2' }}</td>
+                        <td class="num p-num">{{ r.resultados[r.resultados.length - 1].varIndividual[i.isin] | number:'1.0-0' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="rf-nota">{{ r.numEscenarios }} escenarios históricos ({{ r.ventana.desde }} a {{ r.ventana.hasta }}).
+            El VaR por bono no suma al del portafolio: la diferencia es el beneficio de diversificación.</p>
+    </div>
+</ng-container>

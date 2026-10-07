@@ -134,6 +134,12 @@ export class NavService implements OnDestroy {
           dirchange: false,
         },
         {
+          path: 'registro/var/renta-fija',
+          title: 'Renta fija',
+          type: 'link',
+          dirchange: false,
+        },
+        {
           path: 'registro/var/backtesting',
           title: 'Backtesting',
           type: 'link',
