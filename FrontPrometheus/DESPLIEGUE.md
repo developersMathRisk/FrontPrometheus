@@ -83,9 +83,9 @@ Sirve para **piloto, demo y desarrollo**. No para producción con clientes:
 ## 5. Carga diaria: GitHub Actions
 
 En `ProcesosBatchPrometheus` → Settings → Secrets and variables → Actions: `API_URL` (URL del backend) y, como el
-backend ahora exige sesión, `API_USER` y `API_PASSWORD` de un usuario con rol que pueda escribir en mantenedores
-(créelo en Administración → Usuarios, con rol *Analista de riesgos*, y cambie su clave temporal una vez).
-El workflow `.github/workflows/carga-diaria.yml` corre de lunes a viernes a las 18:30 (Lima).
+backend ahora exige sesión, `API_USER` y `API_PASSWORD` de un usuario técnico (en local ya existe `proceso.carga`, rol *Proceso de carga*:
+crea y edita datos de mercado, no elimina; en la nube créelo en Administración → Usuarios y cambie su clave temporal una vez).
+El workflow `.github/workflows/carga-diaria.yml` (tipo de cambio, cierres y foto diaria de posiciones) corre de lunes a viernes a las 18:30 (Lima).
 
 ## 6. Curvas SBS (manual)
 
