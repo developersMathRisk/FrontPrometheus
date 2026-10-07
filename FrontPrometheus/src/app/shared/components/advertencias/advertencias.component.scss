@@ -1,0 +1,90 @@
+:host {
+    display: block;
+}
+
+// Aviso llamativo pero plano (sin degradados ni sombras): color de alerta, borde marcado y una llamada a la acción.
+.adv-aviso {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 14px;
+    text-align: start;
+    color: var(--color-warn-text);
+    background: var(--color-warn-bg);
+    border: 1px solid var(--color-warn-border);
+    border-inline-start: 5px solid var(--color-warn);
+    border-radius: var(--rs);
+    cursor: pointer;
+    animation: adv-atencion 0.9s ease-in-out 2;
+
+    &:hover {
+        border-color: var(--color-warn);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--color-warn);
+        outline-offset: 2px;
+    }
+}
+
+.adv-aviso__icono {
+    display: inline-flex;
+    flex: none;
+    color: var(--color-warn);
+}
+
+.adv-aviso__texto {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.3;
+
+    strong {
+        font-size: 14px;
+    }
+
+    small {
+        font-size: 12px;
+        opacity: 0.85;
+    }
+}
+
+.adv-aviso__cta {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 2px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--color-warn);
+}
+
+@keyframes adv-atencion {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-4px);
+    }
+    75% {
+        transform: translateX(4px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .adv-aviso {
+        animation: none;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .adv-aviso__texto small {
+        display: none;
+    }
+}

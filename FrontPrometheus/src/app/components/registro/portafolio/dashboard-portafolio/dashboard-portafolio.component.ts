@@ -99,7 +99,20 @@ export class DashboardPortafolioComponent {
   }
 
   filtrarPortafolioInstrumentoResumen(){
-    this.listDataResumenFiltrado = this.listDataResumen.filter(e => (this.idPortafolioSeleccionado == 0 || e.idPortafolio == this.idPortafolioSeleccionado) && (this.fechaConsulta ? new Date(e.fechaValor).toISOString().slice(0, 10) === this.fechaConsulta : true));
+    // Las posiciones son una foto por fecha: para la fecha elegida se muestra, de cada portafolio, la foto más
+    // reciente que no la supere (así hoy muestra la de ayer hasta que corra la carga diaria, en vez de una tabla vacía).
+    const delPortafolio = this.listDataResumen.filter(e => this.idPortafolioSeleccionado == 0 || e.idPortafolio == this.idPortafolioSeleccionado);
+    const dia = (e: PortafolioInstrumento) => String(e.fechaValor).slice(0, 10);
+    if (!this.fechaConsulta) {
+      this.listDataResumenFiltrado = delPortafolio;
+    } else {
+      const ultima = new Map<number, string>();
+      for (const e of delPortafolio) {
+        const f = dia(e);
+        if (f <= this.fechaConsulta && f > (ultima.get(e.idPortafolio) ?? '')) ultima.set(e.idPortafolio, f);
+      }
+      this.listDataResumenFiltrado = delPortafolio.filter(e => dia(e) === ultima.get(e.idPortafolio));
+    }
     this.dsResumen = new MatTableDataSource<PortafolioInstrumento>(this.listDataResumenFiltrado);
     this.dsResumen.paginator = this.paginatorResumen;
     this.dsResumen.sort = this.sortResumen;

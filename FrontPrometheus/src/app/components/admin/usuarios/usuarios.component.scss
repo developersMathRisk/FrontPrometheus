@@ -53,7 +53,7 @@
         margin-inline: 8px;
         padding: 2px 8px;
         font-size: 15px;
-        background: #fff;
+        background: var(--color-raised);
         border-radius: 6px;
     }
 
@@ -101,19 +101,19 @@
     background: var(--color-divider);
 
     &.on {
-        color: #1b7f3b;
-        background: #e3f4e8;
+        color: var(--color-accent-800);
+        background: var(--color-accent-100);
     }
 
     &.warn {
-        color: #8a5a00;
-        background: #fff1d6;
+        color: var(--color-warn-text);
+        background: var(--color-warn-bg);
     }
 }
 
 .usr-btn {
     border: 1px solid var(--color-divider);
-    background: #fff;
+    background: var(--color-raised);
     color: var(--color-neutral-800);
 
     &:hover {

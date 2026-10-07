@@ -13,6 +13,8 @@
 
     <!-- El asistente IA vive en la burbuja flotante del shell (AsistenteIaService); este componente le registra el contexto. -->
 
+    <app-advertencias [items]="resultado.advertencias" contexto="del cálculo de VaR"></app-advertencias>
+
     <div class="rvar-resumen">
         <div class="rvar-resumen__item">
             <span class="rvar-resumen__etiqueta">Portafolio</span>
@@ -35,10 +37,6 @@
             <span class="rvar-resumen__valor">{{ resultado.fechaInicio }} → {{ resultado.fechaFin }}</span>
         </div>
     </div>
-
-    <p class="rvar-nota" *ngFor="let a of resultado.advertencias">
-        <mat-icon aria-hidden="true">info</mat-icon>{{ a }}
-    </p>
 
     <table class="rvar-tabla">
         <caption>VaR por metodología y nivel de confianza</caption>

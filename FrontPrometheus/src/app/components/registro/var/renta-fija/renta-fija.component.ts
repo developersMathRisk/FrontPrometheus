@@ -1,5 +1,6 @@
 import { CommonModule, DecimalPipe, PercentPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { AdvertenciasComponent } from '../../../../shared/components/advertencias/advertencias.component';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../../environments/environment';
@@ -15,7 +16,7 @@ import { RegistroService } from '../../../../shared/services/registro.service';
 @Component({
   selector: 'app-renta-fija',
   standalone: true,
-  imports: [CommonModule, FormsModule, EncabezadoComponent, ChipGroupComponent],
+  imports: [CommonModule, FormsModule, EncabezadoComponent, ChipGroupComponent, AdvertenciasComponent],
   providers: [DecimalPipe, PercentPipe],
   templateUrl: './renta-fija.component.html',
   styleUrl: './renta-fija.component.scss',

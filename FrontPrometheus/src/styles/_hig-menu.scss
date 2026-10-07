@@ -384,7 +384,7 @@
     // Antes usaba --color-surface (gris, el mismo tono que el sidebar): sin nada que lo separe del
     // contenido salvo el borde, leía "plomo"/sucio. Blanco puro + el borde + la sombra ya existente
     // del tema dan la separación, look más limpio.
-    background: #fff;
+    background: var(--color-raised);
     border-bottom: 1px solid var(--color-divider);
     // El tema trae 0.75rem de relleno arriba/abajo; se reduce para un header más compacto.
     // Solo el eje vertical: el relleno horizontal (padding-inline-start) lo fija el tema para dejar sitio al
@@ -453,5 +453,10 @@
 
 .app-sidebar .menu-badge--ia {
     color: #fff !important;
-    background: linear-gradient(135deg, #1f4290, #7c4ddb) !important;
+    background: #2457a6 !important;
+}
+
+// Modo oscuro: el nombre de marca es azul marino y desaparece sobre fondo oscuro; se aclara solo el texto (el símbolo conserva sus colores).
+[data-theme-mode="dark"] img[src*="prometheus-wordmark"] {
+    filter: brightness(0) invert(0.93);
 }

@@ -86,6 +86,7 @@
         <span class="est-resultados__fecha">{{ resultado.fechaProceso }}</span>
     </div>
     <div class="card-body est-resultado">
+        <app-advertencias [items]="resultado.advertencias" contexto="del escenario de stress"></app-advertencias>
         <div class="est-hero">
             <div class="est-hero__valor">
                 <span class="est-hero__cifra">{{ resultado.impactoTotal | number:'1.2-2' }}</span>
@@ -115,10 +116,6 @@
                 <span class="est-resumen__valor">{{ resultado.shockCambiarioPct * 100 | number:'1.0-1' }}%</span>
             </div>
         </div>
-
-        <p class="est-nota" *ngFor="let a of resultado.advertencias">
-            <mat-icon aria-hidden="true">info</mat-icon>{{ a }}
-        </p>
 
         <table class="est-tabla">
             <caption>Impacto por instrumento</caption>

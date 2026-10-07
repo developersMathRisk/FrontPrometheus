@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { AdvertenciasComponent } from '../../../../shared/components/advertencias/advertencias.component';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -30,7 +31,7 @@ interface EscenarioPreset {
 @Component({
   selector: 'app-ejecutar-stress-testing',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, LoaderComponent, EncabezadoComponent],
+  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, LoaderComponent, EncabezadoComponent, AdvertenciasComponent],
   templateUrl: './ejecutar-stress-testing.component.html',
   styleUrl: './ejecutar-stress-testing.component.scss',
   animations: [fadeSlideIn, fadeIn],

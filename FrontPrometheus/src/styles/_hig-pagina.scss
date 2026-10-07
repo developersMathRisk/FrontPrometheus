@@ -81,3 +81,51 @@
         }
     }
 }
+
+
+// Los desplegables del CDK (selector de fecha, paleta, selects) deben quedar por encima de las ventanas modales
+// de ng-bootstrap (z-index 1055) y de sus fondos; si no, el calendario se abre detrás del modal.
+.cdk-overlay-container {
+    z-index: 1200;
+}
+
+
+// Ventana de advertencias de un cálculo (app-advertencias). Va aquí y no en el componente porque el modal se
+// monta en <body>, fuera del ámbito de estilos del componente.
+.advertencias-modal {
+    .adv-modal__cab {
+        gap: 12px;
+        align-items: center;
+        border-bottom: 3px solid var(--color-warn);
+
+        small {
+            color: var(--color-neutral-700);
+        }
+    }
+
+    .adv-modal__icono {
+        display: inline-flex;
+        padding: 8px;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--color-warn);
+    }
+
+    .adv-lista {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 0;
+        padding-inline-start: 22px;
+
+        li {
+            padding-inline-start: 4px;
+            line-height: 1.45;
+        }
+
+        li::marker {
+            font-weight: 700;
+            color: var(--color-warn);
+        }
+    }
+}

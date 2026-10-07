@@ -320,7 +320,20 @@
 }
 
 .var-resultados__fecha {
+    margin-inline-start: auto;
+    padding: 3px 12px;
+    border-radius: 999px;
     font-size: 0.75rem;
-    color: rgba(var(--dark-rgb), 0.78);
+    font-weight: 600;
+    color: var(--color-accent-800);
+    background: var(--color-accent-100);
+    white-space: nowrap;
+}
+
+// El título y la fecha quedan en una fila, con aire entre ambos
+.card-header:has(.var-resultados__fecha) {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 

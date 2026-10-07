@@ -62,6 +62,7 @@
 
     <div class="card" *ngIf="resultado && !ejecutando" [@fadeSlideIn]>
     <div class="card-body bt-resultado">
+        <app-advertencias [items]="resultado.advertencias" contexto="de la prueba retrospectiva"></app-advertencias>
         <p class="bt-contexto">
             {{ resultado.descripcionPortafolio }} · ventana de {{ resultado.ventana }} días ·
             {{ resultado.nivelConfianza * 100 | number:'1.1-2' }}% de confianza
@@ -95,9 +96,6 @@
             [stroke]="chart.stroke" [markers]="chart.markers" [dataLabels]="chart.dataLabels"
             [xaxis]="chart.xaxis" [yaxis]="chart.yaxis" [legend]="chart.legend" [grid]="chart.grid"></apx-chart>
 
-        <p class="bt-nota" *ngFor="let a of resultado.advertencias">
-            <mat-icon aria-hidden="true">info</mat-icon>{{ a }}
-        </p>
     </div>
     </div>
 </div>

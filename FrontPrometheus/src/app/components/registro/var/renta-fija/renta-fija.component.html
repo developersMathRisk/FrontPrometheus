@@ -22,7 +22,7 @@
 </div>
 
 <ng-container *ngIf="resultado as r">
-    <div class="alert alert-warning rf-mensaje" *ngFor="let a of r.advertencias">{{ a }}</div>
+    <app-advertencias class="rf-mensaje" [items]="r.advertencias" contexto="de la valorización de renta fija"></app-advertencias>
 
     <div class="rf-kpis">
         <div class="p-card rf-kpi">

@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { AdvertenciasComponent } from '../advertencias/advertencias.component';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -28,7 +29,7 @@ import { fadeIn, fadeSlideIn } from '../../animations/transiciones';
 @Component({
   selector: 'app-resultado-var',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, NgApexchartsModule, LoaderComponent],
+  imports: [CommonModule, FormsModule, MatIconModule, NgApexchartsModule, LoaderComponent, AdvertenciasComponent],
   templateUrl: './resultado-var.component.html',
   styleUrl: './resultado-var.component.scss',
   animations: [fadeSlideIn, fadeIn],

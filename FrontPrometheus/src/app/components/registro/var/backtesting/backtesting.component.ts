@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { AdvertenciasComponent } from '../../../../shared/components/advertencias/advertencias.component';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -26,7 +27,7 @@ import { ChipGroupComponent, ChipOpcion } from '../../../../shared/components/ch
 @Component({
   selector: 'app-backtesting',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, NgApexchartsModule, LoaderComponent, EncabezadoComponent, ChipGroupComponent],
+  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, NgApexchartsModule, LoaderComponent, EncabezadoComponent, ChipGroupComponent, AdvertenciasComponent],
   templateUrl: './backtesting.component.html',
   styleUrl: './backtesting.component.scss',
   animations: [fadeSlideIn, fadeIn],

@@ -142,7 +142,7 @@
     <div class="card" *ngIf="resultado && !ejecutando" [@fadeSlideIn]>
         <div class="card-header">
             <div class="card-title">Resultado</div>
-            <span class="var-resultados__fecha">{{ resultado.fechaProceso }}</span>
+            <span class="var-resultados__fecha">Calculado el {{ resultado.fechaProceso }}</span>
         </div>
         <div class="card-body">
             <app-resultado-var [resultado]="resultado"></app-resultado-var>

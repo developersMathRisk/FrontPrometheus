@@ -1,0 +1,28 @@
+<button type="button" class="adv-aviso" *ngIf="lista.length" (click)="abrir()"
+    [attr.aria-label]="'Hay ' + lista.length + ' advertencias ' + contexto + '. Ver detalle'">
+    <span class="adv-aviso__icono"><lucide-icon [img]="iconos.TriangleAlert" [size]="20" aria-hidden="true"></lucide-icon></span>
+    <span class="adv-aviso__texto">
+        <strong>{{ lista.length === 1 ? 'Hay 1 advertencia' : 'Hay ' + lista.length + ' advertencias' }} en este cálculo</strong>
+        <small>Cotizaciones faltantes, datos excluidos o desactualizados que pueden afectar el resultado.</small>
+    </span>
+    <span class="adv-aviso__cta">Ver detalle <lucide-icon [img]="iconos.ChevronRight" [size]="16" aria-hidden="true"></lucide-icon></span>
+</button>
+
+<ng-template #detalle let-modal>
+    <div class="modal-header adv-modal__cab">
+        <span class="adv-modal__icono"><lucide-icon [img]="iconos.TriangleAlert" [size]="22" aria-hidden="true"></lucide-icon></span>
+        <div>
+            <h5 class="modal-title">Advertencias {{ contexto }}</h5>
+            <small>Revíselas antes de usar el resultado.</small>
+        </div>
+        <button type="button" class="btn-close ms-auto" aria-label="Cerrar" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <ol class="adv-lista">
+            <li *ngFor="let a of lista">{{ a }}</li>
+        </ol>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close()">Entendido</button>
+    </div>
+</ng-template>
