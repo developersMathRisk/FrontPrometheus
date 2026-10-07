@@ -6,7 +6,6 @@ import {
   inject,
 } from '@angular/core';
 import { Menu, NavService } from '../../services/nav.service';
-import { SwitcherService } from '../../../shared/services/switcher.service';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
@@ -25,7 +24,6 @@ export class ContentLayoutComponent {
     private router:Router,
     private elementRef: ElementRef,
     public navServices: NavService,
-    public SwitcherService: SwitcherService,
     public renderer: Renderer2
   ) {
     this.navServices.items.subscribe((menuItems: any) => {

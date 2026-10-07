@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { SharedModule } from "../../../../shared/shared.module";
-import { ChartOptions } from 'chart.js';
 import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -33,7 +32,7 @@ export class DashboardPortafolioComponent {
   @ViewChild('chart') chart!: ChartComponent;
   // Distribución del valor de mercado por tipo de instrumento: se recalcula con datos reales
   // cada vez que cambia el filtro (ver recalcularIndicadores). Nada de series de ejemplo.
-  public chartOptions2: Partial<ChartOptions> | any = { series: [], labels: [] };
+  public chartOptions2: any = { series: [], labels: [] };
 
   // Valor de mercado total: suma real de cantidad × precio de las posiciones filtradas.
   valorMercadoTotal = 0;

@@ -69,7 +69,7 @@ export class LoginComponent {
      this.authservice
        .loginWithEmail(this.email, this.password)
        .then(() => {
-         this.router.navigate(['/dashboards/sales']);
+         this.router.navigate(['/registro/inicio']);
          console.clear();
           this.toastr.success('log in successful','Dashtic', {
             timeOut: 3000,
@@ -118,7 +118,7 @@ export class LoginComponent {
      this.loginForm.controls['username'].value === 'spruko@admin.com' &&
      this.loginForm.controls['password'].value === 'sprukoadmin'
    ) {
-     this.router.navigate(['/dashboards/sales']);
+     this.router.navigate(['/registro/inicio']);
    } else {
      this.error = 'Please check email and passowrd';
    }
