@@ -24,7 +24,6 @@ import { ListaGrupoEconomicoComponent } from '../lista-grupo-economico/lista-gru
 import { ListaTipoBonoSbsComponent } from '../lista-tipo-bono-sbs/lista-tipo-bono-sbs.component';
 import { ListaTermVolatilidadComponent } from '../lista-term-volatilidad/lista-term-volatilidad.component';
 import { ListaSkewPointComponent } from '../lista-skew-point/lista-skew-point.component';
-import { ListaTipoCambioComponent } from '../lista-tipo-cambio/lista-tipo-cambio.component';
 import { ListaTipoInstrumentoComponent } from '../lista-tipo-instrumento/lista-tipo-instrumento.component';
 import { ListaTipoSectorComponent } from '../lista-tipo-sector/lista-tipo-sector.component';
 import { EncabezadoComponent } from '../../../../../shared/components/encabezado/encabezado.component';
@@ -64,7 +63,6 @@ export class MantenedorAtributosFinancierosComponent {
       { id: 20, descripcion: 'Tipo Bono' },
       { id: 21, descripcion: 'Term. Volatilidad' },
       { id: 22, descripcion: 'Skew Point' },
-      { id: 23, descripcion: 'Tipo Cambio' },
       { id: 24, descripcion: 'Tipo Instrumento' },
       { id: 25, descripcion: 'Tipo Sector' },
     ];
@@ -94,7 +92,6 @@ export class MantenedorAtributosFinancierosComponent {
     20: ListaTipoBonoSbsComponent,
     21: ListaTermVolatilidadComponent,
     22: ListaSkewPointComponent,
-    23: ListaTipoCambioComponent,
     24: ListaTipoInstrumentoComponent,
     25: ListaTipoSectorComponent
   };

@@ -5,6 +5,7 @@ import { ListaTasaInteresComponent } from '../lista-tasa-interes/lista-tasa-inte
 import { ListaIndiceMercadoComponent } from '../lista-indice-mercado/lista-indice-mercado.component';
 import { ListaPrecioMercadoComponent } from '../lista-precio-mercado/lista-precio-mercado.component';
 import { ListaVolatilidadComponent } from '../lista-volatilidad/lista-volatilidad.component';
+import { ListaTipoCambioComponent } from '../../atributo-financiero/lista-tipo-cambio/lista-tipo-cambio.component';
 import { EncabezadoComponent } from '../../../../../shared/components/encabezado/encabezado.component';
 
 interface Factor {
@@ -26,7 +27,8 @@ export class MantenedorFactoresComponent implements OnInit {
     { id: 1, etiqueta: 'Tasa de Interés', descripcion: 'Vértices de las curvas de tasas de referencia.', componente: ListaTasaInteresComponent },
     { id: 2, etiqueta: 'Índice de Mercado', descripcion: 'Índices de referencia del mercado.', componente: ListaIndiceMercadoComponent },
     { id: 3, etiqueta: 'Precio de Mercado', descripcion: 'Precios históricos por instrumento y fecha; son la base del cálculo de VaR.', componente: ListaPrecioMercadoComponent },
-    { id: 4, etiqueta: 'Volatilidad', descripcion: 'Superficie de volatilidad por plazo y punto de skew.', componente: ListaVolatilidadComponent }
+    { id: 4, etiqueta: 'Volatilidad', descripcion: 'Superficie de volatilidad por plazo y punto de skew.', componente: ListaVolatilidadComponent },
+    { id: 5, etiqueta: 'Tipo de Cambio', descripcion: 'Serie diaria de tipos de cambio por par de monedas; alimenta la conversión y el VaR cambiario.', componente: ListaTipoCambioComponent }
   ];
 
   factorSeleccionado = 1;
