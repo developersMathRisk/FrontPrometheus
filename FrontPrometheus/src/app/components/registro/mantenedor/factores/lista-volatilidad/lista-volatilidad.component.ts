@@ -15,11 +15,12 @@ import { CargaVolatilidadComponent } from "../carga-volatilidad/carga-volatilida
 import { CommonModule } from '@angular/common';
 import { TablaToolbarComponent } from '../../../../../shared/components/tabla-toolbar/tabla-toolbar.component';
 import { EstadoTabla, TablaEstadoComponent, mensajeDeError } from '../../../../../shared/components/tabla-estado/tabla-estado.component';
+import { RangoFechas, RangoFechasComponent } from '../../../../../shared/components/rango-fechas/rango-fechas.component';
 
 @Component({
   selector: 'app-lista-volatilidad',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, MatCheckboxModule, MatMenuModule, EditarVolatilidadComponent, CargaVolatilidadComponent, TablaToolbarComponent, TablaEstadoComponent],
+  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, MatCheckboxModule, MatMenuModule, EditarVolatilidadComponent, CargaVolatilidadComponent, TablaToolbarComponent, TablaEstadoComponent, RangoFechasComponent],
   templateUrl: './lista-volatilidad.component.html',
   styleUrl: './lista-volatilidad.component.scss'
 })
@@ -49,6 +50,8 @@ export class ListaVolatilidadComponent {
 
   cargando = true;
   mensajeError = '';
+  // Serie diaria: se pide al backend solo el rango visible (por defecto, 30 días).
+  rango: RangoFechas = RangoFechasComponent.ultimosDias(30);
   total = 0;
   busqueda = '';
 
@@ -73,7 +76,7 @@ export class ListaVolatilidadComponent {
   listarRegistros(){
     this.cargando = true;
     this.mensajeError = '';
-    this.registroService.getListaVolatilidad().subscribe(
+    this.registroService.getListaVolatilidad(this.rango.desde, this.rango.hasta).subscribe(
       (response: Volatilidad[]) => {
         this.dataSource = new MatTableDataSource<Volatilidad>(response);
         this.dataSource.paginator = this.paginator;
@@ -87,6 +90,11 @@ export class ListaVolatilidadComponent {
         this.mensajeError = mensajeDeError(error);
       }
     )
+  }
+
+  alCambiarRango(rango: RangoFechas) {
+    this.rango = rango;
+    this.listarRegistros();
   }
 
   buscar(texto: string) {

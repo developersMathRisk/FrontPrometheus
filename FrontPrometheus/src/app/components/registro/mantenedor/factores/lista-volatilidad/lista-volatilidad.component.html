@@ -3,6 +3,8 @@
     <app-tabla-toolbar placeholder="Buscar ticker, skew o plazo…" accion="Agregar Volatilidad"
         [total]="total" [filtrados]="filtrados" [ocultarResumen]="cargando || !!mensajeError" [texto]="busqueda"
         (buscar)="buscar($event)" (agregar)="registrar(cargaModal)">
+        <app-rango-fechas filtros [desde]="rango.desde" [hasta]="rango.hasta"
+            (cambio)="alCambiarRango($event)"></app-rango-fechas>
     </app-tabla-toolbar>
 
     <div class="tabla-contenedor">

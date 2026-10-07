@@ -15,11 +15,12 @@ import { CargaPrecioMercadoComponent } from "../carga-precio-mercado/carga-preci
 import { EditarPrecioMercadoComponent } from "../editar-precio-mercado/editar-precio-mercado.component";
 import { TablaToolbarComponent } from '../../../../../shared/components/tabla-toolbar/tabla-toolbar.component';
 import { EstadoTabla, TablaEstadoComponent, mensajeDeError } from '../../../../../shared/components/tabla-estado/tabla-estado.component';
+import { RangoFechas, RangoFechasComponent } from '../../../../../shared/components/rango-fechas/rango-fechas.component';
 
 @Component({
   selector: 'app-lista-precio-mercado',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, MatCheckboxModule, MatMenuModule, CargaPrecioMercadoComponent, EditarPrecioMercadoComponent, TablaToolbarComponent, TablaEstadoComponent],
+  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, MatCheckboxModule, MatMenuModule, CargaPrecioMercadoComponent, EditarPrecioMercadoComponent, TablaToolbarComponent, TablaEstadoComponent, RangoFechasComponent],
   templateUrl: './lista-precio-mercado.component.html',
   styleUrl: './lista-precio-mercado.component.scss'
 })
@@ -42,8 +43,8 @@ export class ListaPrecioMercadoComponent {
   mensajeError = '';
   total = 0;
   busqueda = '';
-  desde = '';
-  hasta = '';
+  // El rango ya no filtra en el cliente: se lo pide al backend (antes se traia la tabla completa).
+  rango: RangoFechas = RangoFechasComponent.ultimosDias(30);
   verTodasLasColumnas = false;
 
   readonly columnasNumericas = [
@@ -113,7 +114,7 @@ export class ListaPrecioMercadoComponent {
   listarRegistros(){
     this.cargando = true;
     this.mensajeError = '';
-    this.registroService.getListaPrecioMercado().subscribe(
+    this.registroService.getListaPrecioMercado(this.rango.desde, this.rango.hasta).subscribe(
       (response: PrecioMercado[]) => {
         // Orden inicial: fecha más reciente primero y, dentro de cada fecha, por nemónico
         const ordenados = [...response].sort((a, b) => (a.nemonico ?? '').localeCompare(b.nemonico ?? ''));
@@ -141,29 +142,26 @@ export class ListaPrecioMercadoComponent {
     this.aplicarFiltros();
   }
 
-  cambiarRango(campo: 'desde' | 'hasta', valor: string) {
-    this[campo] = valor;
-    this.aplicarFiltros();
+  alCambiarRango(rango: RangoFechas) {
+    this.rango = rango;
+    this.listarRegistros();
   }
 
   limpiarFiltros() {
     this.busqueda = '';
-    this.desde = '';
-    this.hasta = '';
-    this.aplicarFiltros();
+    this.rango = RangoFechasComponent.ultimosDias(30);
+    this.listarRegistros();
   }
 
   private aplicarFiltros() {
     if (!this.dataSource) return;
-    this.dataSource.filter = JSON.stringify({ texto: this.normalizar(this.busqueda.trim()), desde: this.desde, hasta: this.hasta });
+    this.dataSource.filter = JSON.stringify({ texto: this.normalizar(this.busqueda.trim()) });
     this.dataSource.paginator?.firstPage();
   }
 
   private coincide(fila: PrecioMercado, filtro: string): boolean {
-    const { texto, desde, hasta } = JSON.parse(filtro);
+    const { texto } = JSON.parse(filtro);
     const fecha = String(fila.fecProceso ?? '').slice(0, 10); // yyyy-MM-dd
-    if (desde && fecha < desde) return false;
-    if (hasta && fecha > hasta) return false;
     if (!texto) return true;
     const [anio, mes, dia] = fecha.split('-');
     const enDdMmYyyy = `${dia}/${mes}/${anio}`;

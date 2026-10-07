@@ -542,8 +542,11 @@ export class RegistroService {
     return this.http.post<TipoCambio>(`${this.apiServeURL}/mantenedores/crearTipoCambio`, objTipoCambio);
   }
 
-  public getListaTipoCambio(): Observable<TipoCambio[]>{
-    return this.http.get<TipoCambio[]>(`${this.apiServeURL}/mantenedores/tipoCambio/list`);
+  // Serie diaria: las vistas piden un rango para no traer la tabla completa.
+  // Sin rango se mantiene el comportamiento anterior (lo usan los combos).
+  public getListaTipoCambio(desde?: string | null, hasta?: string | null): Observable<TipoCambio[]>{
+    const params = desde && hasta ? new HttpParams().set('desde', desde).set('hasta', hasta) : undefined;
+    return this.http.get<TipoCambio[]>(`${this.apiServeURL}/mantenedores/tipoCambio/list`, { params });
   }
 
   public putModificarTipoCambio(id: number, objTipoCambio: TipoCambio): Observable<TipoCambio> {
@@ -579,8 +582,11 @@ export class RegistroService {
     return this.http.post<PrecioMercado>(`${this.apiServeURL}/mantenedores/crearVectorPrecio`, objPrecioMercado);
   }
 
-  public getListaPrecioMercado(): Observable<PrecioMercado[]>{
-    return this.http.get<PrecioMercado[]>(`${this.apiServeURL}/mantenedores/vectorPrecio/list`);
+  // Serie diaria: las vistas piden un rango para no traer la tabla completa.
+  // Sin rango se mantiene el comportamiento anterior (lo usan los combos).
+  public getListaPrecioMercado(desde?: string | null, hasta?: string | null): Observable<PrecioMercado[]>{
+    const params = desde && hasta ? new HttpParams().set('desde', desde).set('hasta', hasta) : undefined;
+    return this.http.get<PrecioMercado[]>(`${this.apiServeURL}/mantenedores/vectorPrecio/list`, { params });
   }
 
   public putModificarPrecioMercado(id: number, objPrecioMercado: PrecioMercado): Observable<PrecioMercado> {
@@ -613,8 +619,11 @@ export class RegistroService {
     return this.http.post<Volatilidad>(`${this.apiServeURL}/mantenedores/crearVolatilitySurfacePoint`, objVolatilidad);
   }
 
-  public getListaVolatilidad(): Observable<Volatilidad[]>{
-    return this.http.get<Volatilidad[]>(`${this.apiServeURL}/mantenedores/volatilitySurfacePoint/list`);
+  // Serie diaria: las vistas piden un rango para no traer la tabla completa.
+  // Sin rango se mantiene el comportamiento anterior (lo usan los combos).
+  public getListaVolatilidad(desde?: string | null, hasta?: string | null): Observable<Volatilidad[]>{
+    const params = desde && hasta ? new HttpParams().set('desde', desde).set('hasta', hasta) : undefined;
+    return this.http.get<Volatilidad[]>(`${this.apiServeURL}/mantenedores/volatilitySurfacePoint/list`, { params });
   }
 
   public putModificarVolatilidad(id: number, objVolatilidad: Volatilidad): Observable<Volatilidad> {

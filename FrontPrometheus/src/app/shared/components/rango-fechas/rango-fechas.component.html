@@ -1,0 +1,12 @@
+<div class="rango" role="group" aria-label="Rango de fechas">
+    <app-date-picker [ngModel]="desde" (ngModelChange)="alCambiarDesde($event)" placeholder="Desde"></app-date-picker>
+    <span class="rango__separador" aria-hidden="true">—</span>
+    <app-date-picker [ngModel]="hasta" (ngModelChange)="alCambiarHasta($event)" placeholder="Hasta"></app-date-picker>
+
+    <div class="rango__atajos">
+        <button type="button" class="p-chip p-chip--pill" *ngFor="let a of atajos"
+            [class.is-on]="atajoActivo(a.dias)" (click)="elegirAtajo(a.dias)">
+            {{ a.etiqueta }}
+        </button>
+    </div>
+</div>

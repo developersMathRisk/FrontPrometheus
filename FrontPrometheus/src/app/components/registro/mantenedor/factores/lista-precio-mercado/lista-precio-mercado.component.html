@@ -4,16 +4,8 @@
         [total]="total" [filtrados]="filtrados" [ocultarResumen]="cargando || !!mensajeError" [texto]="busqueda"
         (buscar)="buscar($event)" (agregar)="registrar(cargaModal)">
 
-        <div filtros class="rango-fechas" role="group" aria-label="Rango de fechas">
-            <label>Desde
-                <input type="date" [value]="desde" [attr.max]="hasta || null"
-                    (input)="cambiarRango('desde', $any($event.target).value)">
-            </label>
-            <label>Hasta
-                <input type="date" [value]="hasta" [attr.min]="desde || null"
-                    (input)="cambiarRango('hasta', $any($event.target).value)">
-            </label>
-        </div>
+        <app-rango-fechas filtros [desde]="rango.desde" [hasta]="rango.hasta"
+            (cambio)="alCambiarRango($event)"></app-rango-fechas>
 
         <div opciones class="form-check form-switch interruptor-columnas"
             title="Incluye precio sucio, TIR, duración, convexidad, valor facial y vencimiento">

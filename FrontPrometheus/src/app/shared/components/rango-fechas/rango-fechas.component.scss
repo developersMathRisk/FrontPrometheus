@@ -1,0 +1,21 @@
+.rango {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.rango__separador {
+    color: var(--color-neutral-500, #98989b);
+}
+
+.rango__atajos {
+    display: flex;
+    gap: 6px;
+    margin-inline-start: 4px;
+}
+
+.rango__atajos .p-chip {
+    padding: 5px 10px;
+    font-size: 12px;
+}

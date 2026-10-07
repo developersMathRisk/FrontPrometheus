@@ -14,11 +14,12 @@ import { CargaTipoCambioComponent } from "../carga-tipo-cambio/carga-tipo-cambio
 import { EditarTipoCambioComponent } from "../editar-tipo-cambio/editar-tipo-cambio.component";
 import { TablaToolbarComponent } from '../../../../../shared/components/tabla-toolbar/tabla-toolbar.component';
 import { EstadoTabla, TablaEstadoComponent, mensajeDeError } from '../../../../../shared/components/tabla-estado/tabla-estado.component';
+import { RangoFechas, RangoFechasComponent } from '../../../../../shared/components/rango-fechas/rango-fechas.component';
 
 @Component({
   selector: 'app-lista-tipo-cambio',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, MatMenuModule, CargaTipoCambioComponent, EditarTipoCambioComponent, TablaToolbarComponent, TablaEstadoComponent],
+  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, MatMenuModule, CargaTipoCambioComponent, EditarTipoCambioComponent, TablaToolbarComponent, TablaEstadoComponent, RangoFechasComponent],
   templateUrl: './lista-tipo-cambio.component.html',
   styleUrl: './lista-tipo-cambio.component.scss'
 })
@@ -38,6 +39,8 @@ export class ListaTipoCambioComponent {
   @ViewChild('sort') sort!: MatSort;
   cargando = true;
   mensajeError = '';
+  // Serie diaria: se pide al backend solo el rango visible (por defecto, 30 días).
+  rango: RangoFechas = RangoFechasComponent.ultimosDias(30);
   total = 0;
   busqueda = '';
 
@@ -71,7 +74,7 @@ export class ListaTipoCambioComponent {
   listarRegistros(){
     this.cargando = true;
     this.mensajeError = '';
-    this.registroService.getListaTipoCambio().subscribe(
+    this.registroService.getListaTipoCambio(this.rango.desde, this.rango.hasta).subscribe(
       (response: TipoCambio[]) => {
         this.dataSource = new MatTableDataSource<TipoCambio>(response);
         this.dataSource.paginator = this.paginator;
@@ -85,6 +88,11 @@ export class ListaTipoCambioComponent {
         this.mensajeError = mensajeDeError(error);
       }
     )
+  }
+
+  alCambiarRango(rango: RangoFechas) {
+    this.rango = rango;
+    this.listarRegistros();
   }
 
   buscar(texto: string) {
