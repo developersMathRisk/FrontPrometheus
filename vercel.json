@@ -1,0 +1,6 @@
+{
+  "installCommand": "cd FrontPrometheus && npm ci",
+  "buildCommand": "cd FrontPrometheus && npx ng build",
+  "outputDirectory": "FrontPrometheus/preview/browser",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
