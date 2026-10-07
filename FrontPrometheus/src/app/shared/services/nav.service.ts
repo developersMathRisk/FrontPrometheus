@@ -135,12 +135,16 @@ export class NavService implements OnDestroy {
           title: 'Ejecutar VaR',
           type: 'link',
           dirchange: false,
+          badgeClass: 'primary-transparent',
+          badgeValue: '+ IA',
         },
         {
           path: 'registro/var/consulta',
           title: 'Consultar VaR',
           type: 'link',
           dirchange: false,
+          badgeClass: 'primary-transparent',
+          badgeValue: '+ IA',
         },
         {
           path: 'registro/var/renta-fija',

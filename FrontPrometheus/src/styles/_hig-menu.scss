@@ -442,3 +442,16 @@
     position: relative;
     z-index: 1 !important;
 }
+
+
+// Etiqueta "+ IA" del menú: destaca las opciones que usan el asistente IA.
+.app-sidebar .menu-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+.app-sidebar .menu-badge--ia {
+    color: #fff !important;
+    background: linear-gradient(135deg, #1f4290, #7c4ddb) !important;
+}

@@ -11,37 +11,7 @@
         </p>
     </div>
 
-    <!-- Asistente IA integrado: interpreta el resultado automáticamente y permite simular cambios
-         con el motor real de Stress Testing, sin salir de la pantalla de resultados. -->
-    <div class="rvar-ia" *ngIf="interpretacion">
-        <div class="rvar-ia__interpretacion">
-            <mat-icon aria-hidden="true">smart_toy</mat-icon>
-            <p>{{ interpretacion }}</p>
-        </div>
-
-        <div class="rvar-ia__mensajes" *ngIf="mensajesIA.length">
-            <div class="rvar-ia__mensaje" [class.rvar-ia__mensaje--usuario]="m.autor === 'usuario'" *ngFor="let m of mensajesIA" [@fadeIn]>
-                <mat-icon aria-hidden="true">{{ m.autor === 'usuario' ? 'person' : 'smart_toy' }}</mat-icon>
-                <p>{{ m.texto }}</p>
-            </div>
-            <div class="rvar-ia__mensaje" *ngIf="pensandoIA" [@fadeIn]>
-                <mat-icon aria-hidden="true">smart_toy</mat-icon>
-                <p class="rvar-ia__pensando"><span></span><span></span><span></span></p>
-            </div>
-        </div>
-
-        <div class="rvar-ia__sugerencias" *ngIf="!mensajesIA.length">
-            <button type="button" class="rvar-ia__sugerencia" *ngFor="let s of sugerenciasIA" (click)="usarSugerenciaIA(s)">{{ s }}</button>
-        </div>
-
-        <form class="rvar-ia__entrada" (ngSubmit)="preguntarIA()">
-            <input type="text" class="form-control" placeholder="Simule un cambio, p. ej. '¿qué pasa si el mercado cae 20%?'"
-                [(ngModel)]="preguntaIA" name="preguntaIA" [disabled]="pensandoIA">
-            <button type="submit" class="btn btn-primary btn-sm" [disabled]="!preguntaIA.trim() || pensandoIA">
-                <mat-icon aria-hidden="true">send</mat-icon>
-            </button>
-        </form>
-    </div>
+    <!-- El asistente IA vive en la burbuja flotante del shell (AsistenteIaService); este componente le registra el contexto. -->
 
     <div class="rvar-resumen">
         <div class="rvar-resumen__item">

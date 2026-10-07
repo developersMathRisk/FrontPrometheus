@@ -13,6 +13,7 @@ import { HoverEffectSidebarDirective } from './directives/hover-effect-sidebar.d
 import { AuthenticationLayoutComponent } from './layouts/authentication-layout/authentication-layout.component';
 import { CommandPaletteComponent } from './components/command-palette/command-palette.component';
 import { ToastComponent } from './components/toast/toast.component';
+import { AsistenteIaComponent } from './components/asistente-ia/asistente-ia.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ToastComponent } from './components/toast/toast.component';
     FormsModule,
     CommandPaletteComponent,
     ToastComponent,
+    AsistenteIaComponent,
   ],
   exports: [
     HeaderComponent,

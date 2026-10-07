@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { AsistenteIaService } from '../../services/asistente-ia.service';
 import { MatIconModule } from '@angular/material/icon';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { EjecutarVarResponse, ResultadoMetodoVar } from '../../models/var/ejecutar-var-response';
@@ -11,11 +14,6 @@ import { EjecutarStressResponse } from '../../models/var/ejecutar-stress';
 import { RegistroService } from '../../services/registro.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { fadeIn, fadeSlideIn } from '../../animations/transiciones';
-
-interface MensajeIA {
-  autor: 'usuario' | 'asistente';
-  texto: string;
-}
 
 /**
  * Muestra el resultado de un cálculo de VaR: un número principal bien destacado
@@ -35,7 +33,7 @@ interface MensajeIA {
   styleUrl: './resultado-var.component.scss',
   animations: [fadeSlideIn, fadeIn],
 })
-export class ResultadoVarComponent implements OnInit, OnChanges {
+export class ResultadoVarComponent implements OnInit, OnChanges, OnDestroy {
   @Input({ required: true }) resultado!: EjecutarVarResponse;
 
   cargandoDistribucion = false;
@@ -51,19 +49,16 @@ export class ResultadoVarComponent implements OnInit, OnChanges {
   serie: PuntoSerieVar[] = [];
   chartSerie: any = null;
 
-  // ---- asistente IA integrado: interpreta el resultado y permite simular cambios -----------
+  // ---- asistente IA: se registra en la burbuja flotante del shell -----------------------------
   listMoneda: Moneda[] = [];
-  mensajesIA: MensajeIA[] = [];
-  preguntaIA = '';
-  pensandoIA = false;
 
-  readonly sugerenciasIA = [
+  private readonly sugerenciasIA = [
     '¿Qué pasa si el mercado cae 20%?',
     '¿Qué pasa si el dólar sube 10%?',
     '¿Qué tan expuesto estoy a una crisis de -35%?',
   ];
 
-  constructor(private registroService: RegistroService, private router: Router) {}
+  constructor(private registroService: RegistroService, private router: Router, private asistente: AsistenteIaService) {}
 
   ngOnInit(): void {
     this.registroService.getListaMoneda().subscribe(r => this.listMoneda = r);
@@ -77,10 +72,27 @@ export class ResultadoVarComponent implements OnInit, OnChanges {
   ngOnChanges(cambios: SimpleChanges): void {
     if (cambios['resultado']) {
       this.numBinsManual = null; // cada resultado nuevo vuelve a partir de Sturges
-      this.mensajesIA = [];
       this.cargarDistribucion();
       this.cargarSerie();
+      this.registrarAsistente();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.asistente.liberar();
+  }
+
+  private registrarAsistente(): void {
+    const interpretacion = this.interpretacion;
+    if (!interpretacion) return;
+    this.asistente.registrar({
+      clave: `var-${this.resultado.idResultadoVARDetalle ?? this.resultado.descripcionPortafolio}`,
+      titulo: this.resultado.descripcionPortafolio,
+      interpretacion,
+      sugerencias: this.sugerenciasIA,
+      placeholder: "Simule un cambio, p. ej. '¿qué pasa si el mercado cae 20%?'",
+      responder: (pregunta) => this.responder(pregunta),
+    });
   }
 
   /** Interpretación automática del resultado, generada apenas termina el cálculo: ancla cada frase
@@ -115,49 +127,26 @@ export class ResultadoVarComponent implements OnInit, OnChanges {
     return frase;
   }
 
-  usarSugerenciaIA(texto: string) {
-    this.preguntaIA = texto;
-    this.preguntarIA();
-  }
-
-  preguntarIA() {
-    const texto = this.preguntaIA.trim();
-    if (!texto || this.pensandoIA) return;
-    this.mensajesIA.push({ autor: 'usuario', texto });
-    this.preguntaIA = '';
-
+  /** Responde una pregunta del asistente: reconoce un shock de precio o cambiario y lo simula con el motor real de Stress Testing. */
+  private responder(texto: string): Observable<string> {
     const escenario = this.interpretarEscenario(texto);
     if (!escenario.reconocido) {
-      this.mensajesIA.push({
-        autor: 'asistente',
-        texto: 'No reconocí un porcentaje de shock en su pregunta. Pruebe algo como "¿qué pasa si el mercado ' +
-          'cae 20%?" o "¿qué pasa si el dólar sube 10%?": lo simulo con el motor real de Stress Testing.',
-      });
-      return;
+      return of('No reconocí un porcentaje de shock en su pregunta. Pruebe algo como "¿qué pasa si el mercado ' +
+        'cae 20%?" o "¿qué pasa si el dólar sube 10%?": lo simulo con el motor real de Stress Testing.');
     }
-
     const moneda = this.listMoneda.find(m => m.codMoneda === this.resultado.monedaReporte);
     if (!moneda || !this.resultado.idsPortafolio?.length) {
-      this.mensajesIA.push({ autor: 'asistente', texto: 'No pude identificar el portafolio o la moneda para simular el escenario.' });
-      return;
+      return of('No pude identificar el portafolio o la moneda para simular el escenario.');
     }
-
-    this.pensandoIA = true;
-    this.registroService.postEjecutarStress({
+    return this.registroService.postEjecutarStress({
       idsPortafolio: this.resultado.idsPortafolio,
       idMoneda: moneda.idMoneda,
       shockPrecioPct: escenario.shockPrecioPct,
       shockCambiarioPct: escenario.shockCambiarioPct,
-    }).subscribe({
-      next: (r) => {
-        this.pensandoIA = false;
-        this.mensajesIA.push({ autor: 'asistente', texto: this.formatearRespuestaStress(r) });
-      },
-      error: () => {
-        this.pensandoIA = false;
-        this.mensajesIA.push({ autor: 'asistente', texto: 'El motor de Stress Testing no pudo calcular este escenario con los datos actuales.' });
-      },
-    });
+    }).pipe(
+      map(r => this.formatearRespuestaStress(r)),
+      catchError(() => of('El motor de Stress Testing no pudo calcular este escenario con los datos actuales.')),
+    );
   }
 
   private interpretarEscenario(texto: string): { shockPrecioPct: number; shockCambiarioPct: number; reconocido: boolean } {
@@ -346,6 +335,7 @@ export class ResultadoVarComponent implements OnInit, OnChanges {
         this.serie = r;
         this.cargandoSerie = false;
         if (r.length >= 2) this.chartSerie = this.armarSerie(r, d);
+        this.registrarAsistente();
       },
       error: () => this.cargandoSerie = false,
     });

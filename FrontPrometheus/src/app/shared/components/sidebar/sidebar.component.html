@@ -145,6 +145,13 @@
                 (click)="setNavActive($event, childrenItem.path ?? '')"
               >
                 {{ childrenItem.title }}
+                @if (childrenItem.badgeValue) {
+                <span
+                  class="badge bg-{{ childrenItem.badgeClass }} ms-2 menu-badge"
+                  [class.menu-badge--ia]="childrenItem.badgeValue === '+ IA'"
+                  >{{ childrenItem.badgeValue }}</span
+                >
+                }
               </a>
               }
               <!-- empty -->

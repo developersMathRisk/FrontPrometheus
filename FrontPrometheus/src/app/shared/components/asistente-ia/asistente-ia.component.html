@@ -1,0 +1,46 @@
+<ng-container *ngIf="asistente.contexto() as ctx">
+    <section class="ia-panel" *ngIf="asistente.abierto()" role="dialog" aria-label="Asistente IA" [@fadeIn]>
+        <header class="ia-panel__cab">
+            <span class="ia-panel__marca"><lucide-icon [img]="iconos.Sparkles" [size]="18" aria-hidden="true"></lucide-icon></span>
+            <div class="ia-panel__titulo">
+                <strong>Asistente IA</strong>
+                <small>{{ ctx.titulo }}</small>
+            </div>
+            <button type="button" class="ia-panel__cerrar" (click)="asistente.cerrar()" aria-label="Cerrar el asistente">
+                <lucide-icon [img]="iconos.X" [size]="18" aria-hidden="true"></lucide-icon>
+            </button>
+        </header>
+
+        <div class="ia-panel__hilo" #hilo>
+            <div class="ia-msg ia-msg--asistente">
+                <p>{{ ctx.interpretacion }}</p>
+            </div>
+            <div class="ia-msg" [class.ia-msg--usuario]="m.autor === 'usuario'" [class.ia-msg--asistente]="m.autor === 'asistente'"
+                *ngFor="let m of asistente.mensajes()" [@fadeIn]>
+                <p>{{ m.texto }}</p>
+            </div>
+            <div class="ia-msg ia-msg--asistente" *ngIf="asistente.pensando()" [@fadeIn]>
+                <p class="ia-pensando" aria-label="Pensando"><span></span><span></span><span></span></p>
+            </div>
+        </div>
+
+        <div class="ia-panel__sugerencias" *ngIf="!asistente.mensajes().length">
+            <button type="button" *ngFor="let s of ctx.sugerencias" (click)="usarSugerencia(s)">{{ s }}</button>
+        </div>
+
+        <form class="ia-panel__entrada" (ngSubmit)="enviar()">
+            <input type="text" name="pregunta" [(ngModel)]="pregunta" [disabled]="asistente.pensando()" autocomplete="off"
+                [placeholder]="ctx.placeholder || 'Pregunte o simule un escenario…'" aria-label="Pregunta al asistente" />
+            <button type="submit" [disabled]="!pregunta.trim() || asistente.pensando()" aria-label="Enviar">
+                <lucide-icon [img]="iconos.Send" [size]="17" aria-hidden="true"></lucide-icon>
+            </button>
+        </form>
+    </section>
+
+    <button type="button" class="ia-burbuja" [class.ia-burbuja--abierta]="asistente.abierto()" (click)="asistente.alternar()"
+        [attr.aria-expanded]="asistente.abierto()" aria-label="Asistente IA">
+        <lucide-icon [img]="asistente.abierto() ? iconos.X : iconos.Sparkles" [size]="26" aria-hidden="true"></lucide-icon>
+        <span class="ia-burbuja__etiqueta" *ngIf="!asistente.abierto()">IA</span>
+        <span class="ia-burbuja__punto" *ngIf="asistente.novedad() && !asistente.abierto()" aria-hidden="true"></span>
+    </button>
+</ng-container>
