@@ -65,30 +65,9 @@
             <div class="var-cobertura__cargando" *ngIf="cargandoInstrumentos">
                 <app-loader tamano="inline" etiqueta="Revisando posiciones de los portafolios..."></app-loader>
             </div>
-            <ng-container *ngIf="!cargandoInstrumentos && instrumentos.length">
-                <div class="var-cobertura__resumen">
-                    <mat-icon aria-hidden="true" [class.var-cobertura__icono--alerta]="instrumentosElegibles.length === 0">
-                        {{ instrumentosElegibles.length === 0 ? 'error_outline' : 'check_circle' }}
-                    </mat-icon>
-                    <span>
-                        Se calculará con <strong>{{ instrumentosElegibles.length }}</strong> de {{ instrumentos.length }}
-                        posiciones{{ esMultiPortafolio ? ' (de los portafolios elegidos)' : ' del portafolio' }}.
-                    </span>
-                </div>
-                <div class="var-chips">
-                    <span class="var-chip var-chip--elegible" *ngFor="let i of instrumentosElegibles"
-                        [title]="esMultiPortafolio ? i.codISIN + ' · ' + i.descripcionPortafolio : i.codISIN">
-                        {{ i.codTicker }}<em *ngIf="esMultiPortafolio"> · {{ i.descripcionPortafolio }}</em>
-                    </span>
-                    <span class="var-chip var-chip--excluido" *ngFor="let i of instrumentosExcluidos"
-                        [title]="i.motivo">
-                        {{ i.codTicker }} <mat-icon aria-hidden="true">info</mat-icon>
-                    </span>
-                </div>
-                <ul class="var-cobertura__motivos" *ngIf="instrumentosExcluidos.length">
-                    <li *ngFor="let i of instrumentosExcluidos">{{ i.codTicker }} ({{ i.nombreTipoInstrumento }}): {{ i.motivo }}</li>
-                </ul>
-            </ng-container>
+            <app-cobertura-posiciones *ngIf="!cargandoInstrumentos && instrumentos.length"
+                [elegibles]="instrumentosElegibles" [excluidos]="instrumentosExcluidos" [multiPortafolio]="esMultiPortafolio">
+            </app-cobertura-posiciones>
         </div>
 
         <div class="var-config__fila">

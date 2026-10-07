@@ -1,3 +1,4 @@
+import { CoberturaPosicionesComponent } from '../../../../shared/components/cobertura-posiciones/cobertura-posiciones.component';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { Moneda } from '../../../../shared/models/atributo-financiero/moneda';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -26,7 +27,7 @@ import { ChipGroupComponent, ChipOpcion } from '../../../../shared/components/ch
 @Component({
   selector: 'app-ejecutar-var',
   standalone: true,
-  imports: [NgSelectModule, FormsModule, MatIconModule, CargaMonedaComponent, CargaPortafolioComponent, CommonModule, ResultadoVarComponent, LoaderComponent, EncabezadoComponent, ChipGroupComponent],
+  imports: [NgSelectModule, FormsModule, MatIconModule, CargaMonedaComponent, CargaPortafolioComponent, CommonModule, ResultadoVarComponent, LoaderComponent, EncabezadoComponent, ChipGroupComponent, CoberturaPosicionesComponent],
   templateUrl: './ejecutar-var.component.html',
   styleUrl: './ejecutar-var.component.scss',
   animations: [fadeIn, fadeSlideIn],

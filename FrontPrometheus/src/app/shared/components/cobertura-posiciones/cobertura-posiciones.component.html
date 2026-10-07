@@ -1,0 +1,69 @@
+<div class="cob" [class.cob--vacio]="elegibles.length === 0">
+    <div class="cob__fila">
+        <span class="cob__icono" [class.cob__icono--alerta]="elegibles.length === 0">
+            <lucide-icon [img]="elegibles.length === 0 ? iconos.CircleX : iconos.CircleCheck" [size]="20" aria-hidden="true"></lucide-icon>
+        </span>
+        <span class="cob__texto">
+            Se calculará con <strong>{{ elegibles.length }}</strong> de {{ total }}
+            posiciones{{ multiPortafolio ? ' (de los portafolios elegidos)' : ' del portafolio' }}.
+        </span>
+        <button type="button" class="cob__ver" (click)="abrir()">Ver detalle</button>
+    </div>
+
+    <button type="button" class="cob__aviso" *ngIf="excluidos.length" (click)="abrir()">
+        <lucide-icon [img]="iconos.TriangleAlert" [size]="18" aria-hidden="true"></lucide-icon>
+        <span>
+            <strong>{{ excluidos.length }} {{ excluidos.length === 1 ? 'posición excluida' : 'posiciones excluidas' }}</strong>
+            <small>{{ motivoPrincipal }}{{ gruposExcluidos.length > 1 ? ' · y ' + (gruposExcluidos.length - 1) + ' motivo(s) más' : '' }}</small>
+        </span>
+        <lucide-icon [img]="iconos.ChevronRight" [size]="16" aria-hidden="true"></lucide-icon>
+    </button>
+</div>
+
+<ng-template #detalle let-modal>
+    <div class="modal-header">
+        <div>
+            <h5 class="modal-title">Posiciones del cálculo</h5>
+            <small class="text-muted">{{ elegibles.length }} incluidas · {{ excluidos.length }} excluidas</small>
+        </div>
+        <button type="button" class="btn-close" aria-label="Cerrar" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body cob-modal">
+        <label class="cob-modal__buscar">
+            <lucide-icon [img]="iconos.Search" [size]="16" aria-hidden="true"></lucide-icon>
+            <input type="search" [(ngModel)]="filtro" placeholder="Buscar por ticker, ISIN o portafolio" aria-label="Buscar posiciones" />
+        </label>
+
+        <section *ngIf="excluidos.length">
+            <h6 class="cob-modal__titulo cob-modal__titulo--alerta">Excluidas ({{ excluidos.length }})</h6>
+            <ng-container *ngFor="let g of gruposExcluidos">
+                <div class="cob-modal__grupo" *ngIf="filtrados(g.items).length">
+                    <p class="cob-modal__motivo"><strong>{{ g.items.length }}</strong> · {{ g.motivo }}</p>
+                    <div class="cob-modal__chips">
+                        <span class="cob-chip cob-chip--excluido" *ngFor="let i of filtrados(g.items) | slice:0:limite"
+                            [title]="i.codISIN + ' · ' + i.nombreTipoInstrumento">{{ i.codTicker }}</span>
+                    </div>
+                    <small class="text-muted" *ngIf="filtrados(g.items).length > limite">
+                        Mostrando {{ limite }} de {{ filtrados(g.items).length }}: use el buscador para encontrar uno específico.
+                    </small>
+                </div>
+            </ng-container>
+        </section>
+
+        <section *ngIf="elegibles.length">
+            <h6 class="cob-modal__titulo">Incluidas ({{ elegibles.length }})</h6>
+            <div class="cob-modal__chips">
+                <span class="cob-chip" *ngFor="let i of filtrados(elegibles) | slice:0:limite"
+                    [title]="i.codISIN + (multiPortafolio ? ' · ' + i.descripcionPortafolio : '')">
+                    {{ i.codTicker }}<em *ngIf="multiPortafolio"> · {{ i.descripcionPortafolio }}</em>
+                </span>
+            </div>
+            <small class="text-muted" *ngIf="filtrados(elegibles).length > limite">
+                Mostrando {{ limite }} de {{ filtrados(elegibles).length }}: use el buscador para encontrar uno específico.
+            </small>
+        </section>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close()">Cerrar</button>
+    </div>
+</ng-template>

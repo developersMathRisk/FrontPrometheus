@@ -86,7 +86,7 @@
 // Los desplegables del CDK (selector de fecha, paleta, selects) deben quedar por encima de las ventanas modales
 // de ng-bootstrap (z-index 1055) y de sus fondos; si no, el calendario se abre detrás del modal.
 .cdk-overlay-container {
-    z-index: 1200;
+    z-index: 1200 !important;
 }
 
 
