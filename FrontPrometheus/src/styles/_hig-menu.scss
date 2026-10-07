@@ -387,7 +387,17 @@
     background: #fff;
     border-bottom: 1px solid var(--color-divider);
     // El tema trae 0.75rem de relleno arriba/abajo; se reduce para un header más compacto.
-    padding: 0.375rem 0;
+    // Solo el eje vertical: el relleno horizontal (padding-inline-start) lo fija el tema para dejar sitio al
+    // sidebar; con la abreviatura `padding: x 0` se anulaba y el boton de ocultar el menu quedaba debajo de él.
+    padding-block: 0.375rem;
+}
+
+// Menú fijado: el encabezado es `position: fixed` a todo el ancho y el sidebar (250px) queda encima de su
+// extremo izquierdo; sin este relleno el botón de ocultar el menú y las migas quedaban tapados.
+@media (min-width: 992px) {
+    html[data-nav-layout="vertical"][data-vertical-style="overlay"]:not([data-toggled="icon-overlay-close"]):not([data-toggled="close"]) .app-header {
+        padding-inline-start: 250px;
+    }
 }
 
 // El avatar de perfil hereda el tamaño por defecto de .avatar (42px) usado en todo el tema; en el
