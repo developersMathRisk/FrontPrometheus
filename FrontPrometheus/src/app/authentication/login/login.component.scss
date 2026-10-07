@@ -1,0 +1,119 @@
+:host {
+    display: block;
+}
+
+.acceso {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: #fff;
+}
+
+.acceso__marca {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    padding: 48px clamp(32px, 6vw, 96px);
+    color: #fff;
+    background: linear-gradient(160deg, #0d1b3d 0%, #17306b 55%, #1f4290 100%);
+    border-inline-end: 4px solid #c9a24a;   // dorado del símbolo
+
+
+    h2 {
+        margin: 0;
+        color: #fff !important;
+        font: 600 clamp(26px, 3vw, 38px) / 1.15 var(--font-heading);
+    }
+
+    p {
+        margin: 0;
+        max-width: 420px;
+        font-size: 15px;
+        opacity: 0.88;
+    }
+}
+
+.acceso__simbolo {
+    width: 72px;
+    height: auto;
+    padding: 12px;
+    border-radius: 16px;
+    background: #fff;
+}
+
+.acceso__panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+}
+
+.acceso__form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: min(100%, 380px);
+
+    h1 {
+        margin: 12px 0 0;
+        font: 600 26px/1.2 var(--font-heading);
+        color: var(--color-text);
+    }
+
+    .p-label {
+        margin-top: 8px;
+    }
+}
+
+.acceso__wordmark {
+    width: 168px;
+    height: auto;
+}
+
+.acceso__sub {
+    margin: 0 0 8px;
+    color: var(--color-neutral-800);
+}
+
+.acceso__clave {
+    position: relative;
+
+    .form-control {
+        padding-inline-end: 84px;
+    }
+}
+
+.acceso__ver {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    padding: 0 14px;
+    border: 0;
+    background: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--color-accent-800, #1d3f7a);
+}
+
+.acceso__enviar {
+    margin-top: 16px;
+    padding-block: 10px;
+}
+
+.acceso__ayuda {
+    margin: 8px 0 0;
+    font-size: 12px;
+    color: var(--color-neutral-800);
+}
+
+@media (max-width: 860px) {
+    .acceso {
+        grid-template-columns: 1fr;
+    }
+
+    .acceso__marca {
+        display: none;
+    }
+}

@@ -1,146 +1,61 @@
-import { Component, ElementRef, Renderer2 } from '@angular/core';
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FirebaseService } from '../../shared/services/firebase.service';
-import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../shared/services/auth.service';
-import { AppStateService } from '../../shared/services/app-state.service';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SesionService } from '../../shared/services/sesion.service';
+import { RUTAS_DE_ENTRADA } from '../../shared/services/acceso.guard';
 
+/** Inicio de sesión contra el backend (JWT). Sin credenciales de ejemplo ni dependencias del template. */
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterModule,FormsModule,ReactiveFormsModule,NgbModule,AngularFireModule,AngularFireAuthModule,AngularFireDatabaseModule,
-    AngularFirestoreModule],
-  providers: [FirebaseService],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
-export class LoginComponent {
-  // public showPassword = false;
- disabled = '';
- active: any;
- showLoader:boolean | undefined;
+export class LoginComponent implements OnInit {
+  private readonly sesion = inject(SesionService);
+  private readonly router = inject(Router);
+  private readonly ruta = inject(ActivatedRoute);
 
- constructor(
-  public authservice: AuthService,
-   private router: Router,
-   private formBuilder: FormBuilder,
-   private renderer: Renderer2,
-   private firebaseService: FirebaseService,
-   private toastr: ToastrService 
- ) {
-   // AngularFireModule.initializeApp(environment.firebase);
+  username = '';
+  password = '';
+  verClave = false;
+  cargando = false;
+  error = '';
+  aviso = '';
 
-    const bodyElement = this.renderer.selectRootElement('body', true);
-   //  this.renderer.setAttribute(bodyElement, 'class', 'cover1 justify-center');
- }
- ngOnInit(): void {
-   this.loginForm = this.formBuilder.group({
-     username: ['spruko@admin.com', [Validators.required, Validators.email]],
-     password: ['sprukoadmin', Validators.required],
-   });
+  async ngOnInit(): Promise<void> {
+    const motivo = this.ruta.snapshot.queryParamMap.get('motivo');
+    if (motivo === 'vencida') this.aviso = 'Su sesión venció. Inicie sesión nuevamente.';
+    if (motivo === 'sinAcceso') {
+      this.aviso = 'Su usuario no tiene opciones habilitadas. Contacte al administrador.';
+      return;
+    }
+    if (!motivo && (await this.sesion.restaurar())) this.entrar();
+  }
 
- }
-  firestoreModule = this.firebaseService.getFirestore();
-  databaseModule = this.firebaseService.getDatabase();
-  authModule = this.firebaseService.getAuth();
- // firebase
- email = 'spruko@admin.com';
- password = 'sprukoadmin';
- errorMessage = ''; // validation _error handle
- _error: { name: string; message: string } = { name: '', message: '' }; // for firbase _error handle
+  ingresar(): void {
+    if (this.cargando || !this.username.trim() || !this.password) return;
+    this.cargando = true;
+    this.error = '';
+    this.sesion.login(this.username.trim(), this.password).subscribe({
+      next: () => this.entrar(),
+      error: (e) => {
+        this.cargando = false;
+        this.password = '';
+        this.error = e?.status === 0 ? 'No se pudo conectar con el servidor.' : e?.error?.message ?? 'No se pudo iniciar sesión.';
+      },
+    });
+  }
 
- clearErrorMessage() {
-   this.errorMessage = '';
-   this._error = { name: '', message: '' };
- }
-
- login() {
-   // console.log(this.loginForm)
-
-   // this.disabled = "btn-loading"
-   this.clearErrorMessage();
-   if (this.validateForm(this.email, this.password)) {
-     this.authservice
-       .loginWithEmail(this.email, this.password)
-       .then(() => {
-         this.router.navigate(['/registro/inicio']);
-         console.clear();
-          this.toastr.success('log in successful','Dashtic', {
-            timeOut: 3000,
-            positionClass: 'toast-top-right',
-          });
-       })
-       .catch((_error: any) => {
-         this._error = _error;
-         this.router.navigate(['/']);
-       });
-   }
-
- }
-
- validateForm(email: string, password: string) {
-   if (email.length === 0) {
-     this.errorMessage = 'please enter email id';
-     return false;
-   }
-
-   if (password.length === 0) {
-     this.errorMessage = 'please enter password';
-     return false;
-   }
-
-   if (password.length < 6) {
-     this.errorMessage = 'password should be at least 6 char';
-     return false;
-   }
-
-   this.errorMessage = '';
-   return true;
- }
-
- //angular
- public loginForm!: FormGroup;
- public error: any = '';
-
- get form() {
-   return this.loginForm.controls;
- }
-
- Submit() {
-   // console.log(this.loginForm)
-   if (
-     this.loginForm.controls['username'].value === 'spruko@admin.com' &&
-     this.loginForm.controls['password'].value === 'sprukoadmin'
-   ) {
-     this.router.navigate(['/registro/inicio']);
-   } else {
-     this.error = 'Please check email and passowrd';
-   }
- 
- }
-
- // public togglePassword() {
- //   this.showPassword = !this.showPassword;
- // }
-
- ngOnDestroy(): void {
-   const bodyElement = this.renderer.selectRootElement('body', true);
-   this.renderer.removeAttribute(bodyElement, 'class');
- }
- showPassword = false;
- toggleClass = "ri-eye-off-line";
- toggleVisibility() {
-   this.showPassword = !this.showPassword;
-   if (this.toggleClass === "ri-eye-line") {
-     this.toggleClass = "ri-eye-off-line";
-   } else {
-     this.toggleClass = "ri-eye-line";
-   }
- }
+  private entrar(): void {
+    if (this.sesion.usuario()?.debeCambiarClave) {
+      this.router.navigate(['/auth/cambiar-clave']);
+      return;
+    }
+    const retorno = this.ruta.snapshot.queryParamMap.get('retorno');
+    const destino = retorno && retorno.startsWith('/') ? retorno : '/' + this.sesion.primeraRuta(RUTAS_DE_ENTRADA);
+    this.router.navigateByUrl(destino === '/' ? '/auth/login?motivo=sinAcceso' : destino);
+  }
 }

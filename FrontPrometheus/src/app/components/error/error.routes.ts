@@ -11,7 +11,7 @@ export const admin: Routes = [
           import('./error400/error400.component').then(
             (m) => m.Error400Component
           ),
-        title: 'Dashtic - Error 400',
+        title: 'Prometheus - Error 400',
       },
       {
         path: 'error401',
@@ -19,7 +19,7 @@ export const admin: Routes = [
           import('./error401/error401.component').then(
             (m) => m.Error401Component
           ),
-        title: 'Dashtic - Error 401',
+        title: 'Prometheus - Error 401',
       },
       {
         path: 'error403',
@@ -27,7 +27,7 @@ export const admin: Routes = [
           import('./error403/error403.component').then(
             (m) => m.Error403Component
           ),
-        title: 'Dashtic - Error 403',
+        title: 'Prometheus - Error 403',
       },
       {
         path: 'error404',
@@ -35,7 +35,7 @@ export const admin: Routes = [
           import('./error404/error404.component').then(
             (m) => m.Error404Component
           ),
-        title: 'Dashtic - Error 404',
+        title: 'Prometheus - Error 404',
       },
       {
         path: 'error500',
@@ -43,7 +43,7 @@ export const admin: Routes = [
           import('./error500/error500.component').then(
             (m) => m.Error500Component
           ),
-        title: 'Dashtic - Error 500',
+        title: 'Prometheus - Error 500',
       },
       {
         path: 'error503',
@@ -51,7 +51,7 @@ export const admin: Routes = [
           import('./error503/error503.component').then(
             (m) => m.Error503Component
           ),
-        title: 'Dashtic - Error 503',
+        title: 'Prometheus - Error 503',
       },
     ],
   },

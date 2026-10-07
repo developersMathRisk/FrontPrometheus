@@ -301,20 +301,19 @@
   </overlay-scrollbars>
     <!-- Start::App User (pie del sidebar) -->
     <div class="app-sidebar__user">
-      <div class="dropdown user-pro-body text-center">
-        <div class="user-pic">
-          <img
-            alt="user-img"
-            class="avatar avatar-xl avatar-rounded mb-0"
-            src="./assets/images/faces/16.jpg"
-          />
+      <div class="user-pro-body" *ngIf="sesion.usuario() as u">
+        <span class="p-avatar" aria-hidden="true">{{ sesion.iniciales() }}</span>
+        <div class="user-info">
+          <h5 class="mb-0 fw-bold" [title]="sesion.nombreCompleto()">{{ sesion.nombreCompleto() }}</h5>
+          <span class="app-sidebar__user-name">{{ u.rol }}</span>
         </div>
-        <div class="user-info text-center">
-          <h5 class="mb-1 fw-bold">John Thomson</h5>
-          <span class="text-muted app-sidebar__user-name text-sm"
-            >App Developer</span
-          >
-        </div>
+        <button type="button" class="p-user-btn" title="Cambiar contraseña" aria-label="Cambiar contraseña"
+          (click)="cambiarClave()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"></circle><path d="M10.8 12.2 21 2M16 7l3 3M14 9l2 2"></path></svg>
+        </button>
+        <button type="button" class="p-user-btn" title="Cerrar sesión" aria-label="Cerrar sesión" (click)="salir()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </button>
       </div>
     </div>
     <!-- End::App User -->

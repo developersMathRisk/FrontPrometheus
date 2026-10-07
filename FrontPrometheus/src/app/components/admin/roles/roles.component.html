@@ -1,0 +1,48 @@
+<app-encabezado kicker="Administración" titulo="Roles y accesos"
+    subtitulo="Defina qué opciones puede abrir cada rol y qué acciones puede hacer en ellas."></app-encabezado>
+
+<div class="roles">
+    <aside class="p-card roles__lista">
+        <button type="button" class="btn btn-primary" (click)="nuevo()">Nuevo rol</button>
+        <ul>
+            <li *ngFor="let r of roles">
+                <button type="button" class="roles__item" [class.is-on]="seleccionado?.id === r.id" (click)="elegir(r)">
+                    <strong>{{ r.nombre }}</strong>
+                    <span>{{ r.superAdmin ? 'Acceso total' : r.usuarios + (r.usuarios === 1 ? ' usuario' : ' usuarios') }}
+                        <em *ngIf="!r.activo">· inactivo</em></span>
+                </button>
+            </li>
+        </ul>
+    </aside>
+
+    <section class="p-card roles__detalle" *ngIf="seleccionado || esNuevo; else vacio">
+        <div class="alert alert-info" *ngIf="soloLectura">El rol de superadministrador tiene todos los permisos y no se puede modificar.</div>
+        <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+
+        <div class="roles__campos">
+            <div>
+                <label class="p-label" for="rol-nombre">Nombre</label>
+                <input id="rol-nombre" class="form-control" [(ngModel)]="nombre" [disabled]="soloLectura" maxlength="60" />
+            </div>
+            <div class="roles__desc">
+                <label class="p-label" for="rol-desc">Descripción</label>
+                <input id="rol-desc" class="form-control" [(ngModel)]="descripcion" [disabled]="soloLectura" maxlength="200" />
+            </div>
+            <label class="form-check roles__activo">
+                <input type="checkbox" class="form-check-input" [(ngModel)]="activo" [disabled]="soloLectura" /> Activo
+            </label>
+        </div>
+
+        <app-matriz-permisos [opciones]="opciones" [(valor)]="permisos" [disabled]="soloLectura"></app-matriz-permisos>
+
+        <div class="roles__acciones" *ngIf="!soloLectura">
+            <button type="button" class="btn btn-primary" [disabled]="guardando || nombre.trim().length < 3" (click)="guardar()">
+                {{ guardando ? 'Guardando…' : 'Guardar cambios' }}
+            </button>
+            <button type="button" class="btn btn-outline-danger" *ngIf="!esNuevo" (click)="eliminar()">Eliminar rol</button>
+        </div>
+    </section>
+    <ng-template #vacio>
+        <section class="p-card roles__detalle p-empty">Seleccione un rol o cree uno nuevo.</section>
+    </ng-template>
+</div>

@@ -99,15 +99,10 @@ export class HeaderComponent {
   
   //   let html = document.querySelector('html');
   //   //Theme Color Mode:
-  //   if (localStorage.getItem('dashticHeader') == 'dark') {
-  //     if (localStorage.getItem('dashticdarktheme')) {
-  //       const type: any = localStorage.getItem('dashticdarktheme');
   //       html?.setAttribute('data-theme-mode', type);
   //       html?.setAttribute('data-header-styles', type);
   //       html?.setAttribute('data-menu-styles', type);
   //     }
-  //     if (localStorage.getItem('dashticdarktheme') == 'light') {
-  //       const type: any = localStorage.getItem('dashticdarktheme');
   //       html?.setAttribute('data-theme-mode', type);
   //       html?.setAttribute('data-header-styles', type);
   //       html?.setAttribute('data-menu-styles', type);

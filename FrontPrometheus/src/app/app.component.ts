@@ -12,7 +12,7 @@ import { MenuLateralService } from './shared/services/menu-lateral.service';
 })
 
 export class AppComponent {
-  title = 'Dashtic';
+  title = 'Prometheus';
 
   constructor(private appState : AppStateService, menuLateral: MenuLateralService){
     this.appState.updateState();

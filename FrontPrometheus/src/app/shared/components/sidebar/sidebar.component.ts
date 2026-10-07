@@ -11,6 +11,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 import { checkHoriMenu } from './sidebar';
 import { MenuLateralService } from '../../services/menu-lateral.service';
+import { SesionService } from '../../services/sesion.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -31,11 +32,20 @@ export class SidebarComponent {
     public renderer: Renderer2,
     private sanitizer: DomSanitizer,
     public menu: MenuLateralService,
+    public sesion: SesionService,
   ) {
     // if (document.querySelector('html')?.getAttribute('data-nav-style') == 'icon-hover') {
     //   document.querySelector('.slide-menu')?.setAttribute('style','display:none;')
     // }
   }
+  salir(): void {
+    this.sesion.logout();
+  }
+
+  cambiarClave(): void {
+    this.router.navigate(['/auth/cambiar-clave']);
+  }
+
   getSanitizedSVG(svgContent: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(svgContent);
   } 

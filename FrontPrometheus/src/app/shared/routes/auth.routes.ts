@@ -5,6 +5,11 @@ import { NgModule } from '@angular/core';
 export const authen: Routes = [
     { path: '', children: [...errorRoutingModule.routes] },
     {
+        path: 'auth/cambiar-clave',
+        loadComponent: () =>
+          import('../../authentication/cambiar-clave/cambiar-clave.component').then((m) => m.CambiarClaveComponent),
+    },
+    {
         path: 'auth/login',
         loadComponent: () =>
           import('../../authentication/login/login.component').then((m) => m.LoginComponent),

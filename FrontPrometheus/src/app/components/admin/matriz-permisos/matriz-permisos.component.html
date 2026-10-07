@@ -1,0 +1,37 @@
+<div class="table-responsive">
+    <table class="matriz">
+        <thead>
+            <tr>
+                <th>Opción</th>
+                <th class="matriz__col" *ngFor="let c of columnas">{{ c.etiqueta }}</th>
+                <th class="matriz__col">Todo</th>
+                <th class="matriz__col" *ngIf="base"></th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let g of grupos">
+            <tr class="matriz__grupo">
+                <td [attr.colspan]="base ? 7 : 6">{{ g.nombre }}</td>
+            </tr>
+            <tr *ngFor="let o of g.opciones" [class.matriz__heredado]="base && !esExcepcion(o.clave)">
+                <td>
+                    {{ o.etiqueta }}
+                    <span class="matriz__tag" *ngIf="esExcepcion(o.clave)">excepción</span>
+                </td>
+                <td class="matriz__col" *ngFor="let c of columnas">
+                    <input type="checkbox" class="form-check-input" [checked]="marcado(o.clave, c.clave)" [disabled]="disabled"
+                        (change)="alternar(o.clave, c.clave)" [attr.aria-label]="c.etiqueta + ' · ' + o.etiqueta" />
+                </td>
+                <td class="matriz__col">
+                    <button type="button" class="matriz__todo" [disabled]="disabled"
+                        (click)="todo(o.clave, !(marcado(o.clave, 'leer') && marcado(o.clave, 'crear') && marcado(o.clave, 'editar') && marcado(o.clave, 'eliminar')))">
+                        {{ marcado(o.clave, 'leer') && marcado(o.clave, 'crear') && marcado(o.clave, 'editar') && marcado(o.clave, 'eliminar') ? 'Quitar' : 'Todo' }}
+                    </button>
+                </td>
+                <td class="matriz__col" *ngIf="base">
+                    <button type="button" class="matriz__todo" *ngIf="esExcepcion(o.clave)" [disabled]="disabled"
+                        (click)="restablecer(o.clave)" title="Volver a los permisos del rol">Usar rol</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

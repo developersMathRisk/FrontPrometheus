@@ -1,7 +1,8 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, effect, inject } from '@angular/core';
 import { Subject, BehaviorSubject, fromEvent } from 'rxjs';
 import { takeUntil, debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { SesionService } from './sesion.service';
 // Menu
 export interface Menu {
   headTitle?: string;
@@ -55,7 +56,15 @@ export class NavService implements OnDestroy {
   public fullScreen = false;
   active: any;
 
+  private readonly sesion = inject(SesionService);
+
   constructor(private router: Router) {
+    // El menú muestra solo lo que el usuario puede abrir; se recalcula si cambian sus permisos.
+    effect(() => {
+      this.sesion.permisos();
+      this.sesion.usuario();
+      this.items.next(this.filtrar(this.MENUITEMS));
+    }, { allowSignalWrites: true });
     this.setScreenWidth(window.innerWidth);
     fromEvent(window, 'resize')
       .pipe(debounceTime(1000), takeUntil(this.unsubscriber))
@@ -210,6 +219,17 @@ export class NavService implements OnDestroy {
       ],
     },
     {
+      title: 'Administración',
+      type: 'sub',
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="side-menu__icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
+      active: false,
+      dirchange: false,
+      children: [
+        { path: 'admin/usuarios', title: 'Usuarios', type: 'link', dirchange: false },
+        { path: 'admin/roles', title: 'Roles y accesos', type: 'link', dirchange: false },
+      ],
+    },
+    {
       title: 'Próximamente',
       type: 'sub',
       icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="side-menu__icon"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
@@ -244,5 +264,19 @@ export class NavService implements OnDestroy {
     },
   ];
 
-  items = new BehaviorSubject<Menu[]>(this.MENUITEMS);
+  items = new BehaviorSubject<Menu[]>([]);
+
+  /** Quita las opciones sin permiso de lectura y los grupos que quedan vacíos. */
+  private filtrar(menu: Menu[]): Menu[] {
+    const out: Menu[] = [];
+    for (const m of menu) {
+      if (m.children) {
+        const hijos = this.filtrar(m.children);
+        if (hijos.length) out.push({ ...m, children: hijos });
+      } else if (!m.path || this.sesion.puede(m.path)) {
+        out.push(m);
+      }
+    }
+    return out;
+  }
 }

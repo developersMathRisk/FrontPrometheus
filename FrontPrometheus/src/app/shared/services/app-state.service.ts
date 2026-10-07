@@ -22,7 +22,7 @@ interface StateType {
   providedIn: 'root'
 })
 export class AppStateService {
-  private readonly localStorageKey = 'Dashtic-ng'; // Customize this key
+  private readonly localStorageKey = 'prometheus-ng'; // Customize this key
   private initialState: StateType = {
     theme: 'light',            // light, dark
     direction: 'ltr',               // ltr, rtl
