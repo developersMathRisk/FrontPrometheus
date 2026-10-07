@@ -52,9 +52,18 @@ export class DatePickerComponent implements ControlValueAccessor {
   valorIso: string | null = null;
   disabled = false;
   mesVisible = new Date();
-  /** 'dias': calendario normal. 'meses': "zoom out" para saltar de año y elegir mes directamente. */
-  vista: 'dias' | 'meses' = 'dias';
+  /** 'dias' calendario; 'meses' zoom-out a los meses del año; 'anios' zoom-out a bloques de 12 años. */
+  vista: 'dias' | 'meses' | 'anios' = 'dias';
+  anioBloqueInicio = 0;
   readonly nombresMeses = MESES;
+
+  get bloqueAnios(): number[] {
+    return Array.from({ length: 12 }, (_, i) => this.anioBloqueInicio + i);
+  }
+
+  get rangoBloqueAnios(): string {
+    return `${this.anioBloqueInicio} – ${this.anioBloqueInicio + 11}`;
+  }
 
   private onChange: (valor: string | null) => void = () => {};
   private onTouched: () => void = () => {};
@@ -158,6 +167,25 @@ export class DatePickerComponent implements ControlValueAccessor {
   }
 
   abrirVistaMeses(): void {
+    this.vista = 'meses';
+  }
+
+  abrirVistaAnios(): void {
+    const anio = this.mesVisible.getFullYear();
+    this.anioBloqueInicio = Math.floor(anio / 12) * 12;
+    this.vista = 'anios';
+  }
+
+  bloqueAnterior(): void {
+    this.anioBloqueInicio -= 12;
+  }
+
+  bloqueSiguiente(): void {
+    this.anioBloqueInicio += 12;
+  }
+
+  elegirAnio(anio: number): void {
+    this.mesVisible = new Date(anio, this.mesVisible.getMonth(), 1);
     this.vista = 'meses';
   }
 

@@ -13,7 +13,7 @@
         <ng-content select="[filtros]"></ng-content>
     </div>
 
-    <button type="button" class="btn btn-primary tabla-toolbar__accion" (click)="agregar.emit()">{{ accion }}</button>
+    <button *ngIf="accion" type="button" class="btn btn-primary tabla-toolbar__accion" (click)="agregar.emit()">{{ accion }}</button>
 </div>
 
 <div class="tabla-meta">

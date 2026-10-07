@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, ElementRef, HostListener, TemplateRef, in
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { ModalDismissReasons, NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-import { SwitcherComponent } from '../switcher/switcher.component';
 import { Menu, NavService } from '../../services/nav.service';
 import { AppStateService } from '../../services/app-state.service';
 import { MenuLateralService } from '../../services/menu-lateral.service';
@@ -51,12 +50,6 @@ export class HeaderComponent {
     this.migaActual = actual ? { grupo: actual.ruta, titulo: actual.titulo } : null;
   }
 
-  SwitcherClick() {
-    this.offcanvasService.open(SwitcherComponent, {
-      position: 'end',
-      scroll: true,
-    });
-  }
 
   private modalService = inject(NgbModal);
   closeResult = '';
@@ -255,8 +248,6 @@ export class HeaderComponent {
   }
   //Full Screen event close //
 
-  //Toggled Shortcuts 
-  private offcanvasService = inject(NgbOffcanvas);
 
   //Notifications 
 
@@ -308,11 +299,5 @@ export class HeaderComponent {
   }
 
 
-  toggleSwitcher() {
-    this.offcanvasService.open(SwitcherComponent, {
-      position: 'end',
-      scroll: true,
-    });
-  }
 
 }

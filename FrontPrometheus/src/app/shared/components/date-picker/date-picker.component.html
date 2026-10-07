@@ -6,7 +6,7 @@
 
 <ng-template #plantilla>
     <div class="dtp-popover">
-        <ng-container *ngIf="vista === 'dias'; else vistaMeses">
+        <ng-container *ngIf="vista === 'dias'">
             <div class="dtp-cabecera">
                 <button type="button" class="dtp-nav" aria-label="Mes anterior" (click)="mesAnterior()">
                     <lucide-icon [img]="ChevronLeftIcon" [size]="16" [strokeWidth]="1.5"></lucide-icon>
@@ -31,12 +31,12 @@
             <button type="button" class="dtp-hoy" (click)="irAHoy()">Hoy</button>
         </ng-container>
 
-        <ng-template #vistaMeses>
+        <ng-container *ngIf="vista === 'meses'">
             <div class="dtp-cabecera">
                 <button type="button" class="dtp-nav" aria-label="Año anterior" (click)="anioAnterior()">
                     <lucide-icon [img]="ChevronLeftIcon" [size]="16" [strokeWidth]="1.5"></lucide-icon>
                 </button>
-                <span class="dtp-mes">{{ mesVisible.getFullYear() }}</span>
+                <button type="button" class="dtp-mes" (click)="abrirVistaAnios()" title="Elegir año">{{ mesVisible.getFullYear() }}</button>
                 <button type="button" class="dtp-nav" aria-label="Año siguiente" (click)="anioSiguiente()">
                     <lucide-icon [img]="ChevronRightIcon" [size]="16" [strokeWidth]="1.5"></lucide-icon>
                 </button>
@@ -48,6 +48,25 @@
                     {{ mes.slice(0, 3) }}
                 </button>
             </div>
-        </ng-template>
+        </ng-container>
+
+        <ng-container *ngIf="vista === 'anios'">
+            <div class="dtp-cabecera">
+                <button type="button" class="dtp-nav" aria-label="Bloque anterior" (click)="bloqueAnterior()">
+                    <lucide-icon [img]="ChevronLeftIcon" [size]="16" [strokeWidth]="1.5"></lucide-icon>
+                </button>
+                <span class="dtp-mes">{{ rangoBloqueAnios }}</span>
+                <button type="button" class="dtp-nav" aria-label="Bloque siguiente" (click)="bloqueSiguiente()">
+                    <lucide-icon [img]="ChevronRightIcon" [size]="16" [strokeWidth]="1.5"></lucide-icon>
+                </button>
+            </div>
+
+            <div class="dtp-meses">
+                <button type="button" *ngFor="let anio of bloqueAnios" class="dtp-mes-opcion"
+                    [class.dtp-mes-opcion--activo]="anio === mesVisible.getFullYear()" (click)="elegirAnio(anio)">
+                    {{ anio }}
+                </button>
+            </div>
+        </ng-container>
     </div>
 </ng-template>

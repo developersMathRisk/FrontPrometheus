@@ -155,3 +155,16 @@
         display: none;
     }
 }
+
+.cvar-detalle-cabecera {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.cvar-detalle-cabecera .cvar-subtitulo {
+    margin: 0;
+    font-size: 13px;
+    color: var(--color-neutral-700, #5d5d60);
+}

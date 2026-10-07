@@ -1,11 +1,12 @@
-<app-encabezado kicker="Riesgo de Mercado" titulo="Consulta de VaR" subtitulo="Revise los cálculos de VaR ya ejecutados."></app-encabezado>
+<app-encabezado kicker="Riesgo de Mercado" titulo="Consulta de VaR" subtitulo="Revise los cálculos de VaR ya ejecutados.">
+    <button acciones type="button" class="btn btn-primary" (click)="irAEjecutar()">Ejecutar nuevo cálculo</button>
+</app-encabezado>
 
 <div class="cvar-layout">
 <div class="cvar-layout__lista card">
     <div class="card-body cvar-body">
-        <app-tabla-toolbar placeholder="Buscar por portafolio o fecha..." accion="Ejecutar nuevo cálculo"
-            [total]="lista.length" [filtrados]="listaFiltrada.length" [texto]="busqueda" (buscar)="buscar($event)"
-            (agregar)="irAEjecutar()">
+        <app-tabla-toolbar placeholder="Buscar por portafolio o fecha..." accion=""
+            [total]="lista.length" [filtrados]="listaFiltrada.length" [texto]="busqueda" (buscar)="buscar($event)">
             <div filtros class="cvar-filtro-portafolio">
                 <ng-select placeholder="Todos los portafolios" [items]="listaPortafolio" bindLabel="descripcionPortafolio"
                     bindValue="idPortafolio" [clearable]="true" [(ngModel)]="idPortafolioFiltro"
@@ -15,7 +16,7 @@
 
         <app-tabla-estado [estado]="estadoTabla" [busqueda]="busqueda" [mensajeError]="mensajeError"
             tituloVacio="Aún no hay cálculos de VaR guardados"
-            detalleVacio="Ejecute uno desde «Ejecutar nuevo cálculo» para verlo aquí."
+            detalleVacio="Ejecute uno con el botón «Ejecutar nuevo cálculo» para verlo aquí."
             (reintentar)="listar()" (limpiar)="buscar('')"></app-tabla-estado>
 
         <div class="cvar-tabla-contenedor" *ngIf="!estadoTabla">
@@ -57,9 +58,9 @@
     </div>
 
     <div class="card" *ngIf="seleccionado" [@fadeSlideIn]>
-        <div class="card-header">
+        <div class="card-header cvar-detalle-cabecera">
             <div class="card-title">Detalle del cálculo</div>
-            <span class="cvar-subtitulo">{{ seleccionado.fechaProceso }} · {{ seleccionado.descripcionPortafolio }}</span>
+            <p class="cvar-subtitulo">{{ seleccionado.fechaProceso }} · {{ seleccionado.descripcionPortafolio }}</p>
         </div>
         <div class="card-body">
             <div class="cvar-detalle-cargando" *ngIf="cargandoDetalle">

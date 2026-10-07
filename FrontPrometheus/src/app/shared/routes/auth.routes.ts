@@ -1,18 +1,14 @@
 import { RouterModule, Routes } from '@angular/router';
 import { errorRoutingModule } from '../../components/error/error.routes';
 import { NgModule } from '@angular/core';
-import { accountsRoutingModule } from '../../components/accounts/accounts.routes';
 
 export const authen: Routes = [
-    { path: '', children: [ 
-        ...accountsRoutingModule.routes,
-        ...errorRoutingModule.routes
- ] },
- {
-    path: 'auth/login',
-    loadComponent: () =>
-      import('../../authentication/login/login.component').then((m) => m.LoginComponent),
-  },
+    { path: '', children: [...errorRoutingModule.routes] },
+    {
+        path: 'auth/login',
+        loadComponent: () =>
+          import('../../authentication/login/login.component').then((m) => m.LoginComponent),
+    },
 ]
 
 @NgModule({

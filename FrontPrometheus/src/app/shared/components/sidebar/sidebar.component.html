@@ -7,33 +7,9 @@
   <!-- Start::main-sidebar-header -->
   <div class="main-sidebar-header">
     <a [routerLink]="['/registro/inicio']" class="marca-prometheus">
-      <span class="marca-prometheus__icono" aria-hidden="true">P</span>
-      <span class="marca-prometheus__texto">
-        <span class="marca-prometheus__nombre">Prometheus</span>
-        <span class="marca-prometheus__kicker">Riesgo de Mercado</span>
-      </span>
+      <img class="marca-prometheus__icono" src="./assets/images/brand-logos/prometheus-simbolo.png" alt="Prometheus" />
+      <img class="marca-prometheus__texto" src="./assets/images/brand-logos/prometheus-wordmark.png" alt="Prometheus - Risk Analytics Platform" />
     </a>
-    <!-- Solo se ve con el menú desplegado: fija el menú abierto o vuelve al modo de iconos -->
-    <button
-      type="button"
-      class="sidebar-pin"
-      [class.sidebar-pin--activo]="menu.fijo"
-      [attr.aria-pressed]="menu.fijo"
-      [attr.aria-label]="menu.fijo ? 'Menú fijado. Desfijar para mostrar solo iconos' : 'Fijar el menú abierto'"
-      [attr.title]="menu.fijo ? 'Desfijar (solo iconos; se abre al pasar el mouse)' : 'Fijar el menú abierto'"
-      (click)="menu.alternar()"
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
-        <path
-          d="M14 3.5 20.5 10l-1.6 1.6-1.3-.3-3.1 3.1.4 3.6-1.5 1.5-3.6-3.6L4.5 20.4 3.6 19.5l4.5-4.5-3.6-3.6L6 9.9l3.6.4 3.1-3.1-.3-1.3L14 3.5Z"
-          fill="currentColor"
-          [attr.fill-opacity]="menu.fijo ? 1 : 0"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </button>
   </div>
   <!-- End::main-sidebar-header -->
 
@@ -322,6 +298,7 @@
       </div>
     </nav>
     <!-- End::nav -->
+  </overlay-scrollbars>
     <!-- Start::App User (pie del sidebar) -->
     <div class="app-sidebar__user">
       <div class="dropdown user-pro-body text-center">
@@ -341,7 +318,6 @@
       </div>
     </div>
     <!-- End::App User -->
-  </overlay-scrollbars>
   <!-- End::main-sidebar -->
 </aside>
 <!-- End::app-sidebar -->
