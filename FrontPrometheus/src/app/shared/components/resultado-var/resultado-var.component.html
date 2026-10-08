@@ -46,6 +46,7 @@
                 <th>Confianza</th>
                 <th class="col-num">VaR</th>
                 <th class="col-num">% cartera</th>
+                <th class="col-num" *ngIf="tieneCvar" title="Expected shortfall: pérdida promedio cuando se supera el VaR">CVaR</th>
                 <th class="col-num" *ngIf="!resultado.esHistorico">No diversificado</th>
                 <th class="col-num" *ngIf="!resultado.esHistorico">Beneficio divers.</th>
             </tr>
@@ -61,6 +62,7 @@
                     </div>
                 </td>
                 <td class="col-num">{{ r.ratioVar * 100 | number:'1.2-2' }}%</td>
+                <td class="col-num" *ngIf="tieneCvar">{{ r.cvarDiversificado != null ? (r.cvarDiversificado | number:'1.2-2') : '—' }}</td>
                 <td class="col-num" *ngIf="!resultado.esHistorico">{{ r.varNoDiversificado | number:'1.2-2' }}</td>
                 <td class="col-num" *ngIf="!resultado.esHistorico">{{ r.beneficioDiversificacion | number:'1.2-2' }}</td>
             </tr>
@@ -97,6 +99,51 @@
             </table>
         </div>
         <p class="rvar-matriz__nota">Valores en {{ resultado.monedaReporte }}. Más oscuro = mayor pérdida potencial.</p>
+    </div>
+
+    <!-- Riesgo de tasa: solo cuando la cartera incluyó bonos -->
+    <div class="rvar-tasa" *ngIf="resultado.rentaFija as rf">
+        <p class="rvar-tasa__titulo">Renta fija · sensibilidad a tasas</p>
+        <p class="rvar-tasa__ayuda">
+            Valorizada con curvas SBS al {{ rf.fechaValoracion }}. La duración modificada indica cuánto cae el valor (en %)
+            si las tasas suben 1 punto; la convexidad corrige esa aproximación para movimientos grandes.
+        </p>
+        <div class="rvar-resumen">
+            <div class="rvar-resumen__item">
+                <span class="rvar-resumen__etiqueta">Duración modificada (cartera de bonos)</span>
+                <span class="rvar-resumen__valor">{{ duracionCarteraBonos | number:'1.2-2' }}</span>
+            </div>
+            <div class="rvar-resumen__item">
+                <span class="rvar-resumen__etiqueta">Convexidad</span>
+                <span class="rvar-resumen__valor">{{ convexidadCarteraBonos | number:'1.2-2' }}</span>
+            </div>
+            <div class="rvar-resumen__item">
+                <span class="rvar-resumen__etiqueta">Impacto de +100 pb (aprox.)</span>
+                <span class="rvar-resumen__valor">{{ impactoMasCienPb | number:'1.2-2' }} {{ resultado.monedaReporte }}</span>
+            </div>
+        </div>
+        <table class="rvar-tabla">
+            <thead>
+                <tr>
+                    <th>ISIN</th>
+                    <th>Curva</th>
+                    <th class="col-num">Valor ({{ resultado.monedaReporte }})</th>
+                    <th class="col-num">TIR</th>
+                    <th class="col-num">Duración mod.</th>
+                    <th class="col-num">Convexidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let b of rf.instrumentos">
+                    <td class="col-id">{{ b.isin }}</td>
+                    <td>{{ b.curva }}</td>
+                    <td class="col-num">{{ b.mtm | number:'1.2-2' }}</td>
+                    <td class="col-num">{{ b.tir != null ? (b.tir * 100 | number:'1.2-2') + '%' : '—' }}</td>
+                    <td class="col-num">{{ b.duracionModificada != null ? (b.duracionModificada | number:'1.2-2') : '—' }}</td>
+                    <td class="col-num">{{ b.convexidad != null ? (b.convexidad | number:'1.2-2') : '—' }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <table class="rvar-tabla mt-3">

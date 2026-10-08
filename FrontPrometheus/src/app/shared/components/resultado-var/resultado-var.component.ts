@@ -263,6 +263,32 @@ export class ResultadoVarComponent implements OnInit, OnChanges, OnDestroy {
     return !!celda && celda === this.destacado;
   }
 
+  get tieneCvar(): boolean {
+    return this.resultado?.resultados.some(r => r.cvarDiversificado != null) ?? false;
+  }
+
+  // ---- renta fija: métricas de la cartera de bonos ponderadas por valor -------------------
+  private promedioPonderadoBonos(campo: 'duracionModificada' | 'convexidad'): number {
+    const bonos = this.resultado?.rentaFija?.instrumentos ?? [];
+    const total = bonos.reduce((s, b) => s + b.mtm, 0);
+    return total ? bonos.reduce((s, b) => s + b.mtm * (b[campo] ?? 0), 0) / total : 0;
+  }
+
+  get duracionCarteraBonos(): number {
+    return this.promedioPonderadoBonos('duracionModificada');
+  }
+
+  get convexidadCarteraBonos(): number {
+    return this.promedioPonderadoBonos('convexidad');
+  }
+
+  /** ΔV ≈ −D·Δy·V + ½·C·Δy²·V con Δy = 1%: pérdida aproximada de los bonos si las tasas suben 100 pb. */
+  get impactoMasCienPb(): number {
+    const valor = (this.resultado?.rentaFija?.instrumentos ?? []).reduce((s, b) => s + b.mtm, 0);
+    const dy = 0.01;
+    return valor * (-this.duracionCarteraBonos * dy + 0.5 * this.convexidadCarteraBonos * dy * dy);
+  }
+
   get mostrarColumnasInstrumento(): boolean {
     return !this.resultado.esHistorico;
   }

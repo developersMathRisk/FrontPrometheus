@@ -102,12 +102,7 @@ export const admin: Routes = [
                     import('./var/ejecutar-stress-testing/ejecutar-stress-testing.component').then((m) => m.EjecutarStressTestingComponent),
                 title: 'Ejecutar Stress Testing'
             },
-            {
-                path: 'var/renta-fija',
-                loadComponent: () =>
-                    import('./var/renta-fija/renta-fija.component').then((m) => m.RentaFijaComponent),
-                title: 'Renta fija'
-            },
+            { path: 'var/renta-fija', redirectTo: 'var/ejecutar', pathMatch: 'full' },
             {
                 path: 'var/backtesting',
                 loadComponent: () =>

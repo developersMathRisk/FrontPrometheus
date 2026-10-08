@@ -6,6 +6,24 @@ export class ResultadoMetodoVar {
     varNoDiversificado?: number;
     beneficioDiversificacion?: number;
     ratioVar!: number;
+    cvarDiversificado?: number | null; // expected shortfall; null en resultados guardados
+}
+
+/** Duración, convexidad y TIR de cada bono incluido en el cálculo (solo si la ejecución tuvo renta fija). */
+export interface RiesgoBonoVar {
+    isin: string;
+    moneda: string;
+    curva: string;
+    mtm: number;
+    duracionMacaulay: number;
+    duracionModificada: number | null;
+    convexidad: number | null;
+    tir: number | null;
+}
+
+export interface RentaFijaVar {
+    fechaValoracion: string;
+    instrumentos: RiesgoBonoVar[];
 }
 
 export class ResultadoInstrumentoVar {
@@ -37,4 +55,5 @@ export class EjecutarVarResponse {
     instrumentos!: ResultadoInstrumentoVar[];
     advertencias!: string[];
     esHistorico?: boolean;
+    rentaFija?: RentaFijaVar | null;
 }

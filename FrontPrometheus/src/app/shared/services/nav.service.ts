@@ -147,12 +147,6 @@ export class NavService implements OnDestroy {
           badgeValue: '+ IA',
         },
         {
-          path: 'registro/var/renta-fija',
-          title: 'Renta fija',
-          type: 'link',
-          dirchange: false,
-        },
-        {
           path: 'registro/var/backtesting',
           title: 'Backtesting',
           type: 'link',

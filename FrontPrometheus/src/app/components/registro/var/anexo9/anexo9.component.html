@@ -76,7 +76,7 @@
                             {{ f.tipoRiesgo }}
                             <mat-icon class="an9-info" aria-hidden="true" *ngIf="f.nota" [title]="f.nota">info</mat-icon>
                         </td>
-                        <td class="col-num">{{ f.var | number:'1.2-2' }}</td>
+                        <td class="col-num">{{ f.var !== undefined && f.var !== null ? (f.var | number:'1.2-2') : 'En el total' }}</td>
                         <td class="col-num">{{ f.cvar !== undefined && f.cvar !== null ? (f.cvar | number:'1.2-2') : 'N/D' }}</td>
                         <td class="col-num">{{ f.svar !== undefined && f.svar !== null ? (f.svar | number:'1.2-2') : 'Pendiente' }}</td>
                         <td class="col-num">{{ f.scvar !== undefined && f.scvar !== null ? (f.scvar | number:'1.2-2') : 'Pendiente' }}</td>
