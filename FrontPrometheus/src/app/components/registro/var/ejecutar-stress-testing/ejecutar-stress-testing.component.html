@@ -20,27 +20,42 @@
 
         <div class="est-campo">
             <span class="form-label mb-0">Escenario de estrés <span class="hig-requerido">*</span></span>
-            <div class="var-chips">
-                <button type="button" class="var-chip" *ngFor="let e of escenarios"
-                    [class.var-chip--activo]="e === escenarioSeleccionado" [title]="e.descripcion"
-                    (click)="elegirEscenario(e)">
-                    {{ e.nombre }}
+            <div class="est-escenarios" role="radiogroup" aria-label="Escenario de estrés">
+                <button type="button" role="radio" class="est-escenario" *ngFor="let e of escenarios"
+                    [class.est-escenario--activo]="e === escenarioSeleccionado"
+                    [attr.aria-checked]="e === escenarioSeleccionado" (click)="elegirEscenario(e)">
+                    <span class="est-escenario__radio" aria-hidden="true"></span>
+                    <span class="est-escenario__nombre">{{ e.nombre }}</span>
+                    <span class="est-escenario__desc">{{ e.descripcion }}</span>
+                    <span class="est-escenario__shocks">
+                        <span class="est-shock" *ngIf="e.shockPrecioPct !== 0">Precio {{ formatearShock(e.shockPrecioPct) }}</span>
+                        <span class="est-shock" *ngIf="e.shockCambiarioPct !== 0">Cambiario {{ formatearShock(e.shockCambiarioPct) }}</span>
+                    </span>
                 </button>
-                <button type="button" class="var-chip" [class.var-chip--activo]="modoPersonalizado"
+                <button type="button" role="radio" class="est-escenario est-escenario--personalizado"
+                    [class.est-escenario--activo]="modoPersonalizado" [attr.aria-checked]="modoPersonalizado"
                     (click)="elegirPersonalizado()">
-                    Personalizado
+                    <span class="est-escenario__radio" aria-hidden="true"></span>
+                    <span class="est-escenario__nombre">Personalizado</span>
+                    <span class="est-escenario__desc">Defina usted la magnitud del shock de precio y cambiario.</span>
                 </button>
             </div>
         </div>
 
-        <div class="est-personalizado" *ngIf="modoPersonalizado">
+        <div class="est-personalizado" *ngIf="modoPersonalizado" [@fadeIn]>
             <div class="est-campo">
-                <label class="form-label">Shock de precio (%)</label>
-                <input type="number" step="1" class="form-control" [(ngModel)]="shockPrecioPersonalizado">
+                <div class="est-slider__cabecera">
+                    <label class="form-label mb-0">Shock de precio</label>
+                    <span class="est-slider__valor">{{ formatearShock(shockPrecioPersonalizado / 100) }}</span>
+                </div>
+                <ngx-slider [(value)]="shockPrecioPersonalizado" [options]="opcionesSliderPrecio"></ngx-slider>
             </div>
             <div class="est-campo">
-                <label class="form-label">Shock cambiario (%)</label>
-                <input type="number" step="1" class="form-control" [(ngModel)]="shockCambiarioPersonalizado">
+                <div class="est-slider__cabecera">
+                    <label class="form-label mb-0">Shock cambiario</label>
+                    <span class="est-slider__valor">{{ formatearShock(shockCambiarioPersonalizado / 100) }}</span>
+                </div>
+                <ngx-slider [(value)]="shockCambiarioPersonalizado" [options]="opcionesSliderCambiario"></ngx-slider>
             </div>
         </div>
 

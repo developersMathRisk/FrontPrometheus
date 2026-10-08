@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatIconModule } from '@angular/material/icon';
+import { NgxSliderModule, Options } from '@angular-slider/ngx-slider';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RegistroService } from '../../../../shared/services/registro.service';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
@@ -31,7 +32,7 @@ interface EscenarioPreset {
 @Component({
   selector: 'app-ejecutar-stress-testing',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, LoaderComponent, EncabezadoComponent, AdvertenciasComponent],
+  imports: [CommonModule, FormsModule, NgSelectModule, MatIconModule, NgxSliderModule, LoaderComponent, EncabezadoComponent, AdvertenciasComponent],
   templateUrl: './ejecutar-stress-testing.component.html',
   styleUrl: './ejecutar-stress-testing.component.scss',
   animations: [fadeSlideIn, fadeIn],
@@ -54,6 +55,26 @@ export class EjecutarStressTestingComponent implements OnInit {
   modoPersonalizado = false;
   shockPrecioPersonalizado = -10;
   shockCambiarioPersonalizado = 0;
+
+  // Sliders del modo personalizado: la caída de precios puede ser profunda; las alzas se acotan porque un
+  // stress test estresa a la baja. El tipo de cambio se admite en ambos sentidos.
+  readonly opcionesSliderPrecio: Options = this.opcionesSlider(-60, 20);
+  readonly opcionesSliderCambiario: Options = this.opcionesSlider(-30, 30);
+
+  private opcionesSlider(floor: number, ceil: number): Options {
+    return {
+      floor, ceil, step: 1, showTicks: false, hideLimitLabels: false,
+      translate: (v: number) => `${v > 0 ? '+' : ''}${v}%`,
+      ariaLabel: 'Magnitud del shock en porcentaje',
+    };
+  }
+
+  /** Formato con signo explícito para las etiquetas de shock: −20%, +10%, 0%. */
+  formatearShock(fraccion: number): string {
+    const pct = Math.round(fraccion * 1000) / 10;
+    if (pct === 0) return '0%';
+    return `${pct > 0 ? '+' : '−'}${Math.abs(pct)}%`;
+  }
 
   ejecutando = false;
   mensajeError = '';

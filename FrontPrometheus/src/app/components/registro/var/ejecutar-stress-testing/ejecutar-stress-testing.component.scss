@@ -83,9 +83,23 @@
 
 .est-personalizado {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    max-width: 420px;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 14px 16px 6px;
+    background: rgba(var(--dark-rgb), 0.04);
+    border-radius: var(--r, 12px);
+}
+
+.est-slider__cabecera {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.est-slider__valor {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: rgb(var(--primary-rgb));
 }
 
 .est-resumen-shock {
@@ -96,33 +110,64 @@
     border-radius: 8px;
 }
 
-.var-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+// Tarjetas-radio de escenario: 2 columnas, nombre + descripción + shocks aplicados
+.est-escenarios {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
 }
 
-.var-chip {
-    padding: 5px 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--default-text-color);
+.est-escenario {
+    position: relative;
+    display: grid;
+    gap: 3px;
+    padding: 10px 12px 10px 38px;
+    text-align: left;
     cursor: pointer;
+    color: var(--default-text-color);
     background: transparent;
-    border: 1px solid rgba(var(--dark-rgb), 0.28);
-    border-radius: 999px;
-    transition: background-color 0.12s, border-color 0.12s;
+    border: 1px solid rgba(var(--dark-rgb), 0.2);
+    border-radius: var(--r, 12px);
+    transition: border-color var(--dur-fast, 150ms), background var(--dur-fast, 150ms);
 
-    &:hover {
-        background: rgba(var(--dark-rgb), 0.06);
+    &:hover { border-color: rgba(var(--primary-rgb), 0.6); }
+    &:focus-visible { outline: 2px solid rgb(var(--primary-rgb)); outline-offset: 2px; }
+
+    &__radio {
+        position: absolute;
+        top: 13px;
+        left: 12px;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(var(--dark-rgb), 0.35);
+        border-radius: 50%;
     }
 
-    &.var-chip--activo {
-        font-weight: 600;
-        color: rgb(var(--primary-rgb));
-        background: rgba(var(--primary-rgb), 0.12);
+    &__nombre { font-size: 0.82rem; font-weight: 600; }
+    &__desc { font-size: 0.72rem; color: rgba(var(--dark-rgb), 0.65); }
+    &__shocks { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+
+    &--activo {
+        background: rgba(var(--primary-rgb), 0.08);
         border-color: rgb(var(--primary-rgb));
+
+        .est-escenario__radio {
+            border-color: rgb(var(--primary-rgb));
+            background: radial-gradient(circle, rgb(var(--primary-rgb)) 0 45%, transparent 50%);
+        }
     }
+
+    &--personalizado { grid-column: 1 / -1; }
+}
+
+.est-shock {
+    padding: 1px 7px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-risk-text, #b3261e);
+    background: var(--color-risk-bg, rgba(231, 81, 90, 0.1));
+    border-radius: 999px;
 }
 
 .est-accion {
@@ -291,7 +336,7 @@
 }
 
 @media (max-width: 560px) {
-    .est-personalizado {
+    .est-escenarios {
         grid-template-columns: 1fr;
     }
 
