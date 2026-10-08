@@ -234,6 +234,35 @@ export class ResultadoVarComponent implements OnInit, OnChanges, OnDestroy {
       : 'Evolución del VaR de este portafolio';
   }
 
+  // ---- matriz VaR × nivel de confianza ----------------------------------------------
+  /** Niveles de confianza de esta ejecución, de menor a mayor (columnas de la matriz). */
+  get nivelesMatriz(): number[] {
+    return [...new Set(this.resultado?.resultados.map(r => r.nivelConfianza) ?? [])].sort((a, b) => a - b);
+  }
+
+  /** Metodologías de esta ejecución, en el orden en que llegaron (filas de la matriz). */
+  get metodologiasMatriz(): string[] {
+    return [...new Set(this.resultado?.resultados.map(r => r.metodologia) ?? [])];
+  }
+
+  /** Solo tiene sentido cruzar dos ejes cuando hay más de una celda. */
+  get mostrarMatriz(): boolean {
+    return (this.resultado?.resultados.length ?? 0) > 1 && this.nivelesMatriz.length > 0;
+  }
+
+  celdaMatriz(metodologia: string, nivel: number): ResultadoMetodoVar | undefined {
+    return this.resultado?.resultados.find(r => r.metodologia === metodologia && r.nivelConfianza === nivel);
+  }
+
+  /** Intensidad 0–1 de la celda respecto a la pérdida máxima de la matriz (para el sombreado). */
+  intensidadCelda(celda: ResultadoMetodoVar | undefined): number {
+    return celda ? Math.abs(celda.varDiversificado) / this.maxVarDiversificado : 0;
+  }
+
+  esMaxima(celda: ResultadoMetodoVar | undefined): boolean {
+    return !!celda && celda === this.destacado;
+  }
+
   get mostrarColumnasInstrumento(): boolean {
     return !this.resultado.esHistorico;
   }

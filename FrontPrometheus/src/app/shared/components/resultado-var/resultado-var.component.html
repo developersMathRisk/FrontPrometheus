@@ -67,6 +67,38 @@
         </tbody>
     </table>
 
+    <!-- Matriz metodología × confianza: de un vistazo, cómo crece la pérdida con el nivel y qué método es más conservador -->
+    <div class="rvar-matriz" *ngIf="mostrarMatriz">
+        <p class="rvar-matriz__titulo">Matriz VaR · metodología × nivel de confianza</p>
+        <div class="rvar-matriz__scroll">
+            <table class="rvar-matriz__tabla">
+                <thead>
+                    <tr>
+                        <th scope="col">Metodología</th>
+                        <th scope="col" class="col-num" *ngFor="let n of nivelesMatriz">{{ n * 100 | number:'1.1-2' }}%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let m of metodologiasMatriz">
+                        <th scope="row">{{ m }}</th>
+                        <td *ngFor="let n of nivelesMatriz" class="rvar-matriz__celda"
+                            [class.rvar-matriz__celda--max]="esMaxima(celdaMatriz(m, n))"
+                            [class.rvar-matriz__celda--vacia]="!celdaMatriz(m, n)"
+                            [style.--intensidad]="intensidadCelda(celdaMatriz(m, n))">
+                            <ng-container *ngIf="celdaMatriz(m, n) as c; else sinDato">
+                                <span class="rvar-matriz__valor">{{ c.varDiversificado | number:'1.2-2' }}</span>
+                                <span class="rvar-matriz__pct">{{ c.ratioVar * 100 | number:'1.2-2' }}% de la cartera</span>
+                                <span class="rvar-matriz__marca" *ngIf="esMaxima(c)">Máximo</span>
+                            </ng-container>
+                            <ng-template #sinDato><span class="rvar-matriz__pct">—</span></ng-template>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="rvar-matriz__nota">Valores en {{ resultado.monedaReporte }}. Más oscuro = mayor pérdida potencial.</p>
+    </div>
+
     <table class="rvar-tabla mt-3">
         <caption>Desglose por instrumento</caption>
         <thead>
