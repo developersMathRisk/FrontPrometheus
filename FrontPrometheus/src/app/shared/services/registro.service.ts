@@ -3,10 +3,14 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
-export interface ResultadoImportacionCurva {
-  archivo: string;
-  resultado?: { curva: string; desde: string; hasta: string; fechas: number; tasas: number; nuevas: number; reemplazadas: number };
-  error?: string;
+export interface ResultadoActualizacionCurva {
+  curva: string; desde: string | null; hasta: string | null;
+  fechas: number | null; nuevas: number | null; reemplazadas: number | null; error: string | null;
+}
+export interface ResumenCurva { curva: string; nombre: string; plazos: number; primeraFecha: string; ultimaFecha: string; fechas: number; }
+export interface CurvaEnFecha {
+  curva: string; nombre: string; fecha: string; fechaAnterior: string | null;
+  puntos: { plazo: number; tasa: number; tasaAnterior: number | null }[];
 }
 import { Moneda } from '../models/atributo-financiero/moneda';
 import { Accion } from '../models/producto/accion';
@@ -293,11 +297,18 @@ export class RegistroService {
     return this.http.post<Emisor>(`${this.apiServeURL}/mantenedores/crearMoneda`, objMoneda);
   }
 
-  /** Sube uno o varios Excel exportados de la Consulta Histórica de curvas SBS; reemplaza las tasas de esas fechas. */
-  public importarCurvasSbs(archivos: File[]): Observable<ResultadoImportacionCurva[]> {
-    const datos = new FormData();
-    archivos.forEach(a => datos.append('archivos', a, a.name));
-    return this.http.post<ResultadoImportacionCurva[]>(`${this.apiServeURL}/mantenedores/curvas/importar`, datos);
+  /** Descarga de la SBS y carga las curvas configuradas desde su última fecha (repasa los últimos 60 días). */
+  public actualizarCurvasSbs(): Observable<ResultadoActualizacionCurva[]> {
+    return this.http.post<ResultadoActualizacionCurva[]>(`${this.apiServeURL}/mantenedores/curvas/actualizar-sbs`, {});
+  }
+
+  public getResumenCurvas(): Observable<ResumenCurva[]> {
+    return this.http.get<ResumenCurva[]>(`${this.apiServeURL}/mantenedores/curvas/resumen`);
+  }
+
+  public getCurvaEnFecha(curva: string, fecha?: string | null): Observable<CurvaEnFecha> {
+    const params = fecha ? new HttpParams().set('fecha', fecha) : undefined;
+    return this.http.get<CurvaEnFecha>(`${this.apiServeURL}/mantenedores/curvas/${curva}`, { params });
   }
 
   public getListaMoneda(): Observable<Moneda[]>{

@@ -12,14 +12,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { CargaTasaInteresComponent } from "../carga-tasa-interes/carga-tasa-interes.component";
 import { EditarTasaInteresComponent } from "../editar-tasa-interes/editar-tasa-interes.component";
-import { ImportarCurvasSbsComponent } from '../importar-curvas-sbs/importar-curvas-sbs.component';
+import { CurvasSbsComponent } from '../curvas-sbs/curvas-sbs.component';
 import { TablaToolbarComponent } from '../../../../../shared/components/tabla-toolbar/tabla-toolbar.component';
 import { EstadoTabla, TablaEstadoComponent, mensajeDeError } from '../../../../../shared/components/tabla-estado/tabla-estado.component';
 
 @Component({
   selector: 'app-lista-tasa-interes',
   standalone: true,
-  imports: [MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, MatCheckboxModule, MatMenuModule, CargaTasaInteresComponent, EditarTasaInteresComponent, TablaToolbarComponent, TablaEstadoComponent, ImportarCurvasSbsComponent],
+  imports: [MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule, MatCheckboxModule, MatMenuModule, CargaTasaInteresComponent, EditarTasaInteresComponent, TablaToolbarComponent, TablaEstadoComponent, CurvasSbsComponent],
   templateUrl: './lista-tasa-interes.component.html',
   styleUrl: './lista-tasa-interes.component.scss'
 })

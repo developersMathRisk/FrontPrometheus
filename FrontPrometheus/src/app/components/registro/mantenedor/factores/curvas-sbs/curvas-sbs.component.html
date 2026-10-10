@@ -1,0 +1,86 @@
+<section class="csb" aria-labelledby="csb-titulo">
+    <div class="csb__cabecera">
+        <div>
+            <h3 id="csb-titulo" class="csb__titulo">Curvas SBS · histórico cargado</h3>
+            <p class="csb__ayuda">
+                Se actualizan solas cada día hábil (18:30) desde el portal de la SBS. Con el botón se actualizan ahora:
+                se repasan los últimos 60 días y se reemplazan las tasas del día.
+            </p>
+        </div>
+        <button type="button" class="btn btn-primary btn-sm csb__actualizar" (click)="actualizar()" [disabled]="actualizando">
+            <lucide-icon [img]="iconoActualizar" [size]="15" [class.csb__girando]="actualizando" aria-hidden="true"></lucide-icon>
+            {{ actualizando ? 'Descargando de la SBS...' : 'Actualizar desde SBS' }}
+        </button>
+    </div>
+
+    <p class="csb__error" role="alert" *ngIf="errorActualizar">{{ errorActualizar }}</p>
+    <ul class="csb__resultados" *ngIf="resultados.length" aria-live="polite">
+        <li *ngFor="let r of resultados" [class.csb__resultado--error]="r.error">
+            <strong>{{ r.curva }}</strong>
+            <span *ngIf="!r.error">· {{ r.desde }} → {{ r.hasta }}: {{ r.fechas }} fecha(s), {{ r.nuevas }} tasas nuevas,
+                {{ r.reemplazadas }} reemplazadas</span>
+            <span *ngIf="r.error">· {{ r.error }}</span>
+        </li>
+    </ul>
+
+    <div class="csb__cargando" *ngIf="cargandoResumen && !resumen.length">
+        <app-loader tamano="inline" etiqueta="Cargando curvas..."></app-loader>
+    </div>
+    <p class="csb__error" *ngIf="errorResumen">{{ errorResumen }}</p>
+
+    <div class="csb__tabla" *ngIf="resumen.length">
+        <table>
+            <thead>
+                <tr>
+                    <th>Curva</th>
+                    <th>Descripción</th>
+                    <th class="col-num">Plazos</th>
+                    <th>Desde</th>
+                    <th>Hasta</th>
+                    <th class="col-num">Fechas</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let c of resumen" [class.csb__fila--activa]="c.curva === curvaSeleccionada"
+                    (click)="seleccionar(c.curva)" tabindex="0" (keydown.enter)="seleccionar(c.curva)"
+                    [attr.aria-label]="'Ver curva ' + c.curva">
+                    <td><strong>{{ c.curva }}</strong></td>
+                    <td>{{ c.nombre }}</td>
+                    <td class="col-num">{{ c.plazos }}</td>
+                    <td>{{ c.primeraFecha }}</td>
+                    <td>{{ c.ultimaFecha }}</td>
+                    <td class="col-num">{{ c.fechas | number }}</td>
+                    <td>
+                        <span class="csb__estado" [class.csb__estado--ok]="diasHabilesAtraso(c.ultimaFecha) <= 1"
+                            [class.csb__estado--atraso]="diasHabilesAtraso(c.ultimaFecha) > 1">
+                            {{ diasHabilesAtraso(c.ultimaFecha) <= 1 ? 'Al día' : diasHabilesAtraso(c.ultimaFecha) + ' días hábiles de atraso' }}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="csb__visor" *ngIf="curvaSeleccionada">
+        <div class="csb__visor-cabecera">
+            <p class="csb__visor-titulo">
+                {{ curvaSeleccionada }}<span *ngIf="curva"> al {{ curva.fecha }}</span>
+                <span class="csb__visor-sub" *ngIf="curva?.fechaAnterior">comparada con {{ curva?.fechaAnterior }}</span>
+            </p>
+            <div class="csb__fecha">
+                <label class="form-label mb-0">Fecha</label>
+                <app-date-picker [ngModel]="fechaConsulta" (ngModelChange)="alCambiarFecha($event)"
+                    placeholder="Última disponible"></app-date-picker>
+            </div>
+        </div>
+        <div class="csb__cargando" *ngIf="cargandoCurva"><app-loader tamano="inline" etiqueta="Cargando..."></app-loader></div>
+        <p class="csb__error" *ngIf="errorCurva">{{ errorCurva }}</p>
+        <apx-chart *ngIf="grafico && !cargandoCurva" [series]="grafico.series" [chart]="grafico.chart" [colors]="grafico.colors"
+            [stroke]="grafico.stroke" [markers]="grafico.markers" [dataLabels]="grafico.dataLabels" [legend]="grafico.legend"
+            [xaxis]="grafico.xaxis" [yaxis]="grafico.yaxis" [grid]="grafico.grid" [tooltip]="grafico.tooltip"></apx-chart>
+        <p class="csb__nota" *ngIf="curva && !cargandoCurva">
+            {{ curva.puntos.length }} plazos. Si elige una fecha sin publicación (feriado, fin de semana), se muestra la última anterior.
+        </p>
+    </div>
+</section>
