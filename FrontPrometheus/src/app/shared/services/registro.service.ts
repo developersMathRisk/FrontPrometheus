@@ -2,6 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
+
+export interface ResultadoImportacionCurva {
+  archivo: string;
+  resultado?: { curva: string; desde: string; hasta: string; fechas: number; tasas: number; nuevas: number; reemplazadas: number };
+  error?: string;
+}
 import { Moneda } from '../models/atributo-financiero/moneda';
 import { Accion } from '../models/producto/accion';
 import { Bono } from '../models/producto/bono';
@@ -285,6 +291,13 @@ export class RegistroService {
   //Moneda
   public postRegistrarMoneda(objMoneda: Moneda){
     return this.http.post<Emisor>(`${this.apiServeURL}/mantenedores/crearMoneda`, objMoneda);
+  }
+
+  /** Sube uno o varios Excel exportados de la Consulta Histórica de curvas SBS; reemplaza las tasas de esas fechas. */
+  public importarCurvasSbs(archivos: File[]): Observable<ResultadoImportacionCurva[]> {
+    const datos = new FormData();
+    archivos.forEach(a => datos.append('archivos', a, a.name));
+    return this.http.post<ResultadoImportacionCurva[]>(`${this.apiServeURL}/mantenedores/curvas/importar`, datos);
   }
 
   public getListaMoneda(): Observable<Moneda[]>{
