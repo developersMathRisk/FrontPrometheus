@@ -1,20 +1,21 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { LucideAngularModule, RefreshCw } from 'lucide-angular';
-import {
-  CurvaEnFecha, RegistroService, ResultadoActualizacionCurva, ResumenCurva,
-} from '../../../../../shared/services/registro.service';
+import { LucideAngularModule, MousePointerClick } from 'lucide-angular';
+import { CurvaEnFecha, RegistroService, ResumenCurva } from '../../../../../shared/services/registro.service';
 import { mensajeDeError } from '../../../../../shared/components/tabla-estado/tabla-estado.component';
 import { LoaderComponent } from '../../../../../shared/components/loader/loader.component';
 import { DatePickerComponent } from '../../../../../shared/components/date-picker/date-picker.component';
 
+type Vista = 'grafico' | 'datos';
+
 /**
- * Curvas SBS (histórico): qué hay cargado por curva (desde, hasta, cuántas fechas, si está al día), la
- * actualización automática desde el portal de la SBS y un visor de la curva en una fecha comparada con
- * la fecha anterior. Las curvas se actualizan solas cada día hábil (carga diaria); el botón lo hace al momento.
+ * Curvas (histórico cargado): una fila por curva con su fuente, rango de fechas y estado. Un clic abre los
+ * datos de la curva en una fecha; doble clic, su gráfico (comparado con la fecha anterior). Las curvas
+ * se actualizan solas cada día hábil (carga diaria): no hay botón de descarga para no sobrecargar el portal.
  */
 @Component({
   selector: 'app-curvas-sbs',
@@ -23,18 +24,19 @@ import { DatePickerComponent } from '../../../../../shared/components/date-picke
   templateUrl: './curvas-sbs.component.html',
   styleUrl: './curvas-sbs.component.scss',
 })
-export class CurvasSbsComponent implements OnInit {
-  readonly iconoActualizar = RefreshCw;
+export class CurvasSbsComponent implements OnInit, OnDestroy {
+  @ViewChild('detalle') detalle!: TemplateRef<unknown>;
+  private readonly modales = inject(NgbModal);
+
+  readonly iconoClic = MousePointerClick;
   readonly hoy = new Date().toISOString().slice(0, 10);
 
   resumen: ResumenCurva[] = [];
   cargandoResumen = false;
   errorResumen = '';
 
-  actualizando = false;
-  resultados: ResultadoActualizacionCurva[] = [];
-  errorActualizar = '';
-
+  // Visor (modal)
+  vista: Vista = 'grafico';
   curvaSeleccionada: string | null = null;
   fechaConsulta: string | null = null;
   curva: CurvaEnFecha | null = null;
@@ -42,27 +44,23 @@ export class CurvasSbsComponent implements OnInit {
   errorCurva = '';
   grafico: any = null;
 
+  private temporizadorClic: ReturnType<typeof setTimeout> | null = null;
+
   constructor(private registroService: RegistroService) {}
 
   ngOnInit(): void {
-    this.cargarResumen();
-  }
-
-  cargarResumen() {
     this.cargandoResumen = true;
-    this.errorResumen = '';
     this.registroService.getResumenCurvas().subscribe({
-      next: (r) => {
-        this.resumen = r;
-        this.cargandoResumen = false;
-        if (!this.curvaSeleccionada && r.length) this.seleccionar(r.find(c => c.curva === 'CCPSS')?.curva ?? r[0].curva);
-        else if (this.curvaSeleccionada) this.cargarCurva();
-      },
+      next: (r) => { this.resumen = r; this.cargandoResumen = false; },
       error: (e: HttpErrorResponse) => { this.errorResumen = mensajeDeError(e); this.cargandoResumen = false; },
     });
   }
 
-  /** Días hábiles aproximados desde la última fecha cargada (sábados y domingos no cuentan). */
+  ngOnDestroy(): void {
+    if (this.temporizadorClic) clearTimeout(this.temporizadorClic);
+  }
+
+  /** Días hábiles desde la última fecha cargada (sábados y domingos no cuentan). */
   diasHabilesAtraso(ultima: string): number {
     let d = new Date(ultima + 'T00:00:00');
     const fin = new Date(this.hoy + 'T00:00:00');
@@ -74,20 +72,25 @@ export class CurvasSbsComponent implements OnInit {
     return n;
   }
 
-  actualizar() {
-    this.actualizando = true;
-    this.errorActualizar = '';
-    this.resultados = [];
-    this.registroService.actualizarCurvasSbs().subscribe({
-      next: (r) => { this.resultados = r; this.actualizando = false; this.cargarResumen(); },
-      error: (e: HttpErrorResponse) => { this.errorActualizar = mensajeDeError(e); this.actualizando = false; },
-    });
+  // Un clic espera un instante por si llega el segundo: así el doble clic no abre también los datos.
+  alClic(codigo: string) {
+    if (this.temporizadorClic) clearTimeout(this.temporizadorClic);
+    this.temporizadorClic = setTimeout(() => { this.temporizadorClic = null; this.abrir(codigo, 'datos'); }, 240);
   }
 
-  seleccionar(codigo: string) {
+  alDobleClic(codigo: string) {
+    if (this.temporizadorClic) { clearTimeout(this.temporizadorClic); this.temporizadorClic = null; }
+    this.abrir(codigo, 'grafico');
+  }
+
+  abrir(codigo: string, vista: Vista) {
+    this.vista = vista;
     this.curvaSeleccionada = codigo;
     this.fechaConsulta = null;
+    this.curva = null;
+    this.grafico = null;
     this.cargarCurva();
+    this.modales.open(this.detalle, { centered: true, scrollable: true, size: 'xl', windowClass: 'curva-modal' });
   }
 
   alCambiarFecha(fecha: string | null) {
@@ -105,6 +108,10 @@ export class CurvasSbsComponent implements OnInit {
     });
   }
 
+  variacionPb(p: { tasa: number; tasaAnterior: number | null }): number | null {
+    return p.tasaAnterior == null ? null : (p.tasa - p.tasaAnterior) * 100;
+  }
+
   private armarGrafico(c: CurvaEnFecha) {
     const series: any[] = [{ name: c.fecha, data: c.puntos.map(p => ({ x: p.plazo, y: p.tasa })) }];
     if (c.fechaAnterior) {
@@ -112,7 +119,7 @@ export class CurvasSbsComponent implements OnInit {
     }
     return {
       series,
-      chart: { type: 'line', height: 260, toolbar: { show: false }, zoom: { enabled: false }, animations: { enabled: false } },
+      chart: { type: 'line', height: 340, toolbar: { show: false }, zoom: { enabled: false } },
       colors: ['#3874B8', '#9aa5b1'],
       stroke: { width: [2.5, 1.5], dashArray: [0, 5] },
       markers: { size: c.puntos.length > 40 ? 0 : 3 },

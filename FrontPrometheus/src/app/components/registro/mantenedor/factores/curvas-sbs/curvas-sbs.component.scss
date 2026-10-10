@@ -4,45 +4,97 @@
     border: 1px solid rgba(var(--dark-rgb), 0.12);
     border-radius: var(--r, 12px);
 
-    &__cabecera { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: flex-start; justify-content: space-between; margin-bottom: 0.75rem; }
+    &__cabecera { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
     &__titulo { margin: 0; font-size: 0.95rem; font-weight: 600; }
-    &__ayuda { margin: 0.2rem 0 0; max-width: 680px; font-size: 0.78rem; color: rgba(var(--dark-rgb), 0.65); }
-    &__actualizar { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
-    &__girando { animation: csb-giro 1s linear infinite; }
+    &__ayuda { margin: 0.2rem 0 0; font-size: 0.78rem; color: rgba(var(--dark-rgb), 0.65); }
     &__error { margin: 0.4rem 0; font-size: 0.8rem; color: rgb(var(--danger-rgb)); }
     &__cargando { padding: 0.75rem 0; }
+    &__nota { margin: 0.4rem 0 0; font-size: 0.72rem; color: rgba(var(--dark-rgb), 0.6); }
 
-    &__resultados {
-        display: grid; gap: 0.25rem; margin: 0 0 0.75rem; padding: 0.6rem 0.8rem; list-style: none; font-size: 0.78rem;
-        background: rgba(var(--success-rgb), 0.06); border-radius: var(--rs, 7px);
+    // Pista de uso: entra con un pequeño desplazamiento y el icono "hace doble clic" dos veces
+    &__pista {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin: 0;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.76rem;
+        color: rgb(var(--primary-rgb));
+        background: rgba(var(--primary-rgb), 0.08);
+        border-radius: 999px;
+        animation: csb-entra 0.5s var(--ease, ease-out) both;
     }
-    &__resultado--error { color: rgb(var(--danger-rgb)); }
+    &__pista-icono { display: inline-flex; animation: csb-doble-clic 1.1s ease-in-out 0.5s 2; }
 
     &__tabla {
         overflow-x: auto;
         table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
         th { padding: 0.45rem 0.6rem; font-size: 0.72rem; font-weight: 600; text-align: left; color: rgba(var(--dark-rgb), 0.65);
              background: rgba(var(--dark-rgb), 0.04); white-space: nowrap; }
-        td { padding: 0.45rem 0.6rem; border-bottom: 1px solid rgba(var(--dark-rgb), 0.08); white-space: nowrap; }
+        td { padding: 0.5rem 0.6rem; border-bottom: 1px solid rgba(var(--dark-rgb), 0.08); white-space: nowrap; }
         .col-num { text-align: right; font-variant-numeric: tabular-nums; }
-        tbody tr { cursor: pointer; }
-        tbody tr:hover td { background: rgba(var(--primary-rgb), 0.04); }
+        tbody tr { cursor: pointer; user-select: none; transition: background var(--dur-fast, 150ms); }
+        tbody tr:hover td { background: rgba(var(--primary-rgb), 0.05); }
         tbody tr:focus-visible { outline: 2px solid rgb(var(--primary-rgb)); outline-offset: -2px; }
     }
-    &__fila--activa td { background: rgba(var(--primary-rgb), 0.08) !important; }
+    &__fuente { color: rgba(var(--dark-rgb), 0.7); }
+
+    // La primera fila "late" dos veces al entrar, para mostrar que las filas se abren
+    &__fila--invita td { animation: csb-pulso 1.1s ease-in-out 0.6s 2; }
 
     &__estado { padding: 1px 8px; font-size: 0.7rem; font-weight: 600; border-radius: 999px; }
     &__estado--ok { color: rgb(var(--success-rgb)); background: rgba(var(--success-rgb), 0.12); }
     &__estado--atraso { color: var(--color-warn-text, #7a4a00); background: var(--color-warn-bg, #fff6e3); }
-
-    &__visor { margin-top: 1rem; }
-    &__visor-cabecera { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: flex-end; justify-content: space-between; }
-    &__visor-titulo { margin: 0; font-weight: 600; font-size: 0.88rem; }
-    &__visor-sub { margin-left: 0.4rem; font-weight: 400; font-size: 0.75rem; color: rgba(var(--dark-rgb), 0.6); }
-    &__fecha { display: flex; align-items: center; gap: 0.5rem; min-width: 240px; }
-    &__nota { margin: 0.25rem 0 0; font-size: 0.72rem; color: rgba(var(--dark-rgb), 0.6); }
 }
 
-@keyframes csb-giro { to { transform: rotate(360deg); } }
+.csb-modal {
+    &__sub { margin-top: 0.15rem; font-size: 0.75rem; color: rgba(var(--dark-rgb), 0.6); }
+    &__barra { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+    &__fecha { display: flex; align-items: center; gap: 0.5rem; min-width: 240px; }
 
-@media (prefers-reduced-motion: reduce) { .csb__girando { animation: none; } }
+    &__vistas {
+        display: inline-flex;
+        padding: 3px;
+        background: rgba(var(--dark-rgb), 0.06);
+        border-radius: var(--rs, 7px);
+
+        button {
+            padding: 0.3rem 0.9rem;
+            font-size: 0.8rem;
+            color: var(--default-text-color);
+            background: transparent;
+            border: 0;
+            border-radius: 5px;
+            cursor: pointer;
+
+            &.activo { font-weight: 600; background: var(--custom-white, #fff); box-shadow: var(--shadow-sm); }
+            &:focus-visible { outline: 2px solid rgb(var(--primary-rgb)); }
+        }
+    }
+
+    &__datos {
+        max-height: 55vh;
+        overflow: auto;
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th { position: sticky; top: 0; padding: 0.4rem 0.6rem; font-size: 0.72rem; font-weight: 600; text-align: right;
+             color: rgba(var(--dark-rgb), 0.65); background: var(--custom-white, #fff); border-bottom: 1px solid rgba(var(--dark-rgb), 0.12); }
+        td { padding: 0.32rem 0.6rem; text-align: right; font-variant-numeric: tabular-nums; border-bottom: 1px solid rgba(var(--dark-rgb), 0.06); }
+        .sube { color: rgb(var(--danger-rgb)); }
+        .baja { color: rgb(var(--success-rgb)); }
+    }
+}
+
+@keyframes csb-entra { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@keyframes csb-doble-clic {
+    0%, 100% { transform: scale(1); }
+    15%, 45% { transform: scale(0.82); }
+    30%, 60% { transform: scale(1.05); }
+}
+@keyframes csb-pulso {
+    0%, 100% { background: transparent; }
+    35% { background: rgba(var(--primary-rgb), 0.12); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .csb__pista, .csb__pista-icono, .csb__fila--invita td { animation: none; }
+}

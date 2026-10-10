@@ -3,13 +3,9 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
-export interface ResultadoActualizacionCurva {
-  curva: string; desde: string | null; hasta: string | null;
-  fechas: number | null; nuevas: number | null; reemplazadas: number | null; error: string | null;
-}
-export interface ResumenCurva { curva: string; nombre: string; plazos: number; primeraFecha: string; ultimaFecha: string; fechas: number; }
+export interface ResumenCurva { curva: string; nombre: string; fuente: string; plazos: number; primeraFecha: string; ultimaFecha: string; fechas: number; }
 export interface CurvaEnFecha {
-  curva: string; nombre: string; fecha: string; fechaAnterior: string | null;
+  curva: string; nombre: string; fuente: string; fecha: string; fechaAnterior: string | null;
   puntos: { plazo: number; tasa: number; tasaAnterior: number | null }[];
 }
 import { Moneda } from '../models/atributo-financiero/moneda';
@@ -295,11 +291,6 @@ export class RegistroService {
   //Moneda
   public postRegistrarMoneda(objMoneda: Moneda){
     return this.http.post<Emisor>(`${this.apiServeURL}/mantenedores/crearMoneda`, objMoneda);
-  }
-
-  /** Descarga de la SBS y carga las curvas configuradas desde su última fecha (repasa los últimos 60 días). */
-  public actualizarCurvasSbs(): Observable<ResultadoActualizacionCurva[]> {
-    return this.http.post<ResultadoActualizacionCurva[]>(`${this.apiServeURL}/mantenedores/curvas/actualizar-sbs`, {});
   }
 
   public getResumenCurvas(): Observable<ResumenCurva[]> {
