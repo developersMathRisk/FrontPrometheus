@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, QueryList, Type, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ListaTasaInteresComponent } from '../lista-tasa-interes/lista-tasa-interes.component';
+import { CurvasSbsComponent } from '../curvas-sbs/curvas-sbs.component';
 import { ListaIndiceMercadoComponent } from '../lista-indice-mercado/lista-indice-mercado.component';
 import { ListaPrecioMercadoComponent } from '../lista-precio-mercado/lista-precio-mercado.component';
 import { ListaVolatilidadComponent } from '../lista-volatilidad/lista-volatilidad.component';
@@ -24,7 +24,7 @@ interface Factor {
 })
 export class MantenedorFactoresComponent implements OnInit {
   readonly factores: Factor[] = [
-    { id: 1, etiqueta: 'Tasa de Interés', descripcion: 'Vértices de las curvas de tasas de referencia.', componente: ListaTasaInteresComponent },
+    { id: 1, etiqueta: 'Tasa de Interés', descripcion: 'Curvas de tasas de referencia (SBS y BCRP) con su histórico por fecha. Los plazos se crean solos al cargar cada curva.', componente: CurvasSbsComponent },
     { id: 2, etiqueta: 'Índice de Mercado', descripcion: 'Índices de referencia del mercado.', componente: ListaIndiceMercadoComponent },
     { id: 3, etiqueta: 'Precio de Mercado', descripcion: 'Precios históricos por instrumento y fecha; son la base del cálculo de VaR.', componente: ListaPrecioMercadoComponent },
     { id: 4, etiqueta: 'Volatilidad', descripcion: 'Superficie de volatilidad por plazo y punto de skew.', componente: ListaVolatilidadComponent },
