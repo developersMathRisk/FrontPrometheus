@@ -1,0 +1,63 @@
+<app-encabezado kicker="Back Office" titulo="Contabilidad"
+    subtitulo="Asientos generados al liquidar las operaciones, balance de comprobación y plan de cuentas."></app-encabezado>
+
+<section class="card">
+    <div class="card-body">
+        <div class="cnt-barra">
+            <div class="cnt-vistas" role="tablist">
+                <button type="button" role="tab" [class.activo]="vista === 'libro'" (click)="vista = 'libro'">Libro de asientos</button>
+                <button type="button" role="tab" [class.activo]="vista === 'balance'" (click)="vista = 'balance'">Balance de comprobación</button>
+                <button type="button" role="tab" [class.activo]="vista === 'plan'" (click)="vista = 'plan'">Plan de cuentas</button>
+            </div>
+            <div class="cnt-fechas" *ngIf="vista !== 'plan'">
+                <span class="form-label mb-0">Desde</span><app-date-picker [(ngModel)]="desde" (ngModelChange)="cargar()"></app-date-picker>
+                <span class="form-label mb-0">Hasta</span><app-date-picker [(ngModel)]="hasta" (ngModelChange)="cargar()" placeholder="Hoy"></app-date-picker>
+            </div>
+        </div>
+
+        <div class="cnt-cargando" *ngIf="cargando"><app-loader tamano="inline" etiqueta="Cargando…"></app-loader></div>
+        <p class="cnt-error" *ngIf="error">{{ error }}</p>
+
+        <ng-container *ngIf="datos && !cargando">
+            <div *ngIf="vista === 'libro'">
+                <p class="cnt-sin" *ngIf="!datos.asientos.length">No hay operaciones liquidadas en el período.</p>
+                <div class="cnt-asiento" *ngFor="let a of datos.asientos">
+                    <p class="cnt-asiento__cab">
+                        <strong>{{ a.operacion.codigo }}</strong> · {{ etiquetaTipo[a.operacion.tipo] }} · {{ a.operacion.lado === 'COMPRA' ? 'Compra' : 'Venta' }}
+                        {{ a.operacion.ticker }} · liquidada {{ a.operacion.fechaLiquidacion }} · {{ a.operacion.portafolio }}
+                    </p>
+                    <table>
+                        <thead><tr><th>Cuenta</th><th>Descripción</th><th>Mon.</th><th class="col-num">Debe</th><th class="col-num">Haber</th></tr></thead>
+                        <tbody>
+                            <tr *ngFor="let l of a.lineas"><td>{{ l.cuenta }}</td><td>{{ l.descripcion }}</td><td>{{ l.moneda }}</td>
+                                <td class="col-num">{{ l.debe ? (l.debe | number:'1.2-2') : '' }}</td><td class="col-num">{{ l.haber ? (l.haber | number:'1.2-2') : '' }}</td></tr>
+                            <tr class="cnt-total"><td colspan="3">Totales</td>
+                                <td class="col-num">{{ suma(a.lineas, 'debe') | number:'1.2-2' }}</td><td class="col-num">{{ suma(a.lineas, 'haber') | number:'1.2-2' }}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div *ngIf="vista === 'balance'">
+                <table>
+                    <thead><tr><th>Cuenta</th><th>Descripción</th><th>Mon.</th><th class="col-num">Debe</th><th class="col-num">Haber</th><th class="col-num">Saldo</th></tr></thead>
+                    <tbody>
+                        <tr *ngFor="let r of balance"><td>{{ r.cuenta }}</td><td>{{ r.descripcion }}</td><td>{{ r.moneda }}</td>
+                            <td class="col-num">{{ r.debe | number:'1.2-2' }}</td><td class="col-num">{{ r.haber | number:'1.2-2' }}</td>
+                            <td class="col-num">{{ r.saldo | number:'1.2-2' }}</td></tr>
+                        <tr *ngIf="!balance.length"><td colspan="6" class="cnt-sin">Sin movimientos en el período.</td></tr>
+                    </tbody>
+                </table>
+                <p class="cnt-cuadre" *ngIf="balance.length" [class.ok]="balanceCuadra" [class.ko]="!balanceCuadra">
+                    {{ balanceCuadra ? '✓ El balance cuadra: total debe = total haber.' : '✗ Descuadre entre debe y haber.' }}
+                </p>
+            </div>
+
+            <table *ngIf="vista === 'plan'">
+                <thead><tr><th>Código</th><th>Cuenta</th></tr></thead>
+                <tbody><tr *ngFor="let p of datos.plan"><td>{{ p.codigo }}</td><td>{{ p.nombre }}</td></tr></tbody>
+            </table>
+        </ng-container>
+        <p class="cnt-nota">Asientos sin comisiones ni impuestos. Las operaciones en dólares se registran en su moneda.</p>
+    </div>
+</section>

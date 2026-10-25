@@ -10,6 +10,40 @@ export const admin: Routes = [
                     import('./inicio/inicio.component').then((m) => m.InicioComponent),
                 title: 'Inicio'
             },
+            // ---- Tesorería: Front Office ----
+            {
+                path: 'front/operacion',
+                loadComponent: () => import('./tesoreria/registro-operacion/registro-operacion.component').then((m) => m.RegistroOperacionComponent),
+                title: 'Registro de operación'
+            },
+            {
+                path: 'front/blotter',
+                loadComponent: () => import('./tesoreria/blotter/blotter.component').then((m) => m.BlotterComponent),
+                data: { modo: 'consulta' },
+                title: 'Blotter de operaciones'
+            },
+            {
+                path: 'front/saldos',
+                loadComponent: () => import('./tesoreria/saldos/saldos.component').then((m) => m.SaldosComponent),
+                title: 'Saldos bancarios'
+            },
+            // ---- Tesorería: Back Office ----
+            {
+                path: 'back/liquidacion',
+                loadComponent: () => import('./tesoreria/blotter/blotter.component').then((m) => m.BlotterComponent),
+                data: { modo: 'back' },
+                title: 'Liquidación'
+            },
+            {
+                path: 'back/contabilidad',
+                loadComponent: () => import('./tesoreria/contabilidad/contabilidad.component').then((m) => m.ContabilidadComponent),
+                title: 'Contabilidad'
+            },
+            {
+                path: 'back/maestros',
+                loadComponent: () => import('./tesoreria/maestros/maestros-tesoreria.component').then((m) => m.MaestrosTesoreriaComponent),
+                title: 'Maestros de tesorería'
+            },
             {
                 path: 'mantenedor/producto',
                 loadComponent: () =>

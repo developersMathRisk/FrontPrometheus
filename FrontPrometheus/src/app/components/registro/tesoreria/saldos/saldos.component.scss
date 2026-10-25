@@ -1,0 +1,18 @@
+.sal-cargando { padding: 0.75rem 0; }
+.sal-error { color: rgb(var(--danger-rgb)); }
+.sal-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.sal-kpi {
+    &__etiqueta { margin: 0; font-size: 0.75rem; color: rgba(var(--dark-rgb), 0.6); }
+    &__valor { margin: 0.2rem 0 0; font-size: 1.5rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+    &__sub { margin: 0.3rem 0 0; font-size: 0.72rem; color: rgba(var(--dark-rgb), 0.65); }
+}
+.sal-tabla {
+    overflow-x: auto;
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    th { padding: 0.45rem 0.6rem; font-size: 0.7rem; font-weight: 600; text-align: left; color: rgba(var(--dark-rgb), 0.65); background: rgba(var(--dark-rgb), 0.04); }
+    td { padding: 0.5rem 0.6rem; border-bottom: 1px solid rgba(var(--dark-rgb), 0.07); }
+    .col-num { text-align: right; font-variant-numeric: tabular-nums; }
+}
+.neg { color: rgb(var(--danger-rgb)) !important; }
+.sal-sin { text-align: center; color: rgba(var(--dark-rgb), 0.55); }
+.sal-nota { margin: 0.6rem 0 0; font-size: 0.72rem; color: rgba(var(--dark-rgb), 0.6); }

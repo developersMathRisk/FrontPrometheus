@@ -1,0 +1,139 @@
+<app-encabezado kicker="Front Office" titulo="Registro de operación"
+    subtitulo="Capture la operación negociada; queda Pendiente hasta que Back Office la liquide."></app-encabezado>
+
+<div class="rop">
+    <section class="card rop__form">
+        <div class="card-body">
+            <div class="rop__campo">
+                <span class="form-label">Tipo de instrumento <span class="hig-requerido">*</span></span>
+                <app-chip-group [opciones]="tipos" [ngModel]="s.tipo" (ngModelChange)="alCambiarTipo($event)"></app-chip-group>
+            </div>
+
+            <div class="rop__fila">
+                <div class="rop__campo">
+                    <span class="form-label">Operación <span class="hig-requerido">*</span></span>
+                    <app-chip-group [opciones]="lados" [(ngModel)]="s.lado" (ngModelChange)="cambio()"></app-chip-group>
+                </div>
+                <div class="rop__campo">
+                    <span class="form-label">Mercado <span class="hig-requerido">*</span></span>
+                    <app-chip-group [opciones]="mercados" [(ngModel)]="s.mercado" (ngModelChange)="cambio()"></app-chip-group>
+                </div>
+            </div>
+
+            <div class="rop__campo" *ngIf="s.tipo !== 'FX_SPOT'">
+                <label class="form-label" for="rop-instrumento">Instrumento <span class="hig-requerido">*</span></label>
+                <ng-select labelForId="rop-instrumento" [items]="instrumentos" [loading]="cargandoInstrumentos"
+                    [searchFn]="buscarInstrumento" placeholder="Buscar por ticker, nombre, ISIN o emisor…"
+                    [ngModel]="instrumento" (ngModelChange)="alElegirInstrumento($event)">
+                    <ng-template ng-label-tmp let-i="item">{{ i.ticker }} · {{ i.codIsin }}</ng-template>
+                    <ng-template ng-option-tmp let-i="item">
+                        <div class="rop__opcion">
+                            <strong>{{ i.ticker }}</strong> <span>{{ i.nombre }}</span>
+                            <small>{{ i.codIsin }} · {{ i.moneda }}<ng-container *ngIf="i.vencimiento"> · vence {{ i.vencimiento }}</ng-container></small>
+                        </div>
+                    </ng-template>
+                </ng-select>
+                <p class="rop__ayuda" *ngIf="instrumento as i">
+                    {{ i.emisor || '—' }} · {{ i.moneda }}
+                    <ng-container *ngIf="i.tasaCupon"> · cupón {{ i.tasaCupon | number:'1.2-3' }}%</ng-container>
+                    <ng-container *ngIf="i.nominalUnitario"> · nominal unitario {{ i.nominalUnitario | number }}</ng-container>
+                    <ng-container *ngIf="i.precioReferencia"> · precio ref. {{ i.precioReferencia | number:'1.2-4' }} ({{ i.fechaPrecio }})</ng-container>
+                </p>
+            </div>
+
+            <div class="rop__fila">
+                <div class="rop__campo">
+                    <label class="form-label" for="rop-nominal">{{ etiquetaNominal }} <span class="hig-requerido">*</span></label>
+                    <input id="rop-nominal" type="number" class="form-control" min="0" [(ngModel)]="s.nominal" (ngModelChange)="cambio()">
+                </div>
+                <div class="rop__campo">
+                    <label class="form-label" for="rop-precio">{{ etiquetaPrecio }} <span class="hig-requerido">*</span></label>
+                    <input id="rop-precio" type="number" class="form-control" min="0" step="0.0001" [(ngModel)]="s.precio" (ngModelChange)="cambio()">
+                </div>
+                <div class="rop__campo" *ngIf="s.tipo === 'BONO'">
+                    <label class="form-label" for="rop-tir">Rendimiento / TIR (%)</label>
+                    <input id="rop-tir" type="number" class="form-control" step="0.0001" [(ngModel)]="s.rendimiento" (ngModelChange)="cambio()">
+                </div>
+            </div>
+
+            <div class="rop__fila">
+                <div class="rop__campo">
+                    <span class="form-label">Fecha de operación <span class="hig-requerido">*</span></span>
+                    <app-date-picker [ngModel]="s.fechaOperacion" (ngModelChange)="alCambiarFechaOperacion($event)"></app-date-picker>
+                </div>
+                <div class="rop__campo">
+                    <span class="form-label">Fecha de liquidación <span class="hig-requerido">*</span></span>
+                    <app-date-picker [(ngModel)]="s.fechaLiquidacion" (ngModelChange)="cambio()"></app-date-picker>
+                </div>
+            </div>
+
+            <div class="rop__fila">
+                <div class="rop__campo">
+                    <label class="form-label" for="rop-pf">Portafolio / libro <span class="hig-requerido">*</span></label>
+                    <ng-select labelForId="rop-pf" [items]="catalogos?.portafolios ?? []" bindValue="idPortafolio" bindLabel="descripcion"
+                        placeholder="Seleccione…" [(ngModel)]="s.idPortafolio" (ngModelChange)="cambio()"></ng-select>
+                </div>
+                <div class="rop__campo">
+                    <label class="form-label" for="rop-cp">Contraparte <span class="hig-requerido">*</span></label>
+                    <ng-select labelForId="rop-cp" [items]="catalogos?.contrapartes ?? []" bindValue="id" bindLabel="nombre"
+                        placeholder="Seleccione…" [(ngModel)]="s.idContraparte" (ngModelChange)="cambio()"></ng-select>
+                </div>
+                <div class="rop__campo" *ngIf="pideSubasta">
+                    <label class="form-label" for="rop-subasta">ID de subasta <span class="hig-requerido" *ngIf="contraparte?.exigeSubasta">*</span></label>
+                    <input id="rop-subasta" type="text" class="form-control" [(ngModel)]="s.idSubasta" (ngModelChange)="cambio()">
+                </div>
+            </div>
+
+            <details class="rop__mas">
+                <summary>Datos adicionales (broker, referencia, observaciones)</summary>
+                <div class="rop__fila">
+                    <div class="rop__campo">
+                        <label class="form-label" for="rop-broker">Broker</label>
+                        <input id="rop-broker" type="text" class="form-control" [(ngModel)]="s.broker">
+                    </div>
+                    <div class="rop__campo">
+                        <label class="form-label" for="rop-ref">Referencia externa</label>
+                        <input id="rop-ref" type="text" class="form-control" [(ngModel)]="s.referenciaExterna">
+                    </div>
+                </div>
+                <div class="rop__campo">
+                    <label class="form-label" for="rop-obs">Observaciones</label>
+                    <textarea id="rop-obs" rows="2" class="form-control" [(ngModel)]="s.observaciones"></textarea>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <aside class="card rop__resumen" aria-live="polite">
+        <div class="card-body">
+            <p class="rop__resumen-titulo">Resumen de la operación</p>
+            <p class="rop__vacio" *ngIf="!listoParaSimular">Complete instrumento, nominal, precio, fechas, portafolio y contraparte para ver los montos.</p>
+            <div class="rop__cargando" *ngIf="listoParaSimular && calculando"><app-loader tamano="inline" etiqueta="Calculando…"></app-loader></div>
+
+            <ng-container *ngIf="listoParaSimular && calculo as c">
+                <dl class="rop__montos" *ngIf="c.montoTotal !== null">
+                    <div><dt>Monto limpio</dt><dd>{{ c.monedaLiquidacion }} {{ c.montoLimpio | number:'1.2-2' }}</dd></div>
+                    <div *ngIf="s.tipo === 'BONO'"><dt>Interés corrido</dt><dd>{{ c.monedaLiquidacion }} {{ c.interesCorrido | number:'1.2-2' }}</dd></div>
+                    <div class="rop__total"><dt>{{ s.lado === 'COMPRA' ? 'A pagar' : 'A cobrar' }}</dt><dd>{{ c.monedaLiquidacion }} {{ c.montoTotal | number:'1.2-2' }}</dd></div>
+                    <div *ngIf="c.unidades !== null && s.tipo !== 'FX_SPOT'"><dt>Unidades en el portafolio</dt><dd>{{ s.lado === 'COMPRA' ? '+' : '−' }}{{ c.unidades | number }}</dd></div>
+                </dl>
+                <ul class="rop__errores" *ngIf="c.errores.length" role="alert">
+                    <li *ngFor="let e of c.errores">{{ e }}</li>
+                </ul>
+                <ul class="rop__avisos" *ngIf="c.avisos.length">
+                    <li *ngFor="let a of c.avisos">{{ a }}</li>
+                </ul>
+            </ng-container>
+
+            <button type="button" class="btn btn-primary w-100 mt-2" [disabled]="!puedeRegistrar" (click)="registrar()">
+                {{ registrando ? 'Registrando…' : 'Registrar operación' }}
+            </button>
+            <p class="rop__nota">Queda en estado <strong>Pendiente</strong>. La liquidación, la caja y la posición del portafolio las aplica Back Office.</p>
+
+            <div class="rop__ultima" *ngIf="ultima">
+                <p class="mb-1"><strong>{{ ultima.codigo }}</strong> registrada</p>
+                <p class="mb-0">{{ ultima.lado === 'COMPRA' ? 'Compra' : 'Venta' }} {{ ultima.ticker }} · {{ ultima.monedaLiquidacion }} {{ ultima.montoTotal | number:'1.2-2' }} · liquida {{ ultima.fechaLiquidacion }}</p>
+            </div>
+        </div>
+    </aside>
+</div>

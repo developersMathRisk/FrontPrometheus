@@ -1,0 +1,25 @@
+.cnt-barra { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: space-between; margin-bottom: 0.9rem; }
+.cnt-vistas {
+    display: inline-flex;
+    padding: 3px;
+    background: rgba(var(--dark-rgb), 0.06);
+    border-radius: var(--rs, 7px);
+    button {
+        padding: 0.3rem 0.85rem; font-size: 0.8rem; color: var(--default-text-color); background: transparent; border: 0; border-radius: 5px; cursor: pointer;
+        &.activo { font-weight: 600; background: var(--custom-white, #fff); box-shadow: var(--shadow-sm); }
+    }
+}
+.cnt-fechas { display: flex; align-items: center; gap: 0.5rem; }
+.cnt-cargando { padding: 0.75rem 0; }
+.cnt-error { color: rgb(var(--danger-rgb)); }
+.cnt-sin { color: rgba(var(--dark-rgb), 0.55); font-size: 0.82rem; text-align: center; }
+table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+th { padding: 0.4rem 0.55rem; font-size: 0.7rem; font-weight: 600; text-align: left; color: rgba(var(--dark-rgb), 0.65); background: rgba(var(--dark-rgb), 0.04); }
+td { padding: 0.4rem 0.55rem; border-bottom: 1px solid rgba(var(--dark-rgb), 0.07); }
+.col-num { text-align: right; font-variant-numeric: tabular-nums; }
+.cnt-asiento { margin-bottom: 1rem; &__cab { margin: 0 0 0.35rem; font-size: 0.8rem; } }
+.cnt-total td { font-weight: 600; border-top: 1px solid rgba(var(--dark-rgb), 0.2); }
+.cnt-cuadre { margin: 0.6rem 0 0; font-size: 0.8rem; }
+.ok { color: rgb(var(--success-rgb)); }
+.ko { color: rgb(var(--danger-rgb)); }
+.cnt-nota { margin: 0.8rem 0 0; font-size: 0.72rem; color: rgba(var(--dark-rgb), 0.6); }

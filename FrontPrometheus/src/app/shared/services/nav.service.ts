@@ -109,6 +109,30 @@ export class NavService implements OnDestroy {
       nochild: true,
     },
     {
+      title: 'Front Office',
+      type: 'sub',
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="side-menu__icon"><path d="M3 3v18h18"></path><path d="m7 15 4-4 3 3 5-6"></path></svg>`,
+      active: false,
+      dirchange: false,
+      children: [
+        { path: 'registro/front/operacion', title: 'Registro de operación', type: 'link', dirchange: false },
+        { path: 'registro/front/blotter', title: 'Blotter', type: 'link', dirchange: false },
+        { path: 'registro/front/saldos', title: 'Saldos bancarios', type: 'link', dirchange: false },
+      ],
+    },
+    {
+      title: 'Back Office',
+      type: 'sub',
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="side-menu__icon"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>`,
+      active: false,
+      dirchange: false,
+      children: [
+        { path: 'registro/back/liquidacion', title: 'Liquidación', type: 'link', dirchange: false },
+        { path: 'registro/back/contabilidad', title: 'Contabilidad', type: 'link', dirchange: false },
+        { path: 'registro/back/maestros', title: 'Maestros de tesorería', type: 'link', dirchange: false },
+      ],
+    },
+    {
       title: 'Portafolio',
       type: 'sub',
       icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="side-menu__icon"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`,

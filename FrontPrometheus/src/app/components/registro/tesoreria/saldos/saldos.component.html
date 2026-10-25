@@ -1,0 +1,39 @@
+<app-encabezado kicker="Front Office" titulo="Saldos bancarios"
+    subtitulo="Disponible por banco y moneda, y lo comprometido por operaciones aún no liquidadas."></app-encabezado>
+
+<div class="sal-cargando" *ngIf="cargando"><app-loader tamano="inline" etiqueta="Cargando saldos…"></app-loader></div>
+<p class="sal-error" *ngIf="error">{{ error }}</p>
+
+<div class="sal-kpis" *ngIf="!cargando && cuentas.length">
+    <section class="card sal-kpi" *ngFor="let m of monedas">
+        <div class="card-body">
+            <p class="sal-kpi__etiqueta">Disponible {{ m }}</p>
+            <p class="sal-kpi__valor">{{ total(m) | number:'1.2-2' }}</p>
+            <p class="sal-kpi__sub" [class.neg]="comprometido(m) < 0" *ngIf="comprometido(m) !== 0">
+                Comprometido sin liquidar: {{ comprometido(m) | number:'1.2-2' }} · proyectado {{ total(m) + comprometido(m) | number:'1.2-2' }}
+            </p>
+        </div>
+    </section>
+</div>
+
+<section class="card" *ngIf="!cargando">
+    <div class="card-body">
+        <div class="sal-tabla">
+            <table>
+                <thead>
+                    <tr><th>Banco</th><th>Moneda</th><th>Cuenta</th><th class="col-num">Saldo disponible</th><th class="col-num">Comprometido</th><th class="col-num">Proyectado</th></tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let c of cuentas">
+                        <td><strong>{{ c.banco }}</strong></td><td>{{ c.moneda }}</td><td>{{ c.numero }}</td>
+                        <td class="col-num">{{ c.saldo | number:'1.2-2' }}</td>
+                        <td class="col-num" [class.neg]="comprometidoCuenta(c) < 0">{{ comprometidoCuenta(c) ? (comprometidoCuenta(c) | number:'1.2-2') : '—' }}</td>
+                        <td class="col-num">{{ +c.saldo + comprometidoCuenta(c) | number:'1.2-2' }}</td>
+                    </tr>
+                    <tr *ngIf="!cuentas.length"><td colspan="6" class="sal-sin">No hay cuentas bancarias. Back Office las registra en Maestros.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="sal-nota">Lo comprometido solo incluye operaciones con banco pagador asignado en la cuenta; el total por moneda considera todas las no liquidadas.</p>
+    </div>
+</section>

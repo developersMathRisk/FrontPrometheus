@@ -1,0 +1,222 @@
+<app-encabezado [kicker]="modoBack ? 'Back Office' : 'Front Office'" [titulo]="modoBack ? 'Liquidación de operaciones' : 'Blotter de operaciones'"
+    [subtitulo]="modoBack ? 'Asigne, verifique fondos y avance cada operación hasta liquidarla.' : 'Consulta de operaciones registradas; los cambios de estado los realiza Back Office.'"></app-encabezado>
+
+<div class="blt-tabs" role="tablist" aria-label="Estado">
+    <button type="button" role="tab" *ngFor="let e of estados" [class.activo]="estado === e" [attr.aria-selected]="estado === e"
+        (click)="estado = e; filtrar()">{{ e }} <b>{{ conteo(e) }}</b></button>
+</div>
+
+<section class="card">
+    <div class="card-body">
+        <div class="blt-filtros">
+            <div class="blt-filtro"><span class="form-label">Desde</span>
+                <app-date-picker [(ngModel)]="desde" (ngModelChange)="cargar()"></app-date-picker></div>
+            <div class="blt-filtro"><span class="form-label">Hasta</span>
+                <app-date-picker [(ngModel)]="hasta" (ngModelChange)="cargar()" placeholder="Sin límite"></app-date-picker></div>
+            <div class="blt-filtro"><label class="form-label" for="blt-tipo">Tipo</label>
+                <select id="blt-tipo" class="form-select" [(ngModel)]="tipo" (ngModelChange)="filtrar()">
+                    <option [ngValue]="null">Todos</option>
+                    <option *ngFor="let t of tiposOperacion" [ngValue]="t">{{ etiquetaTipo[t] }}</option>
+                </select></div>
+            <div class="blt-filtro"><label class="form-label" for="blt-pf">Portafolio</label>
+                <select id="blt-pf" class="form-select" [(ngModel)]="idPortafolio" (ngModelChange)="filtrar()">
+                    <option [ngValue]="null">Todos</option>
+                    <option *ngFor="let p of catalogos?.portafolios ?? []" [ngValue]="p.idPortafolio">{{ p.descripcion }}</option>
+                </select></div>
+            <div class="blt-filtro"><label class="form-label" for="blt-cp">Contraparte</label>
+                <select id="blt-cp" class="form-select" [(ngModel)]="contraparte" (ngModelChange)="filtrar()">
+                    <option [ngValue]="null">Todas</option>
+                    <option *ngFor="let c of contrapartes" [ngValue]="c">{{ c }}</option>
+                </select></div>
+            <div class="blt-filtro blt-filtro--texto"><label class="form-label" for="blt-q">Buscar</label>
+                <input id="blt-q" class="form-control" placeholder="Código, ticker, ISIN, emisor…" [(ngModel)]="texto" (ngModelChange)="filtrar()"></div>
+            <button type="button" class="btn btn-outline-primary btn-sm blt-csv" (click)="exportarCsv()" [disabled]="!filtradas.length">Exportar CSV</button>
+        </div>
+
+        <div class="blt-cargando" *ngIf="cargando"><app-loader tamano="inline" etiqueta="Cargando operaciones…"></app-loader></div>
+        <p class="blt-error" *ngIf="error">{{ error }}</p>
+
+        <div class="blt-tabla" *ngIf="!cargando">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Código</th><th>F. oper.</th><th>Tipo</th><th>Instrumento</th><th>Lado</th>
+                        <th class="col-num">Nominal / cant.</th><th class="col-num">Precio</th><th class="col-num">Monto total</th>
+                        <th>F. liq.</th><th>Estado</th><th>Portafolio</th><th>Contraparte</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let o of visibles" [class.activa]="seleccion?.operacion?.id === o.id" (click)="abrir(o.id)"
+                        tabindex="0" (keydown.enter)="abrir(o.id)" [attr.aria-label]="'Ver ' + o.codigo">
+                        <td><strong>{{ o.codigo }}</strong></td>
+                        <td>{{ o.fechaOperacion }}</td>
+                        <td>{{ etiquetaTipo[o.tipo] }}</td>
+                        <td>{{ o.ticker }}<small *ngIf="o.codIsin"> · {{ o.codIsin }}</small></td>
+                        <td><span class="blt-lado" [class.venta]="o.lado === 'VENTA'">{{ o.lado === 'COMPRA' ? 'Compra' : 'Venta' }}</span></td>
+                        <td class="col-num">{{ o.nominal | number:'1.0-2' }}</td>
+                        <td class="col-num">{{ o.precio | number:'1.2-4' }}</td>
+                        <td class="col-num">{{ o.monedaLiquidacion }} {{ o.montoTotal | number:'1.2-2' }}</td>
+                        <td>{{ o.fechaLiquidacion }}</td>
+                        <td><span [class]="claseEstado(o.estado)">{{ o.estado }}</span></td>
+                        <td>{{ o.portafolio || '—' }}</td>
+                        <td>{{ o.contraparte }}</td>
+                    </tr>
+                    <tr *ngIf="!visibles.length"><td colspan="12" class="blt-sin">Sin operaciones con estos filtros.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="blt-paginas" *ngIf="paginas > 1">
+            <span>{{ filtradas.length }} operaciones</span>
+            <button type="button" class="btn btn-sm btn-light" [disabled]="pagina === 0" (click)="pagina = pagina - 1" aria-label="Página anterior">‹</button>
+            <span>{{ pagina + 1 }} / {{ paginas }}</span>
+            <button type="button" class="btn btn-sm btn-light" [disabled]="pagina >= paginas - 1" (click)="pagina = pagina + 1" aria-label="Página siguiente">›</button>
+        </div>
+    </div>
+</section>
+
+<div class="blt-detalle" *ngIf="seleccion as d">
+    <section class="card">
+        <div class="card-header blt-detalle__cab">
+            <div><span class="blt-detalle__codigo">{{ d.operacion.codigo }}</span>
+                <span class="blt-detalle__sub">{{ d.operacion.lado === 'COMPRA' ? 'Compra' : 'Venta' }} · {{ etiquetaTipo[d.operacion.tipo] }} · {{ d.operacion.ticker }}</span></div>
+            <span [class]="claseEstado(d.operacion.estado)">{{ d.operacion.estado }}</span>
+        </div>
+        <div class="card-body">
+            <div class="blt-pestanas" role="tablist">
+                <button type="button" role="tab" [class.activo]="pestana === 'datos'" (click)="pestana = 'datos'">Datos generales</button>
+                <button type="button" role="tab" [class.activo]="pestana === 'liquidacion'" (click)="pestana = 'liquidacion'">Liquidación</button>
+                <button type="button" role="tab" [class.activo]="pestana === 'asiento'" (click)="pestana = 'asiento'">Asiento contable</button>
+                <button type="button" role="tab" [class.activo]="pestana === 'historial'" (click)="pestana = 'historial'">Historial</button>
+            </div>
+
+            <dl class="blt-datos" *ngIf="pestana === 'datos'">
+                <div><dt>Instrumento</dt><dd>{{ d.operacion.nombreInstrumento }} ({{ d.operacion.ticker }})</dd></div>
+                <div><dt>ISIN</dt><dd>{{ d.operacion.codIsin || '—' }}</dd></div>
+                <div><dt>Emisor</dt><dd>{{ d.operacion.emisor || '—' }}</dd></div>
+                <div><dt>Moneda</dt><dd>{{ d.operacion.moneda }}</dd></div>
+                <div><dt>Nominal / cantidad</dt><dd>{{ d.operacion.nominal | number:'1.0-4' }}</dd></div>
+                <div><dt>Precio</dt><dd>{{ d.operacion.precio | number:'1.2-6' }}</dd></div>
+                <div *ngIf="d.operacion.rendimiento"><dt>Rendimiento</dt><dd>{{ d.operacion.rendimiento | number:'1.2-4' }}%</dd></div>
+                <div><dt>Monto limpio</dt><dd>{{ d.operacion.monedaLiquidacion }} {{ d.operacion.montoLimpio | number:'1.2-2' }}</dd></div>
+                <div><dt>Interés corrido</dt><dd>{{ d.operacion.monedaLiquidacion }} {{ d.operacion.interesCorrido | number:'1.2-2' }}</dd></div>
+                <div><dt>Monto total</dt><dd><strong>{{ d.operacion.monedaLiquidacion }} {{ d.operacion.montoTotal | number:'1.2-2' }}</strong></dd></div>
+                <div><dt>Unidades</dt><dd>{{ d.operacion.unidades ?? '—' }}</dd></div>
+                <div><dt>F. operación / liquidación</dt><dd>{{ d.operacion.fechaOperacion }} → {{ d.operacion.fechaLiquidacion }}</dd></div>
+                <div><dt>Mercado</dt><dd>{{ d.operacion.mercado === 'PRIMARIO' ? 'Primario (licitación)' : 'Secundario' }}</dd></div>
+                <div *ngIf="d.operacion.idSubasta"><dt>ID subasta</dt><dd>{{ d.operacion.idSubasta }}</dd></div>
+                <div><dt>Contraparte</dt><dd>{{ d.operacion.contraparte }}</dd></div>
+                <div><dt>Trader</dt><dd>{{ d.operacion.trader }}</dd></div>
+                <div><dt>Broker</dt><dd>{{ d.operacion.broker || '—' }}</dd></div>
+                <div><dt>Referencia externa</dt><dd>{{ d.operacion.referenciaExterna || '—' }}</dd></div>
+                <div class="blt-datos__ancho" *ngIf="d.operacion.observaciones"><dt>Observaciones</dt><dd>{{ d.operacion.observaciones }}</dd></div>
+            </dl>
+
+            <div *ngIf="pestana === 'liquidacion'" class="blt-liq">
+                <ol class="blt-pasos">
+                    <li *ngFor="let p of ['Pendiente','Pre liquidado','Confirmado','Liquidado']"
+                        [class.hecho]="['Pendiente','Pre liquidado','Confirmado','Liquidado'].indexOf(d.operacion.estado) >= ['Pendiente','Pre liquidado','Confirmado','Liquidado'].indexOf(p)">{{ p }}</li>
+                </ol>
+                <dl class="blt-datos">
+                    <div><dt>Portafolio contable</dt><dd>{{ d.operacion.portafolio || 'Sin asignar' }}</dd></div>
+                    <div><dt>Custodia</dt><dd>{{ d.operacion.custodia || 'Sin asignar' }}</dd></div>
+                    <div><dt>Banco pagador</dt><dd>{{ d.operacion.bancoPagador || 'Sin asignar' }}</dd></div>
+                    <div><dt>Tipo de liquidación</dt><dd>{{ d.operacion.tipoLiquidacion }}</dd></div>
+                    <div><dt>Caja</dt><dd>{{ d.operacion.cajaAplicada ? 'Aplicada (una sola vez)' : 'No aplicada' }}</dd></div>
+                    <div><dt>Posición del portafolio</dt><dd>{{ d.operacion.tipo === 'FX_SPOT' ? 'No aplica (FX)' : d.operacion.posicionAplicada ? 'Actualizada' : 'Se actualiza al liquidar' }}</dd></div>
+                </dl>
+            </div>
+
+            <div *ngIf="pestana === 'asiento'" class="blt-asiento">
+                <p class="blt-nota">{{ d.asientoRegistrado ? 'Asiento registrado al liquidar.' : 'Previsualización: el asiento se registra al liquidar.' }} Sin comisiones ni impuestos.</p>
+                <table>
+                    <thead><tr><th>Cuenta</th><th>Descripción</th><th>Mon.</th><th class="col-num">Debe</th><th class="col-num">Haber</th></tr></thead>
+                    <tbody>
+                        <tr *ngFor="let l of d.asiento">
+                            <td>{{ l.cuenta }}</td><td>{{ l.descripcion }}</td><td>{{ l.moneda }}</td>
+                            <td class="col-num">{{ l.debe ? (l.debe | number:'1.2-2') : '' }}</td>
+                            <td class="col-num">{{ l.haber ? (l.haber | number:'1.2-2') : '' }}</td>
+                        </tr>
+                        <tr class="blt-asiento__total">
+                            <td colspan="3">Totales <span [class.ok]="asientoCuadrado" [class.ko]="!asientoCuadrado">{{ asientoCuadrado ? '✓ cuadrado' : '✗ descuadre' }}</span></td>
+                            <td class="col-num">{{ totalAsiento('debe') | number:'1.2-2' }}</td>
+                            <td class="col-num">{{ totalAsiento('haber') | number:'1.2-2' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <table class="blt-hist" *ngIf="pestana === 'historial'">
+                <thead><tr><th>Estado</th><th>Fecha y hora</th><th>Usuario</th><th>Detalle</th></tr></thead>
+                <tbody>
+                    <tr *ngFor="let e of d.historial">
+                        <td><span [class]="claseEstado(e.estado)">{{ e.estado }}</span></td><td>{{ e.fechaHora }}</td><td>{{ e.usuario }}</td><td>{{ e.detalle || '' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <aside class="blt-acciones" *ngIf="modoBack">
+        <section class="card">
+            <div class="card-body">
+                <p class="blt-acciones__titulo">Asignación</p>
+                <div class="blt-campo"><label class="form-label" for="as-pf">Portafolio contable *</label>
+                    <select id="as-pf" class="form-select" [disabled]="!editable" [(ngModel)]="asignacion.idPortafolio">
+                        <option [ngValue]="null">Seleccione…</option>
+                        <option *ngFor="let p of catalogos?.portafolios ?? []" [ngValue]="p.idPortafolio">{{ p.descripcion }}</option>
+                    </select></div>
+                <div class="blt-campo" *ngIf="d.operacion.tipo !== 'FX_SPOT'"><label class="form-label" for="as-cus">Custodia *</label>
+                    <select id="as-cus" class="form-select" [disabled]="!editable" [(ngModel)]="asignacion.idCustodia">
+                        <option [ngValue]="null">Seleccione…</option>
+                        <option *ngFor="let c of catalogos?.custodias ?? []" [ngValue]="c.id">{{ c.nombre }}</option>
+                    </select></div>
+                <div class="blt-campo"><label class="form-label" for="as-banco">Banco pagador *</label>
+                    <select id="as-banco" class="form-select" [disabled]="!editable" [(ngModel)]="asignacion.bancoPagador">
+                        <option [ngValue]="null">Seleccione…</option>
+                        <option *ngFor="let b of catalogos?.bancos ?? []" [ngValue]="b">{{ b }}</option>
+                    </select></div>
+                <div class="blt-campo"><label class="form-label" for="as-tl">Tipo de liquidación</label>
+                    <select id="as-tl" class="form-select" [disabled]="!editable" [(ngModel)]="asignacion.tipoLiquidacion">
+                        <option value="DVP">DVP (entrega contra pago)</option><option value="FOP">FOP (libre de pago)</option>
+                    </select></div>
+                <button type="button" class="btn btn-outline-primary btn-sm w-100" *ngIf="editable" [disabled]="procesando" (click)="guardarAsignacion()">Guardar asignación</button>
+
+                <div class="blt-fondos">
+                    <strong>Suficiencia de fondos</strong>
+                    <p *ngIf="!d.operacion.bancoPagador" class="mb-0">Asigne un banco pagador.</p>
+                    <div *ngFor="let f of d.flujos" class="blt-fondos__fila">
+                        <span>{{ f.moneda }} · flujo {{ f.monto | number:'1.2-2' }}</span>
+                        <span *ngIf="f.disponible !== null">Disponible {{ f.disponible | number:'1.2-2' }}</span>
+                        <span [class.ok]="f.suficiente" [class.ko]="!f.suficiente" *ngIf="d.operacion.bancoPagador">{{ f.suficiente ? '✓ Suficiente' : '✗ Insuficiente' }}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-body">
+                <p class="blt-acciones__titulo">Proceso de liquidación</p>
+                <button type="button" class="btn btn-primary w-100" *ngIf="d.operacion.siguienteEstado"
+                    [disabled]="procesando || (d.operacion.siguienteEstado === 'Liquidado' && !liquidaHoyOAntes)" (click)="avanzar()">
+                    {{ procesando ? 'Procesando…' : textoBoton(d.operacion.siguienteEstado) }}
+                </button>
+                <p class="blt-nota" *ngIf="d.operacion.siguienteEstado === 'Liquidado' && !liquidaHoyOAntes">Se podrá liquidar desde el {{ d.operacion.fechaLiquidacion }}.</p>
+                <p class="blt-nota" *ngIf="!d.operacion.siguienteEstado">Operación {{ d.operacion.estado.toLowerCase() }}.</p>
+                <p class="blt-nota">Orden: Pendiente → Pre liquidado → Confirmado → Liquidado. Quien registró la operación no puede liquidarla.</p>
+
+                <ng-container *ngIf="d.operacion.estado === 'Pendiente' || d.operacion.estado === 'Pre liquidado'">
+                    <button type="button" class="btn btn-link btn-sm text-danger px-0" *ngIf="!pidiendoMotivo" (click)="pidiendoMotivo = true">Anular operación…</button>
+                    <div *ngIf="pidiendoMotivo" class="blt-campo">
+                        <label class="form-label" for="as-motivo">Motivo de la anulación *</label>
+                        <input id="as-motivo" class="form-control" [(ngModel)]="motivoAnulacion">
+                        <div class="d-flex gap-2 mt-1">
+                            <button type="button" class="btn btn-danger btn-sm" [disabled]="!motivoAnulacion.trim() || procesando" (click)="anular()">Anular</button>
+                            <button type="button" class="btn btn-light btn-sm" (click)="pidiendoMotivo = false">Cancelar</button>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </section>
+    </aside>
+</div>
+<div class="blt-cargando" *ngIf="cargandoDetalle && !seleccion"><app-loader tamano="inline" etiqueta="Cargando detalle…"></app-loader></div>
