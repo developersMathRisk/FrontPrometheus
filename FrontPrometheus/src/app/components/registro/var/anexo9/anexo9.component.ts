@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { AsistenteIaService } from '../../../../shared/services/asistente-ia.service';
 import { RegistroService } from '../../../../shared/services/registro.service';
 import { AnexoNueve } from '../../../../shared/models/var/anexo-nueve';
 import { ResultadoMetodoVar } from '../../../../shared/models/var/ejecutar-var-response';
@@ -26,7 +27,7 @@ import { EncabezadoComponent } from '../../../../shared/components/encabezado/en
   styleUrl: './anexo9.component.scss',
   animations: [fadeSlideIn],
 })
-export class Anexo9Component implements OnInit {
+export class Anexo9Component implements OnInit, OnDestroy {
   idResultadoVARDetalle: number | null = null;
   metodologiasDisponibles: ResultadoMetodoVar[] = [];
   idMetodologiaSeleccionada: number | null = null;
@@ -40,7 +41,11 @@ export class Anexo9Component implements OnInit {
   cargandoRecientes = false;
   calculosRecientes: VarEjecucionResumen[] = [];
 
-  constructor(private route: ActivatedRoute, private registroService: RegistroService) {}
+  constructor(private route: ActivatedRoute, private registroService: RegistroService, private asistente: AsistenteIaService) {}
+
+  ngOnDestroy(): void {
+    this.asistente.liberar('anexo9');
+  }
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.queryParamMap.get('idResultadoVARDetalle');
@@ -95,8 +100,35 @@ export class Anexo9Component implements OnInit {
     this.cargando = true;
     this.mensajeError = '';
     this.registroService.getAnexo9(this.idResultadoVARDetalle, this.idMetodologiaSeleccionada).subscribe({
-      next: (a) => { this.anexo = a; this.cargando = false; },
+      next: (a) => { this.anexo = a; this.cargando = false; this.registrarAsistente(a); },
       error: (error: HttpErrorResponse) => { this.mensajeError = mensajeDeError(error); this.cargando = false; },
+    });
+  }
+
+  private registrarAsistente(a: AnexoNueve): void {
+    const fmt = (v?: number | null) => v == null ? 'N/A' : Math.abs(v).toLocaleString('es-PE', { maximumFractionDigits: 2 });
+    const total = a.filas.find(f => /total/i.test(f.tipoRiesgo)) ?? a.filas[a.filas.length - 1];
+    this.asistente.registrar({
+      clave: 'anexo9',
+      modulo: 'Riesgo de mercado · Anexo 9 SBS',
+      titulo: `Anexo 9 · ${a.descripcionPortafolio}`,
+      interpretacion: `Anexo 9 al ${a.fechaCorte} (${a.metodologiaBase}, ${(a.nivelConfianza * 100).toFixed(1)}%, ${a.moneda}). ` +
+        (total ? `${total.tipoRiesgo}: VaR ${fmt(total.var)}, CVaR ${fmt(total.cvar)}.` : ''),
+      opciones: [
+        { etiqueta: 'Explicar el Anexo 9', responder: () =>
+          'El Anexo N° 9 reporta a la SBS los resultados de los modelos internos de riesgo de mercado: por tipo de riesgo, ' +
+          'el VaR (pérdida máxima esperada al nivel de confianza), el CVaR (pérdida promedio cuando se supera el VaR) y sus ' +
+          'versiones estresadas (SVaR/SCVaR, calculadas con un periodo histórico de tensión). Filas: ' +
+          a.filas.map(f => `${f.tipoRiesgo} VaR ${fmt(f.var)}`).join('; ') + '.' },
+        { etiqueta: '¿Qué falta para presentarlo?', responder: () => {
+          const faltan = a.filas.filter(f => f.cvar == null || f.svar == null || f.scvar == null);
+          if (!faltan.length) return 'Todas las filas tienen VaR, CVaR, SVaR y SCVaR. Revise la nota metodológica y exporte el CSV.';
+          return `Faltan medidas en: ${faltan.map(f => `${f.tipoRiesgo} (${[f.cvar == null && 'CVaR', f.svar == null && 'SVaR', f.scvar == null && 'SCVaR'].filter(Boolean).join(', ')})`).join('; ')}. ` +
+            'SVaR/SCVaR requieren un periodo de estrés histórico cargado; el CVaR se obtiene ejecutando el VaR con metodología histórica o paramétrica que lo calcule.';
+        } },
+      ],
+      placeholder: 'Pregunte sobre el reporte, p. ej. ¿por qué el SVaR es mayor?',
+      datos: () => ({ ...a }),
     });
   }
 

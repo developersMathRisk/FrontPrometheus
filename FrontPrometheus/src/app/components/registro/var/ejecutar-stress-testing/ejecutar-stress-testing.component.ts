@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { AdvertenciasComponent } from '../../../../shared/components/advertencias/advertencias.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxSliderModule, Options } from '@angular-slider/ngx-slider';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AsistenteIaService } from '../../../../shared/services/asistente-ia.service';
+import { Observable, map } from 'rxjs';
 import { RegistroService } from '../../../../shared/services/registro.service';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { fadeIn, fadeSlideIn } from '../../../../shared/animations/transiciones';
@@ -37,7 +39,7 @@ interface EscenarioPreset {
   styleUrl: './ejecutar-stress-testing.component.scss',
   animations: [fadeSlideIn, fadeIn],
 })
-export class EjecutarStressTestingComponent implements OnInit {
+export class EjecutarStressTestingComponent implements OnInit, OnDestroy {
   listaPortafolio: Portafolio[] = [];
   listMoneda: Moneda[] = [];
   idsPortafolioSeleccionados: number[] = [];
@@ -80,7 +82,11 @@ export class EjecutarStressTestingComponent implements OnInit {
   mensajeError = '';
   resultado: EjecutarStressResponse | null = null;
 
-  constructor(private registroService: RegistroService) {}
+  constructor(private registroService: RegistroService, private asistente: AsistenteIaService) {}
+
+  ngOnDestroy(): void {
+    this.asistente.liberar('stress');
+  }
 
   ngOnInit(): void {
     this.registroService.getListaPortafolio().subscribe(r => this.listaPortafolio = r);
@@ -137,9 +143,61 @@ export class EjecutarStressTestingComponent implements OnInit {
     this.resultado = null;
 
     this.registroService.postEjecutarStress(cuerpo).subscribe({
-      next: (r) => { this.resultado = r; this.ejecutando = false; },
+      next: (r) => { this.resultado = r; this.ejecutando = false; this.registrarAsistente(r, cuerpo); },
       error: (error: HttpErrorResponse) => { this.mensajeError = mensajeDeError(error); this.ejecutando = false; },
     });
+  }
+
+  private fmt(v: number): string {
+    return Math.abs(v).toLocaleString('es-PE', { maximumFractionDigits: 2 });
+  }
+
+  private registrarAsistente(r: EjecutarStressResponse, cuerpo: EjecutarStressRequest): void {
+    const m = r.monedaReporte;
+    const escenario = `precios ${this.formatearShock(r.shockPrecioPct)} y tipo de cambio ${this.formatearShock(r.shockCambiarioPct)}`;
+    this.asistente.registrar({
+      clave: 'stress',
+      modulo: 'Riesgo de mercado · Stress testing',
+      titulo: `Stress testing · ${r.descripcionPortafolio}`,
+      interpretacion: `Con ${escenario}, el portafolio pasaría de ${this.fmt(r.mtmActual)} a ${this.fmt(r.mtmEstresado)} ${m}: ` +
+        `${r.impactoTotal < 0 ? 'pérdida' : 'ganancia'} de ${this.fmt(r.impactoTotal)} ${m} (${this.formatearShock(r.impactoPct)}).`,
+      opciones: [
+        { etiqueta: 'Instrumentos más afectados', responder: () => {
+          const top = [...r.instrumentos].sort((a, b) => a.impacto - b.impacto).slice(0, 3);
+          if (!top.length) return 'No hay detalle por instrumento.';
+          return 'Los más afectados: ' + top.map((i, n) => `${n + 1}) ${i.codTicker}: ${this.fmt(i.impacto)} ${m}` +
+            (r.impactoTotal ? ` (${(i.impacto / r.impactoTotal * 100).toFixed(0)}% del impacto)` : '')).join('; ') + '.';
+        } },
+        { etiqueta: 'Explicar el escenario', responder: () =>
+          `Se revalúa cada posición actual aplicando ${escenario}. El shock de precio afecta a todos los instrumentos; ` +
+          `el cambiario solo a los denominados en moneda distinta de ${m}. No hay probabilidades: es un "¿qué pasaría si?" determinístico, ` +
+          `complementario al VaR, útil para medir pérdidas en eventos extremos.` },
+        { etiqueta: '¿Y si el shock fuera el doble?', responder: () => this.simular(cuerpo, r.shockPrecioPct * 2, r.shockCambiarioPct * 2) },
+      ],
+      placeholder: "Pregunte o simule, p. ej. '¿y si cae 30%?' o '¿y si el dólar sube 15%?'",
+      responder: (q) => {
+        const pct = q.match(/(-?\d+(?:[.,]\d+)?)\s*%/);
+        if (!pct) return null;
+        const v = Number(pct[1].replace(',', '.')) / 100;
+        const baja = /(cae|caída|caida|baja|pierde|desplom)/i.test(q) ? -Math.abs(v) : v;
+        const cambiaria = /(d[oó]lar|tipo de cambio|tc|devalu|cambiari)/i.test(q);
+        return this.simular(cuerpo, cambiaria ? cuerpo.shockPrecioPct : baja, cambiaria ? Math.abs(v) * (/(baja|cae|apreci)/i.test(q) ? -1 : 1) : cuerpo.shockCambiarioPct);
+      },
+      datos: () => ({
+        portafolio: r.descripcionPortafolio, moneda: m, shockPrecioPct: r.shockPrecioPct, shockCambiarioPct: r.shockCambiarioPct,
+        mtmActual: r.mtmActual, mtmEstresado: r.mtmEstresado, impactoTotal: r.impactoTotal, impactoPct: r.impactoPct,
+        instrumentos: [...r.instrumentos].sort((a, b) => a.impacto - b.impacto).slice(0, 25), totalInstrumentos: r.instrumentos.length,
+        advertencias: r.advertencias?.slice(0, 10) ?? [],
+      }),
+    });
+  }
+
+  /** Simulación con el motor real de stress (no altera la pantalla). */
+  private simular(cuerpo: EjecutarStressRequest, precio: number, cambio: number): Observable<string> {
+    return this.registroService.postEjecutarStress({ ...cuerpo, shockPrecioPct: precio, shockCambiarioPct: cambio }).pipe(
+      map(s => `Simulado con el motor: precios ${this.formatearShock(precio)} y tipo de cambio ${this.formatearShock(cambio)} → ` +
+        `valor ${this.fmt(s.mtmEstresado)} ${s.monedaReporte}, ${s.impactoTotal < 0 ? 'pérdida' : 'ganancia'} de ` +
+        `${this.fmt(s.impactoTotal)} ${s.monedaReporte} (${this.formatearShock(s.impactoPct)}).`));
   }
 
   anchoBarra(valor: number, maximo: number): number {

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { SharedModule } from "../../../../shared/shared.module";
 import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -9,6 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Portafolio } from '../../../../shared/models/portafolio/portafolio';
+import { AsistenteIaService } from '../../../../shared/services/asistente-ia.service';
 import { RegistroService } from '../../../../shared/services/registro.service';
 import { CargaPortafolioProductoComponent } from "../carga-portafolio-producto/carga-portafolio-producto.component";
 import { PortafolioInstrumento } from '../../../../shared/models/portafolio/portafolio-instrumento';
@@ -24,7 +25,7 @@ const COLORES_DISTRIBUCION = ['rgb(68,84,195)', 'rgb(247,45,102)', 'rgb(45,206,1
   templateUrl: './dashboard-portafolio.component.html',
   styleUrl: './dashboard-portafolio.component.scss'
 })
-export class DashboardPortafolioComponent {
+export class DashboardPortafolioComponent implements OnDestroy {
   fechaConsulta = new Date().toLocaleDateString('sv-SE');
   listaPortafolio: Portafolio[] = [];
   idPortafolioSeleccionado: number = 0;
@@ -56,7 +57,11 @@ export class DashboardPortafolioComponent {
     'total'
   ];
 
-  constructor(private registroService: RegistroService, private modalService: NgbModal) {}
+  constructor(private registroService: RegistroService, private modalService: NgbModal, private asistente: AsistenteIaService) {}
+
+  ngOnDestroy(): void {
+    this.asistente.liberar('dashboard-portafolio');
+  }
 
   ngOnInit(){
     this.obtenerListPortafolio();
@@ -121,7 +126,58 @@ export class DashboardPortafolioComponent {
 
   // Valor de mercado total y distribución por tipo de instrumento, calculados a partir de las
   // posiciones reales ya filtradas (nada de cifras de ejemplo).
+  private valorDe(p: PortafolioInstrumento): number {
+    return (p.cantidad ?? 0) * (p.precio ?? 0);
+  }
+
+  private registrarAsistente(): void {
+    const pos = this.listDataResumenFiltrado;
+    const total = pos.reduce((s, p) => s + this.valorDe(p), 0);
+    const nombre = this.listaPortafolio.find(p => p.idPortafolio == this.idPortafolioSeleccionado)?.descripcionPortafolio ?? 'Todos';
+    const fmt = (v: number) => v.toLocaleString('es-PE', { maximumFractionDigits: 2 });
+    const agrupar = (clave: (p: PortafolioInstrumento) => string) => {
+      const m = new Map<string, number>();
+      for (const p of pos) m.set(clave(p), (m.get(clave(p)) ?? 0) + this.valorDe(p));
+      return [...m.entries()].sort((a, b) => b[1] - a[1]);
+    };
+    const pct = (v: number) => total ? `${(v / total * 100).toFixed(1)}%` : '—';
+    this.asistente.registrar({
+      clave: 'dashboard-portafolio',
+      modulo: 'Portafolio · Visualización de posiciones',
+      titulo: `Posiciones · ${nombre}`,
+      interpretacion: pos.length
+        ? `${pos.length} posiciones de ${nombre} al ${this.fechaConsulta || 'último corte'}, con valor de mercado de ${fmt(total)} (moneda de cada instrumento, sin convertir).`
+        : 'No hay posiciones para el filtro elegido; cambie el portafolio o la fecha.',
+      opciones: [
+        { etiqueta: 'Mayor concentración', responder: () => {
+          const top = agrupar(p => p.codticker || p.codISIN).slice(0, 5);
+          if (!top.length) return 'No hay posiciones para analizar.';
+          const hhi = agrupar(p => p.codticker || p.codISIN).reduce((s, [, v]) => s + (total ? (v / total) ** 2 : 0), 0);
+          return 'Mayores posiciones: ' + top.map(([t, v], i) => `${i + 1}) ${t} ${pct(v)}`).join('; ') +
+            `. Índice de concentración (HHI) ${(hhi * 10000).toFixed(0)}: ${hhi > 0.25 ? 'alta concentración' : hhi > 0.15 ? 'concentración moderada' : 'cartera diversificada'}.`;
+        } },
+        { etiqueta: 'Composición por tipo', responder: () => {
+          const g = agrupar(p => p.descripcionTipoInstrumento || 'Sin clasificar');
+          return g.length ? 'Por tipo de instrumento: ' + g.map(([t, v]) => `${t} ${pct(v)} (${fmt(v)})`).join('; ') + '.' : 'No hay posiciones.';
+        } },
+        { etiqueta: 'Composición por portafolio', responder: () => {
+          const g = agrupar(p => p.descripcionPortafolio);
+          return g.length ? g.map(([t, v]) => `${t}: ${fmt(v)} (${pct(v)})`).join('; ') + '.' : 'No hay posiciones.';
+        } },
+      ],
+      placeholder: 'Pregunte sobre la cartera, p. ej. ¿qué riesgos ve en la composición?',
+      datos: () => ({
+        portafolio: nombre, fecha: this.fechaConsulta, totalPosiciones: pos.length, valorMercadoTotal: total,
+        porTipo: agrupar(p => p.descripcionTipoInstrumento || 'Sin clasificar').map(([tipo, valor]) => ({ tipo, valor })),
+        posiciones: [...pos].sort((a, b) => this.valorDe(b) - this.valorDe(a)).slice(0, 40).map(p => ({
+          portafolio: p.descripcionPortafolio, tipo: p.descripcionTipoInstrumento, isin: p.codISIN, ticker: p.codticker,
+          cantidad: p.cantidad, precio: p.precio, valor: this.valorDe(p), fecha: String(p.fechaValor).slice(0, 10) })),
+      }),
+    });
+  }
+
   private recalcularIndicadores() {
+    this.registrarAsistente();
     this.valorMercadoTotal = this.listDataResumenFiltrado.reduce(
       (acc, p) => acc + (p.cantidad ?? 0) * (p.precio ?? 0), 0);
 

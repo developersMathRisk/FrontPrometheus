@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { AdvertenciasComponent } from '../../../../shared/components/advertencias/advertencias.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatIconModule } from '@angular/material/icon';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AsistenteIaService } from '../../../../shared/services/asistente-ia.service';
 import { RegistroService } from '../../../../shared/services/registro.service';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { fadeIn, fadeSlideIn } from '../../../../shared/animations/transiciones';
@@ -32,7 +33,7 @@ import { ChipGroupComponent, ChipOpcion } from '../../../../shared/components/ch
   styleUrl: './backtesting.component.scss',
   animations: [fadeSlideIn, fadeIn],
 })
-export class BacktestingComponent implements OnInit {
+export class BacktestingComponent implements OnInit, OnDestroy {
   listaPortafolio: Portafolio[] = [];
   listMoneda: Moneda[] = [];
   listNivelConfianza: NivelConfianza[] = [];
@@ -48,7 +49,11 @@ export class BacktestingComponent implements OnInit {
   resultado: EjecutarBacktestingResponse | null = null;
   chart: any = null;
 
-  constructor(private registroService: RegistroService) {}
+  constructor(private registroService: RegistroService, private asistente: AsistenteIaService) {}
+
+  ngOnDestroy(): void {
+    this.asistente.liberar('backtesting');
+  }
 
   ngOnInit(): void {
     this.registroService.getListaPortafolio().subscribe(r => this.listaPortafolio = r);
@@ -106,7 +111,7 @@ export class BacktestingComponent implements OnInit {
     this.chart = null;
 
     this.registroService.postEjecutarBacktesting(cuerpo).subscribe({
-      next: (r) => { this.resultado = r; this.ejecutando = false; this.chart = this.armarChart(r); },
+      next: (r) => { this.resultado = r; this.ejecutando = false; this.chart = this.armarChart(r); this.registrarAsistente(r); },
       error: (error: HttpErrorResponse) => { this.mensajeError = mensajeDeError(error); this.ejecutando = false; },
     });
   }
@@ -119,6 +124,46 @@ export class BacktestingComponent implements OnInit {
     return this.resultado?.modeloAdecuado
       ? 'La tasa de excepciones es estadísticamente compatible con el nivel de confianza (prueba de Kupiec).'
       : 'La prueba de Kupiec rechaza el modelo: las excepciones observadas no son compatibles con el nivel de confianza.';
+  }
+
+  private registrarAsistente(r: EjecutarBacktestingResponse): void {
+    const pct = (v: number) => `${(v * 100).toFixed(2)}%`;
+    const esperadas = r.tasaEsperada * r.diasEvaluados;
+    this.asistente.registrar({
+      clave: 'backtesting',
+      modulo: 'Riesgo de mercado · Backtesting',
+      titulo: `Backtesting · ${r.descripcionPortafolio}`,
+      interpretacion: `En ${r.diasEvaluados} días evaluados hubo ${r.excepciones} excepciones (pérdidas mayores al VaR) frente a ` +
+        `~${esperadas.toFixed(1)} esperadas al ${pct(r.nivelConfianza)}. ${this.zonaTexto}`,
+      opciones: [
+        { etiqueta: '¿Qué significa el resultado?', responder: () =>
+          `La prueba de Kupiec compara la tasa observada de excepciones (${pct(r.tasaObservada)}) con la esperada (${pct(r.tasaEsperada)}). ` +
+          `Su estadístico LR es ${r.estadisticoLR.toFixed(2)} y el valor crítico chi² es ${r.valorCriticoChi2.toFixed(2)}: ` +
+          (r.modeloAdecuado ? 'como LR no supera el crítico, no hay evidencia para rechazar el modelo.'
+            : 'como LR supera el crítico, el modelo se rechaza: subestima o sobreestima el riesgo de forma significativa.') },
+        { etiqueta: '¿Cuántas excepciones se esperaban?', responder: () =>
+          `Con confianza ${pct(r.nivelConfianza)} se espera que la pérdida supere al VaR en ${pct(r.tasaEsperada)} de los días: ` +
+          `${esperadas.toFixed(1)} de ${r.diasEvaluados}. Se observaron ${r.excepciones} (${pct(r.tasaObservada)}). ` +
+          (r.excepciones > esperadas ? 'Hay más excepciones de las esperadas: el VaR tiende a quedarse corto.'
+            : 'Hay menos o igual de las esperadas: el VaR es suficiente o algo conservador.') },
+        { etiqueta: '¿Cuándo ocurrieron las excepciones?', responder: () => {
+          const ex = r.serie.filter(p => p.esExcepcion);
+          if (!ex.length) return 'No hubo excepciones en la ventana evaluada.';
+          const peor = [...ex].sort((a, b) => a.pnlReal - b.pnlReal)[0];
+          return `Fechas con excepción: ${ex.slice(-10).map(p => p.fecha).join(', ')}${ex.length > 10 ? ' (últimas 10)' : ''}. ` +
+            `La mayor fue el ${peor.fecha}: pérdida ${Math.abs(peor.pnlReal).toLocaleString('es-PE', { maximumFractionDigits: 2 })} ` +
+            `${r.monedaReporte} contra un VaR de ${Math.abs(peor.varEstimado).toLocaleString('es-PE', { maximumFractionDigits: 2 })}.`;
+        } },
+      ],
+      placeholder: 'Pregunte sobre el resultado, p. ej. ¿las excepciones están agrupadas?',
+      datos: () => ({
+        portafolio: r.descripcionPortafolio, moneda: r.monedaReporte, fechaProceso: r.fechaProceso, confianza: r.nivelConfianza,
+        ventana: r.ventana, diasEvaluados: r.diasEvaluados, excepciones: r.excepciones, tasaObservada: r.tasaObservada,
+        tasaEsperada: r.tasaEsperada, estadisticoLR: r.estadisticoLR, valorCriticoChi2: r.valorCriticoChi2, modeloAdecuado: r.modeloAdecuado,
+        fechasExcepcion: r.serie.filter(p => p.esExcepcion).map(p => ({ fecha: p.fecha, var: p.varEstimado, pnl: p.pnlReal })),
+        ultimosDias: r.serie.slice(-20), advertencias: r.advertencias?.slice(0, 10) ?? [],
+      }),
+    });
   }
 
   private armarChart(r: EjecutarBacktestingResponse) {

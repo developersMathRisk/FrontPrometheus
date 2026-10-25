@@ -1,6 +1,7 @@
+import { AsistenteIaService } from '../../../../shared/services/asistente-ia.service';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { EncabezadoComponent } from '../../../../shared/components/encabezado/encabezado.component';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { mensajeDeError } from '../../../../shared/components/tabla-estado/tabla-estado.component';
@@ -10,6 +11,8 @@ import { CuentaBancaria, Operacion, TesoreriaService } from '../../../../shared/
  * Front Office · Saldos bancarios: disponible por banco y moneda, y el compromiso de las operaciones que
  * aún no se liquidan (lo que saldrá o entrará), para que el trader sepa con qué cuenta antes de negociar.
  */
+const fmtIa = (v: number | null | undefined) => Math.abs(Number(v ?? 0)).toLocaleString('es-PE', { maximumFractionDigits: 2 });
+
 @Component({
   selector: 'app-saldos',
   standalone: true,
@@ -17,8 +20,9 @@ import { CuentaBancaria, Operacion, TesoreriaService } from '../../../../shared/
   templateUrl: './saldos.component.html',
   styleUrl: './saldos.component.scss',
 })
-export class SaldosComponent implements OnInit {
+export class SaldosComponent implements OnInit, OnDestroy {
   private readonly api = inject(TesoreriaService);
+  private readonly asistente = inject(AsistenteIaService);
 
   cuentas: CuentaBancaria[] = [];
   pendientes: Operacion[] = [];
@@ -31,6 +35,37 @@ export class SaldosComponent implements OnInit {
       error: (e: HttpErrorResponse) => { this.error = mensajeDeError(e); this.cargando = false; },
     });
     this.api.operaciones().subscribe(ops => (this.pendientes = ops.filter(o => !['Liquidado', 'Anulado'].includes(o.estado))));
+    this.asistente.registrar({
+      clave: 'front-saldos',
+      modulo: 'Front Office · Saldos bancarios',
+      titulo: 'Saldos bancarios',
+      interpretacion: 'Saldos actuales por cuenta y la posición proyectada tras liquidar las operaciones pendientes. Puedo señalar faltantes de fondos.',
+      opciones: [
+        { etiqueta: 'Posición proyectada por moneda', responder: () => this.monedas.length
+          ? this.monedas.map(m => `${m}: saldo ${fmtIa(this.total(m))}, comprometido ${this.comprometido(m) < 0 ? '−' : '+'}${fmtIa(this.comprometido(m))}, ` +
+            `proyectado ${this.total(m) + this.comprometido(m) < 0 ? '−' : ''}${fmtIa(this.total(m) + this.comprometido(m))}`).join('; ') + '.'
+          : 'No hay cuentas activas registradas.' },
+        { etiqueta: 'Cuentas con saldo insuficiente', responder: () => {
+          const malas = this.cuentas.filter(c => Number(c.saldo) + this.comprometidoCuenta(c) < 0);
+          const sinBanco = this.pendientes.filter(o => !o.bancoPagador).length;
+          return (malas.length
+            ? 'Quedarían en negativo tras liquidar: ' + malas.map(c => `${c.banco} ${c.moneda} (faltan ${fmtIa(Number(c.saldo) + this.comprometidoCuenta(c))})`).join('; ') + '.'
+            : 'Ninguna cuenta queda en negativo con las operaciones ya asignadas.')
+            + (sinBanco ? ` Hay ${sinBanco} operación(es) pendientes sin banco pagador, no incluidas por cuenta.` : '');
+        } },
+      ],
+      placeholder: 'Pregunte, p. ej. ¿alcanza el saldo en dólares para esta semana?',
+      datos: () => ({
+        cuentas: this.cuentas.map(c => ({ banco: c.banco, moneda: c.moneda, saldo: Number(c.saldo), comprometido: this.comprometidoCuenta(c) })),
+        porMoneda: this.monedas.map(m => ({ moneda: m, saldo: this.total(m), comprometido: this.comprometido(m) })),
+        pendientes: this.pendientes.slice(0, 40).map(o => ({ codigo: o.codigo, tipo: o.tipo, lado: o.lado, monto: o.montoTotal,
+          moneda: o.monedaLiquidacion, nominal: o.nominal, fechaLiquidacion: o.fechaLiquidacion, banco: o.bancoPagador, estado: o.estado })),
+      }),
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.asistente.liberar('front-saldos');
   }
 
   get monedas(): string[] {

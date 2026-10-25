@@ -80,20 +80,93 @@ export class ResultadoVarComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.asistente.liberar();
+    this.asistente.liberar(this.claveAsistente);
+  }
+
+  private get claveAsistente(): string {
+    return `var-${this.resultado?.idResultadoVARDetalle ?? this.resultado?.descripcionPortafolio}`;
   }
 
   private registrarAsistente(): void {
     const interpretacion = this.interpretacion;
     if (!interpretacion) return;
     this.asistente.registrar({
-      clave: `var-${this.resultado.idResultadoVARDetalle ?? this.resultado.descripcionPortafolio}`,
+      clave: this.claveAsistente,
+      modulo: 'Riesgo de mercado · VaR',
       titulo: this.resultado.descripcionPortafolio,
       interpretacion,
+      opciones: [
+        { etiqueta: '¿Qué instrumento aporta más riesgo?', responder: () => this.respuestaTopRiesgo() },
+        { etiqueta: '¿Cuánto aporta la diversificación?', responder: () => this.respuestaDiversificacion() },
+        { etiqueta: 'Comparar metodologías', responder: () => this.respuestaMetodologias() },
+      ],
       sugerencias: this.sugerenciasIA,
-      placeholder: "Simule un cambio, p. ej. '¿qué pasa si el mercado cae 20%?'",
+      placeholder: "Pregunte o simule, p. ej. '¿qué pasa si el mercado cae 20%?'",
       responder: (pregunta) => this.responder(pregunta),
+      datos: () => this.resumenParaIa(),
     });
+  }
+
+  private fmt(v: number | null | undefined): string {
+    return Math.abs(v ?? 0).toLocaleString('es-PE', { maximumFractionDigits: 2 });
+  }
+
+  private respuestaTopRiesgo(): string {
+    const lista = [...(this.resultado.instrumentos ?? [])]
+      .sort((a, b) => Math.abs(b.varDesagregado ?? b.varIndividual) - Math.abs(a.varDesagregado ?? a.varIndividual)).slice(0, 3);
+    if (!lista.length) return 'Esta ejecución no tiene desglose por instrumento.';
+    const m = this.resultado.monedaReporte;
+    const total = Math.abs(this.destacado?.varDiversificado ?? 0);
+    return 'Los instrumentos que más explican el VaR son: ' + lista.map((i, n) => {
+      const aporte = Math.abs(i.varDesagregado ?? i.varIndividual);
+      const pct = total ? ` (${(aporte / total * 100).toFixed(0)}% del VaR)` : '';
+      return `${n + 1}) ${i.codTicker}: aporte ${this.fmt(aporte)} ${m}${pct}`;
+    }).join('; ') + '. Reducir o cubrir esas posiciones es lo que más movería el riesgo total.';
+  }
+
+  private respuestaDiversificacion(): string {
+    const d = this.destacado;
+    if (!d || d.varNoDiversificado == null) return 'El resultado guardado no conserva el VaR no diversificado; vuelva a ejecutar el cálculo para verlo.';
+    const m = this.resultado.monedaReporte;
+    const beneficio = Math.abs(d.varNoDiversificado) - Math.abs(d.varDiversificado);
+    const pct = Math.abs(d.varNoDiversificado) ? beneficio / Math.abs(d.varNoDiversificado) * 100 : 0;
+    return `Sumando el VaR de cada instrumento por separado la pérdida sería ${this.fmt(d.varNoDiversificado)} ${m}; ` +
+      `al considerar que no caen todos a la vez, el VaR del portafolio es ${this.fmt(d.varDiversificado)} ${m}. ` +
+      `La diversificación reduce el riesgo en ${this.fmt(beneficio)} ${m} (${pct.toFixed(0)}%).`;
+  }
+
+  private respuestaMetodologias(): string {
+    const nivel = Math.max(...this.resultado.resultados.map(r => r.nivelConfianza));
+    const fila = this.resultado.resultados.filter(r => r.nivelConfianza === nivel);
+    if (fila.length < 2) return 'Esta ejecución usó una sola metodología; ejecute con varias para compararlas.';
+    const m = this.resultado.monedaReporte;
+    const orden = [...fila].sort((a, b) => Math.abs(b.varDiversificado) - Math.abs(a.varDiversificado));
+    const max = orden[0], min = orden[orden.length - 1];
+    const brecha = Math.abs(min.varDiversificado) ? (Math.abs(max.varDiversificado) / Math.abs(min.varDiversificado) - 1) * 100 : 0;
+    return `Al ${(nivel * 100).toFixed(1)}%: ` + orden.map(r => `${r.metodologia} ${this.fmt(r.varDiversificado)} ${m}`).join(', ') +
+      `. ${max.metodologia} es ${brecha.toFixed(0)}% más conservador que ${min.metodologia}. ` +
+      (max.metodologia.toLowerCase().includes('hist') ? 'Que el histórico supere a los modelos normales sugiere colas más pesadas que una distribución normal.'
+        : 'Una brecha grande indica que el supuesto de distribución pesa en el resultado.');
+  }
+
+  /** Resumen compacto del cálculo para el modelo de lenguaje (sin listas largas). */
+  private resumenParaIa() {
+    const r = this.resultado;
+    return {
+      portafolio: r.descripcionPortafolio, monedaReporte: r.monedaReporte, valorPortafolio: r.valorPortafolio,
+      ventanaHistorica: { desde: r.fechaInicio, hasta: r.fechaFin, escenarios: r.numEscenarios }, fechaProceso: r.fechaProceso,
+      resultados: r.resultados.map(x => ({ metodologia: x.metodologia, confianza: x.nivelConfianza, var: x.varDiversificado,
+        cvar: x.cvarDiversificado ?? null, varNoDiversificado: x.varNoDiversificado ?? null, pctCartera: x.ratioVar })),
+      instrumentosPrincipales: [...(r.instrumentos ?? [])]
+        .sort((a, b) => Math.abs(b.varDesagregado ?? b.varIndividual) - Math.abs(a.varDesagregado ?? a.varIndividual)).slice(0, 15)
+        .map(i => ({ ticker: i.codTicker, tipo: i.nombreTipoInstrumento, exposicion: i.mtm ?? null, peso: i.pesoPct ?? null,
+          varIndividual: i.varIndividual, aporteVar: i.varDesagregado ?? null })),
+      totalInstrumentos: r.instrumentos?.length ?? 0,
+      rentaFija: r.rentaFija ? { fechaValoracion: r.rentaFija.fechaValoracion, duracionModificadaCartera: this.duracionCarteraBonos,
+        convexidadCartera: this.convexidadCarteraBonos, impactoMas100pb: this.impactoMasCienPb } : null,
+      advertencias: r.advertencias?.slice(0, 10) ?? [],
+      evolucionVar: this.serie.slice(-10).map(p => ({ fecha: p.fechaProceso, var: p.valorVAR })),
+    };
   }
 
   /** Interpretación automática del resultado, generada apenas termina el cálculo: ancla cada frase
@@ -129,12 +202,10 @@ export class ResultadoVarComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /** Responde una pregunta del asistente: reconoce un shock de precio o cambiario y lo simula con el motor real de Stress Testing. */
-  private responder(texto: string): Observable<string> {
+  private responder(texto: string): Observable<string> | null {
     const escenario = this.interpretarEscenario(texto);
-    if (!escenario.reconocido) {
-      return of('No reconocí un porcentaje de shock en su pregunta. Pruebe algo como "¿qué pasa si el mercado ' +
-        'cae 20%?" o "¿qué pasa si el dólar sube 10%?": lo simulo con el motor real de Stress Testing.');
-    }
+    // Sin un shock en %, la pregunta la responde el modelo de lenguaje con el resumen del cálculo
+    if (!escenario.reconocido) return null;
     const moneda = this.listMoneda.find(m => m.codMoneda === this.resultado.monedaReporte);
     if (!moneda || !this.resultado.idsPortafolio?.length) {
       return of('No pude identificar el portafolio o la moneda para simular el escenario.');

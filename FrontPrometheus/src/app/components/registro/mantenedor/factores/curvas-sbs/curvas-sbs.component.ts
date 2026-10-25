@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { LucideAngularModule, MousePointerClick } from 'lucide-angular';
 import { CurvaEnFecha, RegistroService, ResumenCurva } from '../../../../../shared/services/registro.service';
+import { AsistenteIaService } from '../../../../../shared/services/asistente-ia.service';
 import { mensajeDeError } from '../../../../../shared/components/tabla-estado/tabla-estado.component';
 import { LoaderComponent } from '../../../../../shared/components/loader/loader.component';
 import { DatePickerComponent } from '../../../../../shared/components/date-picker/date-picker.component';
@@ -27,6 +28,7 @@ type Vista = 'grafico' | 'datos';
 export class CurvasSbsComponent implements OnInit, OnDestroy {
   @ViewChild('detalle') detalle!: TemplateRef<unknown>;
   private readonly modales = inject(NgbModal);
+  private readonly asistente = inject(AsistenteIaService);
 
   readonly iconoClic = MousePointerClick;
   readonly hoy = new Date().toISOString().slice(0, 10);
@@ -51,13 +53,45 @@ export class CurvasSbsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.cargandoResumen = true;
     this.registroService.getResumenCurvas().subscribe({
-      next: (r) => { this.resumen = r; this.cargandoResumen = false; },
+      next: (r) => { this.resumen = r; this.cargandoResumen = false; this.registrarAsistente(); },
       error: (e: HttpErrorResponse) => { this.errorResumen = mensajeDeError(e); this.cargandoResumen = false; },
     });
   }
 
   ngOnDestroy(): void {
     if (this.temporizadorClic) clearTimeout(this.temporizadorClic);
+    this.asistente.liberar('curvas');
+  }
+
+  private registrarAsistente(): void {
+    this.asistente.registrar({
+      clave: 'curvas',
+      modulo: 'Factores de riesgo · Curvas de tasas',
+      titulo: 'Curvas de tasas',
+      interpretacion: `${this.resumen.length} curvas con histórico cargado (SBS y BCRP). Puedo revisar cuáles están desactualizadas o explicar la curva abierta.`,
+      opciones: [
+        { etiqueta: '¿Qué curvas están desactualizadas?', responder: () => {
+          const atrasadas = this.resumen.filter(c => this.diasHabilesAtraso(c.ultimaFecha) > 1);
+          return atrasadas.length ? 'Con más de 1 día hábil de atraso: ' + atrasadas.map(c => `${c.curva} (última ${c.ultimaFecha}, ${this.diasHabilesAtraso(c.ultimaFecha)} días hábiles)`).join('; ') +
+            '. La carga diaria las actualiza; si persiste, revise la ejecución del proceso batch.' : 'Todas las curvas están al día (máximo 1 día hábil de atraso).';
+        } },
+        { etiqueta: 'Explicar la curva abierta', responder: () => {
+          const c = this.curva;
+          if (!c) return 'Abra una curva (clic para datos, doble clic para el gráfico) y vuelva a preguntar.';
+          const p = c.puntos;
+          const corto = p[0], largo = p[p.length - 1];
+          const pend = largo && corto ? (largo.tasa - corto.tasa) * 100 : 0;
+          const cambios = p.map(x => this.variacionPb(x)).filter((v): v is number => v != null);
+          const prom = cambios.length ? cambios.reduce((s, v) => s + v, 0) / cambios.length : null;
+          return `${c.nombre} al ${c.fecha}: de ${corto?.tasa.toFixed(3)}% a ${corto?.plazo} días a ${largo?.tasa.toFixed(3)}% a ${largo?.plazo} días; ` +
+            `pendiente ${pend >= 0 ? '+' : ''}${pend.toFixed(0)} pb (${pend > 0 ? 'normal, creciente' : pend < 0 ? 'invertida' : 'plana'}). ` +
+            (prom != null ? `Frente al ${c.fechaAnterior}, se movió en promedio ${prom >= 0 ? '+' : ''}${prom.toFixed(1)} pb.` : '');
+        } },
+      ],
+      placeholder: 'Pregunte, p. ej. ¿qué implica la pendiente de la curva soberana?',
+      datos: () => ({ curvas: this.resumen.map(c => ({ ...c, diasHabilesAtraso: this.diasHabilesAtraso(c.ultimaFecha) })),
+        curvaAbierta: this.curva ? { ...this.curva, puntos: this.curva.puntos.slice(0, 60) } : null }),
+    });
   }
 
   /** Días hábiles desde la última fecha cargada (sábados y domingos no cuentan). */

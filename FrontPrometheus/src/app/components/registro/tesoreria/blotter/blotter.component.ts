@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -8,6 +8,7 @@ import { EncabezadoComponent } from '../../../../shared/components/encabezado/en
 import { DatePickerComponent } from '../../../../shared/components/date-picker/date-picker.component';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { mensajeDeError } from '../../../../shared/components/tabla-estado/tabla-estado.component';
+import { AsistenteIaService } from '../../../../shared/services/asistente-ia.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import {
   CatalogosTesoreria, DetalleOperacion, ETIQUETA_TIPO, EstadoOperacion, Operacion, TesoreriaService, TipoOperacion, hoyIso,
@@ -20,6 +21,8 @@ type Pestana = 'datos' | 'liquidacion' | 'asiento' | 'historial';
  * asignación de portafolio/custodia/banco pagador, suficiencia de fondos y avance del flujo
  * Pendiente → Pre liquidado → Confirmado → Liquidado (o anulación). El modo llega por `data.modo` de la ruta.
  */
+const fmtIa = (v: number | null | undefined) => Math.abs(Number(v ?? 0)).toLocaleString('es-PE', { maximumFractionDigits: 2 });
+
 @Component({
   selector: 'app-blotter',
   standalone: true,
@@ -27,10 +30,11 @@ type Pestana = 'datos' | 'liquidacion' | 'asiento' | 'historial';
   templateUrl: './blotter.component.html',
   styleUrl: './blotter.component.scss',
 })
-export class BlotterComponent implements OnInit {
+export class BlotterComponent implements OnInit, OnDestroy {
   private readonly api = inject(TesoreriaService);
   private readonly toast = inject(ToastService);
   private readonly ruta = inject(ActivatedRoute);
+  private readonly asistente = inject(AsistenteIaService);
 
   readonly modoBack = this.ruta.snapshot.data['modo'] === 'back';
   readonly etiquetaTipo = ETIQUETA_TIPO;
@@ -67,6 +71,59 @@ export class BlotterComponent implements OnInit {
   ngOnInit(): void {
     this.api.catalogos().subscribe(c => (this.catalogos = c));
     this.cargar();
+    this.registrarAsistente();
+  }
+
+  ngOnDestroy(): void {
+    this.asistente.liberar(this.claveIa);
+  }
+
+  private get claveIa(): string {
+    return this.modoBack ? 'back-liquidacion' : 'front-blotter';
+  }
+
+  private registrarAsistente(): void {
+    const pendientes = () => this.operaciones.filter(o => !['Liquidado', 'Anulado'].includes(o.estado));
+    this.asistente.registrar({
+      clave: this.claveIa,
+      modulo: this.modoBack ? 'Back Office · Liquidación' : 'Front Office · Blotter',
+      titulo: this.modoBack ? 'Liquidación de operaciones' : 'Blotter de operaciones',
+      interpretacion: this.modoBack
+        ? 'Revise las operaciones por liquidar: asigne portafolio, custodia y banco, verifique fondos y avance el flujo. Puedo resumir lo urgente.'
+        : 'Consulta de operaciones registradas. Puedo resumirlas o señalar lo que requiere atención.',
+      opciones: [
+        { etiqueta: 'Por liquidar hoy', responder: () => {
+          const hoy = hoyIso();
+          const ops = pendientes().filter(o => o.fechaLiquidacion <= hoy);
+          if (!ops.length) return 'No hay operaciones pendientes con liquidación hoy o vencida.';
+          return `${ops.length} operación(es) deben liquidarse hoy o están atrasadas: ` +
+            ops.slice(0, 8).map(o => `${o.codigo} ${o.lado.toLowerCase()} ${o.ticker} ${fmtIa(o.montoTotal)} ${o.monedaLiquidacion} (${o.estado}${o.fechaLiquidacion < hoy ? ', atrasada' : ''})`).join('; ') + '.';
+        } },
+        { etiqueta: 'Pendientes sin asignación', responder: () => {
+          const ops = pendientes().filter(o => !o.idPortafolio || !o.idCustodia || !o.bancoPagador);
+          if (!ops.length) return 'Todas las operaciones pendientes tienen portafolio, custodia y banco pagador asignados.';
+          return `${ops.length} sin asignación completa: ` + ops.slice(0, 8).map(o => `${o.codigo} (falta ${[
+            !o.idPortafolio && 'portafolio', !o.idCustodia && 'custodia', !o.bancoPagador && 'banco'].filter(Boolean).join(', ')})`).join('; ') + '.';
+        } },
+        { etiqueta: 'Resumen del período', responder: () => {
+          const ops = this.operaciones;
+          if (!ops.length) return 'No hay operaciones en el rango de fechas.';
+          const porEstado = ['Pendiente', 'Pre liquidado', 'Confirmado', 'Liquidado', 'Anulado'].map(e => `${e} ${this.conteo(e)}`).join(', ');
+          const montos = new Map<string, number>();
+          for (const o of ops.filter(x => x.estado !== 'Anulado')) montos.set(o.monedaLiquidacion, (montos.get(o.monedaLiquidacion) ?? 0) + o.montoTotal);
+          return `${ops.length} operaciones: ${porEstado}. Volumen (sin anuladas): ` + [...montos].map(([m, v]) => `${fmtIa(v)} ${m}`).join(', ') + '.';
+        } },
+      ],
+      placeholder: this.modoBack ? 'Pregunte, p. ej. ¿qué bloquea la liquidación de la seleccionada?' : 'Pregunte sobre las operaciones…',
+      datos: () => ({
+        modo: this.modoBack ? 'back office' : 'consulta', hoy: hoyIso(), filtros: { estado: this.estado, desde: this.desde, hasta: this.hasta, tipo: this.tipo },
+        totalOperaciones: this.operaciones.length,
+        operaciones: this.filtradas.slice(0, 40).map(o => ({ codigo: o.codigo, tipo: o.tipo, lado: o.lado, ticker: o.ticker, monto: o.montoTotal,
+          moneda: o.monedaLiquidacion, fechaOperacion: o.fechaOperacion, fechaLiquidacion: o.fechaLiquidacion, estado: o.estado,
+          portafolio: o.portafolio, custodia: o.custodia, banco: o.bancoPagador, contraparte: o.contraparte, trader: o.trader })),
+        seleccionada: this.seleccion ? { ...this.seleccion, historial: this.seleccion.historial.slice(-5) } : null,
+      }),
+    });
   }
 
   cargar(idSeleccionar?: number) {
