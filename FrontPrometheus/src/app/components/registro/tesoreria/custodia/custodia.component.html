@@ -1,0 +1,40 @@
+<app-encabezado kicker="Back Office" titulo="Custodia"
+    subtitulo="Unidades por custodio según las operaciones del sistema, para conciliar con el estado de cuenta del custodio."></app-encabezado>
+
+<div class="cus-cargando" *ngIf="cargando"><app-loader tamano="inline" etiqueta="Cargando…"></app-loader></div>
+<p class="cus-error" *ngIf="error">{{ error }}</p>
+
+<div class="cus-tarjetas" *ngIf="!cargando && tenencias.length">
+    <button type="button" class="card cus-tarjeta" [class.activa]="custodia === null" (click)="custodia = null">
+        <span class="cus-tarjeta__nombre">Todas</span><span class="cus-tarjeta__dato">{{ tenencias.length }} instrumentos</span>
+    </button>
+    <button type="button" class="card cus-tarjeta" *ngFor="let c of custodias" [class.activa]="custodia === c" (click)="custodia = c">
+        <span class="cus-tarjeta__nombre">{{ c }}</span><span class="cus-tarjeta__dato">{{ posiciones(c) }} con saldo</span>
+    </button>
+</div>
+
+<section class="card" *ngIf="!cargando">
+    <div class="card-body">
+        <div class="cus-tabla">
+            <table>
+                <thead>
+                    <tr><th>Custodia</th><th>Instrumento</th><th>ISIN</th><th>Tipo</th><th>Mon.</th>
+                        <th class="col-num">En custodia</th><th class="col-num">En tránsito</th><th class="col-num">Proyectado</th>
+                        <th>Última liquidación</th><th class="col-num">Operaciones</th></tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let t of visibles" [class.sin-asignar]="t.custodia === 'Sin asignar'">
+                        <td>{{ t.custodia }}</td><td><strong>{{ t.ticker }}</strong> <small>{{ t.nombre }}</small></td><td>{{ t.codIsin }}</td>
+                        <td>{{ etiquetaTipo[t.tipo] }}</td><td>{{ t.moneda }}</td>
+                        <td class="col-num">{{ t.unidadesLiquidadas | number }}</td>
+                        <td class="col-num" [class.neg]="t.unidadesPorLiquidar < 0">{{ t.unidadesPorLiquidar ? (t.unidadesPorLiquidar | number) : '—' }}</td>
+                        <td class="col-num">{{ t.unidadesLiquidadas + t.unidadesPorLiquidar | number }}</td>
+                        <td>{{ t.ultimaLiquidacion || '—' }}</td><td class="col-num">{{ t.operaciones }}</td>
+                    </tr>
+                    <tr *ngIf="!visibles.length"><td colspan="10" class="cus-sin">Aún no hay operaciones de valores registradas.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="cus-nota">Solo considera operaciones registradas en Prometheus (no incluye las posiciones iniciales cargadas por archivo). «Sin asignar»: operaciones pendientes sin cuenta de custodia.</p>
+    </div>
+</section>

@@ -35,6 +35,11 @@ export const admin: Routes = [
                 title: 'Liquidación'
             },
             {
+                path: 'back/custodia',
+                loadComponent: () => import('./tesoreria/custodia/custodia.component').then((m) => m.CustodiaComponent),
+                title: 'Custodia'
+            },
+            {
                 path: 'back/contabilidad',
                 loadComponent: () => import('./tesoreria/contabilidad/contabilidad.component').then((m) => m.ContabilidadComponent),
                 title: 'Contabilidad'

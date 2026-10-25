@@ -52,6 +52,11 @@ export interface DetalleOperacion {
   operacion: Operacion; historial: EventoOperacion[]; flujos: FlujoCaja[]; asiento: LineaAsiento[]; asientoRegistrado: boolean;
 }
 
+export interface Tenencia {
+  custodia: string; codIsin: string; ticker: string; nombre: string; tipo: TipoOperacion; moneda: string;
+  unidadesLiquidadas: number; unidadesPorLiquidar: number; ultimaLiquidacion: string | null; operaciones: number;
+}
+
 export interface Contabilidad {
   plan: { codigo: string; nombre: string }[];
   asientos: { operacion: Operacion; lineas: LineaAsiento[] }[];
@@ -109,6 +114,10 @@ export class TesoreriaService {
 
   cuentas(): Observable<CuentaBancaria[]> {
     return this.http.get<CuentaBancaria[]>(`${this.url}/cuentas`);
+  }
+
+  custodia(): Observable<Tenencia[]> {
+    return this.http.get<Tenencia[]>(`${this.url}/custodia`);
   }
 
   contabilidad(desde?: string | null, hasta?: string | null): Observable<Contabilidad> {

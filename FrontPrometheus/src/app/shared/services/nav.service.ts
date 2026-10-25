@@ -128,6 +128,7 @@ export class NavService implements OnDestroy {
       dirchange: false,
       children: [
         { path: 'registro/back/liquidacion', title: 'Liquidación', type: 'link', dirchange: false },
+        { path: 'registro/back/custodia', title: 'Custodia', type: 'link', dirchange: false },
         { path: 'registro/back/contabilidad', title: 'Contabilidad', type: 'link', dirchange: false },
         { path: 'registro/back/maestros', title: 'Maestros de tesorería', type: 'link', dirchange: false },
       ],
